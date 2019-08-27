@@ -1,0 +1,36 @@
+@charset "utf-8";
+body,dl,dd,h1,h2,h3,h4,h5,h6,p,form,ol,ul {
+  margin: 0;
+  padding: 0;
+}
+ol, ul {
+  list-style: none;
+}
+a{
+  text-decoration: none;
+}
+input,button,textarea{
+  outline: none;
+}
+/* 谷歌浏览器滚动条 */
+div::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: rgba(208,212,218,.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da, endColorstr=#0dd0d4da);
+  width: 6px;
+  height: 6px;
+}
+div::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: rgba(208,212,218,.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da, endColorstr=#4dd0d4da);
+}
+#app {
+  width: 100%;
+  height: 100%;
+  height: 100vh;
+}
