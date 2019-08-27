@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const path = require('path');
 // 连接地址
@@ -58,5 +59,9 @@ module.exports = {
       template: 'index.html',
       inject: true
     }),
+    // 静态资源
+    new CopyWebpackPlugin([
+      { from: join('assets/image'), to:  join('dist/assets/image/') }
+    ])
   ],
 }
