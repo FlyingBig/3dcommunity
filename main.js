@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 require('./assets/index');
 //创建场景.
 let scene = new THREE.Scene();
