@@ -1,12 +1,14 @@
 require('three-orbitcontrols');
 require('./assets/index');
 require('./node_modules/threebsp/index');
+require('./node_modules/three/src/extras/Earcut');
 import CylinderBuild from './utils/cylinderBuilding';
 import PolygonBuild from './utils/polygonBuild';
 import computed, { getTransparent } from './utils/bspComputed';
 import mainBuild from './utils/mainBuild';
 import myBuild from './utils/myBuild';
 import numBuild from './utils/numBuild';
+import myGround from './utils/myGround';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 //创建场景.
@@ -154,3 +156,23 @@ function animate() {
 }
 initControl();
 animate();
+
+
+/****加载地面环境***/
+var roadObjs = myGround.loadRoad();
+for(let i=0;i<roadObjs.length;i++){
+  scene.add(roadObjs[i]);
+}
+var riverObjs = myGround.loadRiver();
+for(let i=0;i<riverObjs.length;i++){
+	scene.add(riverObjs[i]);
+}
+var grassObjs = myGround.loadGrass();
+for(let i=0;i<grassObjs.length;i++){
+  scene.add(grassObjs[i]);
+}
+
+var treeObjs = myGround.loadTree(scene);
+for(let i=0;i<treeObjs.length;i++){
+	scene.add(treeObjs[i]);
+}
