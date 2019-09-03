@@ -61,7 +61,8 @@ module.exports = {
     }),
     // 静态资源
     new CopyWebpackPlugin([
-      { from: join('assets/image'), to:  join('dist/assets/image/') }
+      { from: join('assets/image'), to:  join('dist/assets/image/') },
+      { from: join('models'), to:  join('dist/models/') }
     ])
   ],
 }
