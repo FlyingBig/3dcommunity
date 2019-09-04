@@ -47,7 +47,7 @@ class NumBuild {
     const material1 = new THREE.MeshBasicMaterial({map: texture1});
     const mesh1 = new THREE.Mesh(top, material1);
     mesh1.rotateX(Math.PI * -0.5);
-    mesh1.position.set(0, 40.01, 0);
+    mesh1.position.set(0, 40.2, 0);
     box.add(mesh,mesh1);
     return box;
   }

@@ -36,7 +36,7 @@ class MainBuild {
     geometry.computeBoundingBox();
     // 顶上地面
     const foot = this.getBuildTop();
-    foot.position.set(0, 0, 41.1);
+    foot.position.set(0, 0, 41.5);
     box.add(foot);
     box.add(mesh);
     box.rotateX(Math.PI * -0.5);

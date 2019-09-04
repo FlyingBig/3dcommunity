@@ -2,7 +2,6 @@
  * 集合物体融合计算
  * 参考：https://blog.csdn.net/qq_30100043/article/details/78944426
  * */
-import CylinderBuild from './cylinderBuilding';
 
 class ComputedBuild {
   cylinder() {
@@ -12,8 +11,8 @@ class ComputedBuild {
         color: "#EAD7A7"
       },
     };
-    let parent = new CylinderBuild({ height: 3, config }).init();
-    let child = new CylinderBuild({ radiusTop:9.5, radiusBottom: 9.5, height: 3, config }).init();
+    let parent = new THREE.CylinderGeometry(15, 15, 6, 60);
+    let child = new THREE.CylinderGeometry(14.5, 14.5, 6, 60);
     let result = new ThreeBSP(parent).subtract(new ThreeBSP(child)).toMesh();
     let texture = new THREE.TextureLoader().load( 'assets/image/cylinderTop.png' );
     texture.wrapS = THREE.RepeatWrapping;
