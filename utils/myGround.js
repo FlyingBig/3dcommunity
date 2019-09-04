@@ -1,5 +1,4 @@
 import { Earcut } from '../node_modules/three/src/extras/Earcut';
-var treeObjs = [];
 //道路点位数据
 var myRoads= [
 	{
@@ -1097,8 +1096,6 @@ class MyGround {
 		this.loadRiver();
 		this.loadGrass();
 		this.loadTree();
-		//this.loadTree();
-		//this.loadShapObj();
 	}
 	/**
 	 * 初始化3d环境
@@ -1190,7 +1187,7 @@ class MyGround {
 	 * @returns {THREE.Mesh}
 	 */
 	getBoxGeometry(size,type,imgOrColor,repeat,opacity){
-		var material;
+		let material;
 		if(type=="img"){
 			material = new THREE.MeshPhongMaterial({map:new THREE.TextureLoader().load(imgOrColor),side:THREE.DoubleSide});
 		}else{
@@ -1205,8 +1202,8 @@ class MyGround {
 			material.transparent = true;
 			material.opacity = opacity;
 		}
-		var geometry = new THREE.BoxGeometry(size[0],size[1],size[2]);
-		var objectMesh = new THREE.Mesh(geometry,material);
+		let geometry = new THREE.BoxGeometry(size[0],size[1],size[2]);
+		let objectMesh = new THREE.Mesh(geometry,material);
 		return objectMesh;
 	}
 	/**
@@ -1215,20 +1212,20 @@ class MyGround {
 	 * @param type
 	 */
 	loadBoxObject(config,type){
-		var topPoints = [];
-		var points = config.point;
-		for(var i=0;i<points.length;i++) {
-			var vertice = points[i];
+		let topPoints = [];
+		let points = config.point;
+		for(let i=0;i<points.length;i++) {
+			let vertice = points[i];
 			topPoints.push([vertice[0],vertice[1]+config.height,vertice[2]]);
 		}
-		var totalPoints = points.concat(topPoints);
-		var vertices =[];           //所有的顶点
-		for(var j=0;j<totalPoints.length;j++) {
+		let totalPoints = points.concat(topPoints);
+		let vertices =[];           //所有的顶点
+		for(let j=0;j<totalPoints.length;j++) {
 			vertices.push(new THREE.Vector3(totalPoints[j][0],totalPoints[j][1],totalPoints[j][2]))
 		}
-		var length = points.length;
-		var faces = [];
-		for(var n=0;n<length;n++) {                      //侧面生成三角形
+		let length = points.length;
+		let faces = [];
+		for(let n=0;n<length;n++) {                      //侧面生成三角形
 			if(n!=length-1) {
 				faces.push(new THREE.Face3(n,n+1,length+n+1));
 				faces.push(new THREE.Face3(length+n+1,length+n,n));
@@ -1237,29 +1234,29 @@ class MyGround {
 				faces.push(new THREE.Face3(length,length+n,n));
 			}
 		}
-		var data=[];
-		for(var m=0;m<length;m++) {
+		let data=[];
+		for(let m=0;m<length;m++) {
 			data.push(points[m][0],points[m][2]);
 		}
-		var triangles = Earcut.triangulate(data);
+		let triangles = Earcut.triangulate(data);
 
 		if(triangles && triangles.length != 0) {
-			for(var l=0;l<triangles.length;l++) {
-				var tlength = triangles.length;
+			for(let l=0;l<triangles.length;l++) {
+				let tlength = triangles.length;
 				if(l%3==0 && l < tlength-2) {
 					faces.push(new THREE.Face3(triangles[l],triangles[l+1],triangles[l+2]));                            //底部的三角面
 					faces.push(new THREE.Face3(triangles[l]+length,triangles[l+1]+length,triangles[l+2]+length));        //顶部的三角面
 				}
 			}
 		}
-		var geometry = new THREE.Geometry();
+		let geometry = new THREE.Geometry();
 		geometry.vertices = vertices;
 		geometry.faces = faces;
 		geometry.computeFaceNormals();      //自动计算法向量
 		//给立方体设置贴图
-		var materials = [];  //创建一个贴图数组
+		let materials = [];  //创建一个贴图数组
 		//设置贴图数组
-		for(var k = 0;k < geometry.faces.length/2;k++) {
+		for(let k = 0;k < geometry.faces.length/2;k++) {
 			if(config.img==""||!config.img){
 				materials[k] = this.createMaterial("color",config.color);
 
@@ -1275,19 +1272,19 @@ class MyGround {
 			}
 		}
 		//记录每个面的id，将纹理坐标和faceid间接关联，否则纹理图片始终都是第一张的图片
-		var faceId = 0;
-		var uv = [new THREE.Vector2(0,0),new THREE.Vector2(1,0),new THREE.Vector2(1,1),new THREE.Vector2(0,1)];
+		let faceId = 0;
+		let uv = [new THREE.Vector2(0,0),new THREE.Vector2(1,0),new THREE.Vector2(1,1),new THREE.Vector2(0,1)];
 		//设置纹理坐标
-		for(var g=0;g<geometry.faces.length;g+=2){
+		for(let g=0;g<geometry.faces.length;g+=2){
 			geometry.faces[g].materialIndex = faceId;
 			geometry.faces[g+1].materialIndex = faceId;
 			geometry.faceVertexUvs[0][g] = [uv[0],uv[1],uv[2]];
 			geometry.faceVertexUvs[0][g+1] = [uv[2],uv[3],uv[0]];
 			faceId++;
 		}
-		var cubeMaterial = new THREE.MeshFaceMaterial(materials);
+		let cubeMaterial = new THREE.MeshFaceMaterial(materials);
 
-		var cube = new THREE.Mesh(geometry,cubeMaterial);
+		let cube = new THREE.Mesh(geometry,cubeMaterial);
 
 		cube.name = config.id;
 		cube.attributes = config;
@@ -1314,7 +1311,7 @@ class MyGround {
 	 * 使用shape加载对象
 	 */
 	loadShapObjTest(){
-		var heartShape = new THREE.Shape();
+		let heartShape = new THREE.Shape();
 
 		heartShape.moveTo( 423.79,-173.92 );
 		heartShape.bezierCurveTo( 402.42,-138.75,394.29,-117,365.13,14.66);
@@ -1323,11 +1320,11 @@ class MyGround {
 		heartShape.bezierCurveTo(374.59,-4.6,381.27,-28.27,403.31,-119.78);
 		heartShape.bezierCurveTo(419.79,-151.59,432.59,-171.14,423.79,-173.92 );
 
-		var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+		let extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 
-		var geometry = new THREE.ShapeGeometry( heartShape, extrudeSettings );
-		var myMaterial = this.createMaterial("img","./assets/image/road1.jpg",[1,10]);
-		var mesh = new THREE.Mesh( geometry, myMaterial );
+		let geometry = new THREE.ShapeGeometry( heartShape, extrudeSettings );
+		let myMaterial = this.createMaterial("img","./assets/image/road1.jpg",[1,10]);
+		let mesh = new THREE.Mesh( geometry, myMaterial );
 		mesh.rotation.x=Math.PI/2
 		mesh.position.x =0;
 		mesh.position.z = 0;
@@ -1343,7 +1340,7 @@ class MyGround {
 	 * @returns {MeshPhongMaterial}
 	 */
 	createMaterial(type,imgOrColor,size,opacity,rotate){
-		var material;
+		let material;
 		if(type=="img"){
 			material = new THREE.MeshPhongMaterial({
 				map:new THREE.TextureLoader().load(imgOrColor),
@@ -1379,25 +1376,24 @@ class MyGround {
 	 * 导入模型文件
 	 */
 	loadTree (scene) {
-		var mtlLoader = new THREE.MTLLoader();
-		var objLoader = new THREE.OBJLoader();
-		mtlLoader.load('./assets/image/obj/tree2/LS06_01.mtl',function(materials){
+		let mtlLoader = new THREE.MTLLoader();
+		let objLoader = new THREE.OBJLoader();
+		mtlLoader.load('./assets/image/LS06_02.mtl',function(materials){
 			materials.preload();
+			materials.alphaTest = 0;
+			materials.blendDstAlpha = 0;
 			objLoader.setMaterials(materials);
-			objLoader.load('./assets/image/obj/tree2/LS06_01.obj',function(obj){
+			objLoader.load('./assets/image/LS06_02.obj',function(obj){
 				obj.scale.set(8,8,8);
-				for(var i=0;i<myTrees.length;i++){
-					var treePoints = myTrees[i].point;
-					for(var j=0;j<treePoints.length;j++){
-						var obj1 = obj.clone();
+				for(let i=0;i<myTrees.length;i++){
+					let treePoints = myTrees[i].point;
+					for(let j=0;j<treePoints.length;j++){
+						let obj1 = obj.clone();
 						obj1.position.set(treePoints[j][0],treePoints[j][1],treePoints[j][2]);
-						treeObjs.push(obj1);
 						scene.add(obj1)
 					}
 				}
-				return treeObjs;
 			})
-
 		})
 	}
 }
