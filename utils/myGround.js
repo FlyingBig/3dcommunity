@@ -1375,26 +1375,30 @@ class MyGround {
 	/**
 	 * 导入模型文件
 	 */
-	loadTree (scene) {
-		let mtlLoader = new THREE.MTLLoader();
-		let objLoader = new THREE.OBJLoader();
-		mtlLoader.load('./assets/image/LS06_02.mtl',function(materials){
-			materials.preload();
-			materials.alphaTest = 0;
-			materials.blendDstAlpha = 0;
-			objLoader.setMaterials(materials);
-			objLoader.load('./assets/image/LS06_02.obj',function(obj){
-				obj.scale.set(8,8,8);
-				for(let i=0;i<myTrees.length;i++){
-					let treePoints = myTrees[i].point;
-					for(let j=0;j<treePoints.length;j++){
-						let obj1 = obj.clone();
-						obj1.position.set(treePoints[j][0],treePoints[j][1],treePoints[j][2]);
-						scene.add(obj1)
-					}
-				}
-			})
-		})
+	loadTree () {
+		return new Promise(function (resolve, reject) {
+      let mtlLoader = new THREE.MTLLoader();
+      let objLoader = new THREE.OBJLoader();
+      let trees = [];
+      mtlLoader.load('../models/tree/LS06_02.mtl',function(materials){
+        materials.preload();
+        materials.alphaTest = 0;
+        materials.blendDstAlpha = 0;
+        objLoader.setMaterials(materials);
+        objLoader.load('../models/tree//LS06_02.obj',function(obj){
+          obj.scale.set(8,8,8);
+          for(let i=0;i<myTrees.length;i++){
+            let treePoints = myTrees[i].point;
+            for(let j=0;j<treePoints.length;j++){
+              let obj1 = obj.clone();
+              obj1.position.set(treePoints[j][0],treePoints[j][1],treePoints[j][2]);
+              trees.push(obj1);
+            }
+          }
+          resolve(trees);
+        },null, (e)=>{console.log(e); reject(e)})
+      })
+    })
 	}
 }
 export default new MyGround();

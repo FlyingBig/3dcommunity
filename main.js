@@ -92,31 +92,31 @@ async function scar () {
   scene.add(car);
 };
 async function redCar() {
-  CAR = await objModel('/models/redCar/file.mtl','/models/redCar/file.obj',-Math.PI/2, 0.01);
+  CAR = await objModel('/models/redCar/file.mtl','/models/redCar/file.obj',-Math.PI/2, 0.001);
   CAR.position.set(0, 0, 0);
-  CAR.rotateY(Math.PI*-0.5);
+  CAR.rotateY(Math.PI*-0.25);
   scene.add(CAR);
 };
 // scar(); //货车
 redCar(); //小汽车
 var axesHelper = new THREE.AxesHelper( 1000 );
+axesHelper.position.set(0,10,0);
 scene.add( axesHelper );
 let PATH = []; //运动轨迹
 function runPath() {
-    PATH = new THREE.CatmullRomCurve3([
+  PATH = new THREE.CatmullRomCurve3([
     new THREE.Vector3( -800, 10, 800 ),
     new THREE.Vector3( 800, 10, 800 ),
     new THREE.Vector3( 800, 10, -800 ),
     new THREE.Vector3( -800, 10, -800 ),
-    new THREE.Vector3( -800, 10, 800 ),
-  ]);
-  // let points = path.getPoints( 100 );
-  // let geometry = new THREE.BufferGeometry().setFromPoints( points );
-  //
-  // let material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-  //
-  // let curveObject = new THREE.Line( geometry, material );
-  // scene.add(curveObject);
+  ], true);
+  let points = PATH.getPoints( 100 );
+  let geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+  let material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+
+  let curveObject = new THREE.Line( geometry, material );
+  scene.add(curveObject);
 }
 runPath();
 let material = new THREE.MeshPhongMaterial( { color: 0x808080 } );
@@ -138,14 +138,24 @@ function initControl() {
 }
 //渲染循环
 let progress = 0;
+let avg = Math.PI/2/200;
+function runCar(progress) {
+  if(progress> 525 && progress <= 725) {
+    CAR.rotateY(avg);
+  } else if(progress> 1150 && progress <= 1350) {
+    CAR.rotateY(avg);
+  } else if(progress> 1725 && progress <= 1925) {
+    CAR.rotateY(avg);
+  } else if(progress>2400  || progress <= 100) {
+    CAR.rotateY(avg);
+  }
+}
 function animate() {
   // if ( progress < 2500 && CAR) {
   //   let pro = 0.0004*progress;
   //   let point = PATH.getPoint(pro);
-  //   console.log(progress);
-  //   if(progress == 0 || progress == 625 || progress == 1250 || progress == 1875) {
-  //     CAR.rotateY(Math.PI*0.5);
-  //   }
+  //   let n = CAR.rotation.y;
+  //   runCar(progress, n);
   //   progress ++;
   //   CAR.position.set(point.x, point.y, point.z);
   // } else {
@@ -160,16 +170,14 @@ animate();
 
 /****加载地面环境***/
 var roadObjs = myGround.loadRoad();
-for(let i=0;i<roadObjs.length;i++){
-  scene.add(roadObjs[i]);
-}
-var riverObjs = myGround.loadRiver();
-for(let i=0;i<riverObjs.length;i++){
-	scene.add(riverObjs[i]);
-}
-var grassObjs = myGround.loadGrass();
-for(let i=0;i<grassObjs.length;i++){
-  scene.add(grassObjs[i]);
-}
+scene.add(...roadObjs);
 
-myGround.loadTree(scene);
+var riverObjs = myGround.loadRiver();
+scene.add(...riverObjs);
+
+var grassObjs = myGround.loadGrass();
+scene.add(...grassObjs);
+
+myGround.loadTree().then(re=>{
+  scene.add(...re);
+});
