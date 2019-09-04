@@ -172,7 +172,4 @@ for(let i=0;i<grassObjs.length;i++){
   scene.add(grassObjs[i]);
 }
 
-var treeObjs = myGround.loadTree(scene);
-for(let i=0;i<treeObjs.length;i++){
-	scene.add(treeObjs[i]);
-}
+myGround.loadTree(scene);
