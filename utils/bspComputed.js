@@ -33,7 +33,7 @@ class ComputedBuild {
  * color 模型颜色
  * opacity 模型透明度
  * */
-export const getTransparent = ( geometry, color = 0xFF0000, opacity = 0.2) => {
+export const getTransparent = ( geometry, color = '#19EAFD', opacity = 0.2) => {
   const box = new THREE.Object3D();
   // 面
   const material1 = new THREE.MeshBasicMaterial({color: color, transparent: true, opacity: opacity});

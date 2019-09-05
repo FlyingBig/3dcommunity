@@ -259,5 +259,6 @@ class RenderCanvas {
 		this.scene.add(water);
 		this.scene.add(...riverObjs);
 	}
+
 }
 new RenderCanvas().init();

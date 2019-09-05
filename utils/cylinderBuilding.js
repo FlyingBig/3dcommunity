@@ -6,12 +6,11 @@ import computed from "./bspComputed";
  * */
 export default class CylinderBuild {
   //圆柱的顶部半径, 圆柱的底部半径, 圆柱的高度
-  constructor( param ) {
-    let { radiusTop, radiusBottom, height, config } = param;
+  constructor( param = {}) {
+    let { radiusTop, radiusBottom, height } = param;
     this.radiusTop = radiusTop || 15;
     this.radiusBottom = radiusBottom || 15;
     this.height = height || 47;
-    this.config = config;
   };
   init() {
     const box = new THREE.Object3D();

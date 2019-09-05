@@ -1501,7 +1501,7 @@ class MyGround {
 		return new Promise(function (resolve, reject) {
       let mtlLoader = new THREE.MTLLoader();
       let objLoader = new THREE.OBJLoader();
-      let trees = [];
+      let trees = new THREE.Object3D();
       mtlLoader.load('../models/tree/LS06_02.mtl',function(materials){
         materials.preload();
         materials.alphaTest = 0;
@@ -1514,7 +1514,7 @@ class MyGround {
             for(let j=0;j<treePoints.length;j++){
               let obj1 = obj.clone();
               obj1.position.set(treePoints[j][0],treePoints[j][1],treePoints[j][2]);
-              trees.push(obj1);
+              trees.add(obj1);
             }
           }
           resolve(trees);

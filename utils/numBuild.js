@@ -14,10 +14,10 @@ class NumBuild {
     ];
   }
   init() {
-    const box = new THREE.Object3D();
+    // const box = new THREE.Object3D();
     const main = this.getMainBuild();
-    box.add(main);
-    return box;
+    // box.add(main);
+    return main;
   }
   // 贴图方法
   getTexture( url, conf = {} ) {
