@@ -31,7 +31,7 @@ var myRoads= [
 	{
 		name:'road3',//外侧道路
 		type:'road_mainRoad',
-		point:[[-543.57,0,-288.33],[-543.35,0,-357.23],[-564.84,0,-358.57],[-566.84,0,-293.99]],
+		point:[[-543.57,0,-288.33],[-543.35,0,-337.23],[-564.84,0,-348.57],[-566.84,0,-293.99]],
 		height:1,
 		color:"",
 		repeatSize:[4,3],
@@ -42,6 +42,21 @@ var myRoads= [
 	},
 	//科华南路
 	{
+	name:'road4',//外侧道路
+	type:'road_mainRoad',
+	point:[[-566.5,0,-292.06],
+					[497.5,0,-221.09],
+					[497.5,0,-278.13],
+					[-566.5,0,-348.79]],
+	height:1.2,
+	color:"",
+	repeatSize:[5,6],
+	img:"./assets/image/road1.jpg",
+	ifRepeat:true,
+	position:[-2,0,0],
+	rotate:Math.PI/2
+},
+	/*{
 		name:'road4',//外侧道路
 		type:'road_mainRoad',
 		point:[[-564.28,0,-320.72],[-277.07,0,-256.52],[-264.83,0,-312.67],[-564.93,0,-383.2]],
@@ -52,8 +67,8 @@ var myRoads= [
 		ifRepeat:true,
 		position:[0,0,0],
 		rotate:Math.PI/2
-	},
-	{
+	},*/
+/*	{
 		name:'road5',//外侧道路
 		type:'road_mainRoad',
 		point:[[-277.07,0,-256.52],[-95.4,0,-229.31],[-85.72,0,-278.08],[-264.83,0,-312.67]],
@@ -88,12 +103,12 @@ var myRoads= [
 		ifRepeat:true,
 		position:[0,0,0],
 		rotate:Math.PI/2
-	},
+	},*/
 	//南三环路3段
 	{
 		name:'road7',//外侧道路
 		type:'road_mainRoad',
-		point:[[498.04,0,-239.18],[482.12,0,1.25],[424.46,0,0.38],[447.06,0,-244.35]],
+		point:[[498.04,0,-239.18],[482.12,0,1.25],[431.46,0,0.38],[447.06,0,-244.35]],
 		height:1,
 		color:"",
 		repeatSize:[5,6],
@@ -105,7 +120,7 @@ var myRoads= [
 	{
 		name:'road7',//外侧道路
 		type:'road_mainRoad',
-		point:[[482.12,0,1.25],[449.17,0,144.79],[393.85,0,146.04],[424.46,0,0.38]],
+		point:[[482.12,0,1.25],[449.17,0,144.79],[398.17,0,135.04],[431.46,0,0.38]],
 		height:1,
 		color:"",
 		repeatSize:[5,6],
@@ -1091,6 +1106,110 @@ var myTrees= [
 	}
 
 ];
+var garbageBins = [
+	{
+		name: '',
+		id: '',
+		point:[-541.79,0,-250.87],
+		rotationY:Math.PI*-0.3,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-449.06,0,-278.08],
+		rotationY:Math.PI*-0.45,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-366.69,0,-273.86],
+		rotationY:Math.PI*0.41,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-297,0,-258.44],
+		rotationY:Math.PI*0.42,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-179.89,0,-237.55],
+		rotationY:Math.PI*0.43,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-34.18,0,-221.35],
+		rotationY:Math.PI*0.44,
+	},
+	{
+		name: '',
+		id: '',
+		point:[212.73,0,-202.95],
+		rotationY:Math.PI*0.44,
+	},
+	{
+		name: '',
+		id: '',
+		point:[134.14,0,9.77],
+		rotationY:Math.PI*.3,
+	},
+	{
+		name: '',
+		id: '',
+		point:[218.19,0,59.12],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[121.23,0,-118.73],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[34.51,0,-1.05],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-89.5,0,17.44],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-230.77,0,15.43],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-295.11,0,-162.42],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[-178.11,0,218.67],
+		rotationY:Math.PI*.5,
+},
+	{
+		name: '',
+		id: '',
+		point:[32.51,0,132.43],
+		rotationY:Math.PI*.5,
+	},
+	{
+		name: '',
+		id: '',
+		point:[328.50,0,23],
+		rotationY:Math.PI*.5,
+	},
+]
 class MyGround {
 	/**
 	 * 初始化
@@ -1402,6 +1521,145 @@ class MyGround {
         },null, (e)=>{console.log(e); reject(e)})
       })
     })
+	}
+
+	/**
+	 * 加载垃圾桶
+	 */
+	loadGarbageBin () {
+		let objects = new THREE.Object3D();
+
+		let boxInner = new THREE.BoxGeometry(1.2,1.5,1.2);
+		let material1 = new THREE.MeshLambertMaterial({color:0xcccccc});
+		let material2 = new THREE.MeshLambertMaterial({color:0x256856});
+
+		let upBoxMesh = this.getBoxGeometry([1.5,0.3,3],"color",0x256856);
+		let downBoxMesh = this.getBoxGeometry([1.7,0.6,2.7],"color",0x256856);
+		//左右两个桶
+		let boxLeftMesh = this.getBoxGeometry([1.5,2,1.4],"color",0xcccccc);
+		let boxRightMesh = this.getBoxGeometry([1.5,2,1.4],"color",0xcccccc);
+		upBoxMesh.position.y=1.6
+		downBoxMesh.position.y=-1
+
+		let boxLeftBSP = new ThreeBSP(boxLeftMesh);
+		let holeCube = new THREE.Mesh(boxInner);
+		holeCube.position.set(0,0.5,0);
+		let clipBSP1 = new ThreeBSP(holeCube);
+		let resultBSPLeft = boxLeftBSP.subtract(clipBSP1);
+		boxLeftMesh = resultBSPLeft.toMesh();
+		boxLeftMesh.material = material1;
+		boxLeftMesh.position.z = -0.7;
+
+		let boxRightBSP = new ThreeBSP(boxRightMesh);
+		let holeCubeRight = new THREE.Mesh(boxInner);
+		holeCubeRight.position.set(0,0.5,0);
+
+		let clipBSP2 = new ThreeBSP(holeCubeRight);
+		let resultBSPRight = boxRightBSP.subtract(clipBSP2);
+		boxRightMesh = resultBSPRight.toMesh();
+		boxRightMesh.material = material1;
+		boxRightMesh.position.z = 0.7
+
+		let otherWasteMesh = this.getBoxGeometry([0.1,2,1.4],"img","../assets/image/otherWaste.png");
+		let recycableMesh = this.getBoxGeometry([0.1,2,1.4],"img","../assets/image/recycable.png");
+		otherWasteMesh.position.set(-.7,0,0.7);
+		recycableMesh.position.set(-.7,0,-0.7);
+		let otherWasteMesh2 = otherWasteMesh.clone();
+		let recycableMesh2 = recycableMesh.clone();
+		otherWasteMesh2.position.set(.7,0,.7);
+		recycableMesh2.position.set(.7,0,-.7);
+		//侧边
+		let postMesh = this.getBoxGeometry([1.5,2.3,0.1],"color",0xcccccc);
+		postMesh.position.set(0,0.3,-1.4);
+
+		let postMesh2 = postMesh.clone();
+		postMesh2.position.set(0,0.3,1.4);
+
+		objects.add(upBoxMesh);
+		objects.add(downBoxMesh);
+		objects.add(boxLeftMesh);
+		objects.add(boxRightMesh);
+		objects.add(recycableMesh);
+		objects.add(otherWasteMesh);
+		objects.add(recycableMesh2);
+		objects.add(otherWasteMesh2);
+		objects.add(postMesh);
+		objects.add(postMesh2);
+		objects.position.set(-120,1.7,0);
+		objects.castShadow = true;
+		var myGarbageBins=[];
+		for(let i =0;i<garbageBins.length;i++){
+			let garbageBinObj = objects.clone();
+			let point = garbageBins[i].point;
+			garbageBinObj.position.set(point[0],point[1],point[2]);
+			garbageBinObj.scale.set(2,2,2);
+			garbageBinObj.position.y = 4;
+			garbageBinObj.rotation.y = garbageBins[i].rotationY;
+			myGarbageBins.push(garbageBinObj);
+		}
+		return myGarbageBins;
+	}
+	/**
+	 * 加载路灯
+	 */
+	loadLamp (scene) {
+		let objects = new THREE.Object3D();
+		let postBox = new THREE.CylinderBufferGeometry(0.2,0.3,26,30);//灯柱
+		let material = new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide});
+		let post = new THREE.Mesh(postBox,material);
+		objects.add(post);
+		objects.position.set(-120,10,0);
+
+		let pointsData = [[0,0,0],[0.5,0.5,0],[1,0.7,0],[1.5,0.8,0],[2,0.9,0],[2.5,1,0],[5,1.4,0]];
+		let pointsData2 = [[0,0,0],[0.5,0.5,0],[1,0.7,0],[1.5,0.8,0],[5,1,0]]
+		let points=[];
+		for(let i=0;i<pointsData.length;i++){
+			points.push(new THREE.Vector3(pointsData[i][0],pointsData[i][1],pointsData[i][2]));
+		}
+		let tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points),128,0.1,12)
+		let materialTube = new THREE.MeshPhongMaterial({color:0xffffff,side:THREE.DoubleSide});
+		let tubeMesh = new THREE.Mesh(tubeGeometry,materialTube);
+		tubeMesh.position.set(0.2,9,0);
+		objects.add(tubeMesh);
+
+		let lamp = new THREE.Object3D();
+		let lampPart1 = this.getBoxGeometry([1.2,0.2,0.6],"color",0x000000);
+		let lampPart2 = this.getBoxGeometry([1,0.1,0.5],"color",0xdddddd);
+		lampPart1.name="lamp";
+		lampPart2.position.y = -0.12;
+		lamp.add(lampPart2);
+		lamp.add(lampPart1);
+		lamp.position.set(5.2,10.4,0)
+		objects.add(lamp);
+		objects.position.set(0,18,0);
+		objects.rotation.y = Math.PI
+		objects.scale.set(0.8,1,0.8)
+		scene.add(objects);
+		this.addOneRoadLamp(objects.children[2].getWorldPosition(),scene)
+	}
+
+	/**
+	 * 添加路灯灯光
+	 */
+	addOneRoadLamp (position,scene){
+		let oneRoadLamp = new THREE.SpotLight(0xdd0000, 200, 10, 0.5,0.7,0.7);
+		oneRoadLamp.distance = 30;
+
+		oneRoadLamp.castShadow = true;
+		//var lightHelper1 = new THREE.SpotLightHelper( spotLight);
+		oneRoadLamp.shadow.mapSize.width = 5;
+		oneRoadLamp.shadow.mapSize.height = 5;
+		oneRoadLamp.angle = Math.PI/6;
+		oneRoadLamp.shadow.camera.near = 200;
+		oneRoadLamp.shadow.camera.far = 20;
+		oneRoadLamp.shadow.camera.fov = 10;
+		oneRoadLamp.position.set(-position.x,position.y,-position.z);
+		let targetObj = new THREE.Object3D();
+		targetObj.add(new THREE.Vector3(-position.x,0,-position.z));
+		targetObj.position.set(-position.x,0,-position.z);
+		scene.add(targetObj);
+		oneRoadLamp.target = targetObj;
+		scene.add(oneRoadLamp);
 	}
 }
 export default new MyGround();
