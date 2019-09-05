@@ -1,3 +1,5 @@
+import {TextureLoader} from "three";
+
 require('three-orbitcontrols');
 require('./assets/index');
 require('./node_modules/threebsp/index');
@@ -11,16 +13,20 @@ import numBuild from './utils/numBuild';
 import myGround from './utils/myGround';
 // obj文件导出
 import { objModel } from './utils/modelOut';
+
+import { Water } from './node_modules/three/examples/jsm/objects/Water2';
+var water;
 //创建场景.
 let scene = new THREE.Scene();
 //相机
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
 //渲染器
-let renderer = new THREE.WebGLRenderer();
+let renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setClearColor(0x4682B4,1.0);
 //设置画布大小
 const contrain = document.getElementById('app');
 renderer.setSize(contrain.clientWidth, contrain.clientHeight);
-renderer.setClearColor("#0E101F");
+renderer.setClearColor("#cccccc");
 //加入到body
 contrain.appendChild(renderer.domElement);
 //加入灯光
@@ -33,6 +39,11 @@ lights[ 0 ].position.set( -500, 400, -1200 );
 lights[ 1 ].position.set( 200, 400, 1200 );
 lights[ 2 ].position.set( 500, 400, 1200 );
 
+var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
+scene.add( ambientLight );
+
+var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.6 );
+//scene.add( directionalLight );
 scene.add( lights[ 0 ] );
 scene.add( lights[ 1 ] );
 scene.add( lights[ 2 ] );
@@ -98,7 +109,7 @@ async function redCar() {
   scene.add(CAR);
 };
 // scar(); //货车
-redCar(); //小汽车
+//redCar(); //小汽车
 var axesHelper = new THREE.AxesHelper( 1000 );
 axesHelper.position.set(0,10,0);
 scene.add( axesHelper );
@@ -161,7 +172,7 @@ function animate() {
   // } else {
   //   progress = 0;
   // }
-  requestAnimationFrame(animate);
+	requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
 initControl();
@@ -173,6 +184,34 @@ var roadObjs = myGround.loadRoad();
 scene.add(...roadObjs);
 
 var riverObjs = myGround.loadRiver();
+/*for(let i=0;i<riverObjs.length;i++){
+  let geom =riverObjs[i].geometry;
+  water=new Water(geom,{
+		color:'#ffffff',
+		scale:2,
+		flowDirection:new THREE.Vector2(1,1),
+		textureWidth:1024,
+		textureHeight:1024,
+	});
+	water.position.set(0,80,0);
+
+	scene.add(water);
+}*/
+
+let watergeometry = myGround.loadRiverWater();
+let textureLoader = new TextureLoader();
+water=new Water(watergeometry,{
+	color:'#ffffff',
+	scale:.02,
+  normalMap0:textureLoader.load('./assets/image/Water_1_M_Normal.jpg'),
+  normalMap1:textureLoader.load('./assets/image/Water_2_M_Normal.jpg'),
+	flowDirection:new THREE.Vector2(-1,-1),
+	textureWidth:1024,
+	textureHeight:1024,
+});
+water.position.y = 5
+water.rotation.x = Math.PI*-0.5
+scene.add(water);
 scene.add(...riverObjs);
 
 var grassObjs = myGround.loadGrass();
@@ -181,3 +220,5 @@ scene.add(...grassObjs);
 myGround.loadTree().then(re=>{
   scene.add(...re);
 });
+
+
