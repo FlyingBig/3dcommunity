@@ -220,5 +220,3 @@ scene.add(...grassObjs);
 myGround.loadTree().then(re=>{
   scene.add(...re);
 });
-
-

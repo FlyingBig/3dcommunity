@@ -21,7 +21,7 @@ class MyBuild {
     mesh.rotateX(Math.PI * 0.5);
     // 房屋顶上
     const top = this.ellipseTop();
-    top.position.set(0, 1.1, 0);
+    top.position.set(0, 1.5, 0);
     top.rotateX(Math.PI * -0.5);
     box.add(top);
     box.add(mesh);
