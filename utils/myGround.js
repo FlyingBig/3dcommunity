@@ -1,4 +1,7 @@
 import { Earcut } from '../node_modules/three/src/extras/Earcut';
+
+
+import { WaterRefractionShader } from '../node_modules/three/examples/jsm/shaders/WaterRefractionShader';
 //道路点位数据
 var myRoads= [
 	{
@@ -1002,7 +1005,8 @@ var myRivers= [
 		height:2,
 		img:null,
 		repeatSize:[],
-		color:'#159FEE',
+		/*color:'#a1d3ee',*/
+		img:"./assets/image/road1.jpg",
 	},
 ];
 //草坪点位数据
@@ -1310,26 +1314,25 @@ class MyGround {
 	/**
 	 * 使用shape加载对象
 	 */
-	loadShapObjTest(){
+	loadRiverWater(){
 		let heartShape = new THREE.Shape();
 
-		heartShape.moveTo( 423.79,-173.92 );
-		heartShape.bezierCurveTo( 402.42,-138.75,394.29,-117,365.13,14.66);
-		heartShape.bezierCurveTo(359.67,23.96,355.00,28.08,350.55,35.07);
-		heartShape.bezierCurveTo(364.79,36.7,364.79,29.8,370.92,15.43);
-		heartShape.bezierCurveTo(374.59,-4.6,381.27,-28.27,403.31,-119.78);
-		heartShape.bezierCurveTo(419.79,-151.59,432.59,-171.14,423.79,-173.92 );
+		heartShape.moveTo( myRivers[0].point[0][0],-myRivers[0].point[0][2] );
+		for(let i=1;i<myRivers[0].point.length;i++){
+			let point = myRivers[0].point[i];
+			heartShape.lineTo(point[0],-point[2])
+		}
 
 		let extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 
-		let geometry = new THREE.ShapeGeometry( heartShape, extrudeSettings );
+		let geometry = new THREE.ShapeGeometry( heartShape, {depth: 20, bevelEnabled: false} );
 		let myMaterial = this.createMaterial("img","./assets/image/road1.jpg",[1,10]);
 		let mesh = new THREE.Mesh( geometry, myMaterial );
-		mesh.rotation.x=Math.PI/2
 		mesh.position.x =0;
 		mesh.position.z = 0;
-		mesh.position.y=10;
-		scene.add(mesh);
+		mesh.position.y=8;
+		mesh.rotation.x = Math.PI*-0.5;
+		return mesh.geometry;
 	}
 	/**
 	 * 创建材质
