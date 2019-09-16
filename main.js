@@ -145,6 +145,8 @@ class RenderCanvas {
 		this.loadWater();
 		this.animate();
 		this.redCar();
+		this.loadGarbages();
+		this.loadLamps();
 		this.randomBuild( 150 );
     var geometry = new THREE.Geometry();
     geometry.vertices.push(
@@ -399,7 +401,11 @@ class RenderCanvas {
         that.scene.children[1].position.set( ...that.positionLight[1] );
         that.scene.children[2].position.set( ...that.positionLight[2] );
         that.sceneBox.material.map = that.sceneTexture.day;
+        that.scene.remove(...myGround.lampLights);
+        that.scene.dispose()
       } else {
+				that.scene.add(...myGround.lampLights);
+				that.scene.dispose()
         that.scene.children[0].position.set( that.positionLight[0][0]*10, that.positionLight[0][1]*10, that.positionLight[0][2]*10 );
         that.scene.children[1].position.set( that.positionLight[1][0]*10, that.positionLight[1][1]*10, that.positionLight[2][2]*10 );
         that.scene.children[2].position.set( that.positionLight[2][0]*10, that.positionLight[2][1]*10, that.positionLight[2][2]*10 );
@@ -436,7 +442,19 @@ class RenderCanvas {
             }).start();
         }
       }
+
     }, false)
   }
+  //添加垃圾桶
+	loadGarbages (){
+		let garbages = myGround.loadGarbageBin();
+		
+		this.scene.add(...garbages)
+	}
+	//添加路灯
+	loadLamps (){
+		let lamps = myGround.loadLamp();
+		this.scene.add(...lamps)
+	}
 }
 new RenderCanvas().init();
