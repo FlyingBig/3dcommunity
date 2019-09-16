@@ -15,14 +15,14 @@ export default class CylinderBuild {
   init() {
     const box = new THREE.Object3D();
     const geometry = new THREE.CylinderGeometry( this.radiusTop, this.radiusBottom, this.height, 32 );
-    const texture1 = this.getTexture('/assets/image/circle.png',{ rx: 12, ry: 5 });
+    const texture1 = this.getTexture('/assets/image/circle.png',{ rx: 16, ry: 17 });
     const material = new THREE.MeshBasicMaterial({map: texture1});
     const cylinder = new THREE.Mesh( geometry, material );
     // 顶上遮盖
     const top = new THREE.CircleBufferGeometry(15, 10);
     const texture = this.getTexture('/assets/image/19.png',{ rx: 4, ry: 4 });
     const mesh = new THREE.Mesh(top, new THREE.MeshBasicMaterial({color: "#F6F7F8", map: texture}));
-    cylinder.position.set(0,19,0);
+    cylinder.position.set(0,21,0);
     box.add(cylinder);
     mesh.position.set(0, 45, 0);
     mesh.rotateX(-Math.PI/2);

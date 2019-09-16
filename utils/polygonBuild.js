@@ -69,6 +69,7 @@ export default class PolygonBuild {
     copyk.position.set(-3, -31.2, 0);
     box.add(k);
     box.add(copyk);
+    box.rotateX( Math.PI * -0.5 );
     return box;
   }
   // 贴图方法
