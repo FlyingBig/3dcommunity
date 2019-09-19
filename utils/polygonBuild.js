@@ -26,7 +26,7 @@ export default class PolygonBuild {
       shape.lineTo(this.path[i][0], this.path[i][1]);
     }
     const extrudeSettings = { depth: 12, bevelSegments: 2, steps: 1, bevelSize: 1, bevelThickness: 1 };
-    const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+    const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
 
     let texture = this.getTexture( '/assets/image/wall.png' );
     const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3"}));
@@ -118,19 +118,19 @@ export default class PolygonBuild {
   getWindowForOne(url, w, h, x, y ) {
     x = x || 4;
     y = y || 3;
-    const geometry = new THREE.PlaneGeometry( w, h );
+    const geometry = new THREE.PlaneBufferGeometry( w, h );
     const texture = this.getTexture( url, { rx: x, ry: y});
     const door = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#fff", map: texture}));
     return door;
   }
   getDoor( w, h ) {
-    const geometry = new THREE.PlaneGeometry( w, h );
+    const geometry = new THREE.PlaneBufferGeometry( w, h );
     const texture = this.getTexture('/assets/image/door.jpg', { rx: 1, ry: 1});
     const door = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#fff", map: texture}));
     return door;
   }
   getTop( w, h ) {
-    const geometry = new THREE.PlaneGeometry( w, h );
+    const geometry = new THREE.PlaneBufferGeometry( w, h );
     const texture = this.getTexture('/assets/image/11.jpg', { rx: 5, ry: 5});
     const door = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#fff", map: texture}));
     return door;
@@ -141,7 +141,7 @@ export default class PolygonBuild {
     return mesh;
   }
   getTopBuildWap(  w, h  ) {
-    const geometry = new THREE.PlaneGeometry( w, h );
+    const geometry = new THREE.PlaneBufferGeometry( w, h );
     const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#6D6D79"}));
     return mesh;
   }

@@ -36,13 +36,13 @@ class NumBuild {
     for(let i=1; i<path.length; i++) {
       shape.lineTo(path[i][0], path[i][1]);
     }
-    const geometry = new THREE.ExtrudeGeometry(shape, {depth: 40, bevelEnabled: false});
+    const geometry = new THREE.ExtrudeBufferGeometry(shape, {depth: 40, bevelEnabled: false});
     const texture = this.getTexture('/assets/image/20.png',{ rx: 1/15, ry: 1/45 });
     const material = new THREE.MeshBasicMaterial({map: texture});
     const mesh = new THREE.Mesh(geometry, material);
     mesh.rotateX(Math.PI * -0.5);
     // 顶部
-    const top = new THREE.ShapeGeometry(shape);
+    const top = new THREE.ShapeBufferGeometry(shape);
     const texture1 = this.getTexture('/assets/image/15.png',{ rx: 1/30, ry: 1/25 });
     const material1 = new THREE.MeshBasicMaterial({map: texture1});
     const mesh1 = new THREE.Mesh(top, material1);

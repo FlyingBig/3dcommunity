@@ -337,7 +337,7 @@ var myGrass= [
 		repeatSize:[40,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,0,0],
+		position:[0,1,0],
 	},
 	{
 		name:'grass2',//外侧道路
@@ -348,7 +348,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,0,0],
+		position:[0,-0.5,0],
 	},
 	{
 		name:'grass3',//外侧道路
@@ -359,7 +359,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,0,0],
+		position:[0,-0.5,0],
 	},
 	{
 		name:'grass4',//外侧道路
@@ -370,7 +370,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,0,0],
+		position:[0,-0.5,0],
 	},
 	{
 		name:'grass5',//外侧道路
@@ -381,7 +381,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,0,0],
+		position:[0,-0.5,0],
 	},
 ];
 // 树木点位数据
@@ -1411,7 +1411,8 @@ class MyGround {
       geometry.faceVertexUvs[0][g] = [uv[0],uv[1],uv[2]];
       geometry.faceVertexUvs[0][g+1] = [uv[2],uv[3],uv[0]];
     }
-    let cube = new THREE.Mesh(geometry, material);
+    let buffer = new THREE.BufferGeometry().fromGeometry( geometry ); // 转为buffer几何体
+    let cube = new THREE.Mesh(buffer, material);
 		if(config.ifRepeat){
 			cube.material.map.wrapS = THREE.RepeatWrapping;
 			cube.material.map.wrapT = THREE.RepeatWrapping;
@@ -1436,7 +1437,6 @@ class MyGround {
 	 */
 	loadRiverWater(){
 		let heartShape = new THREE.Shape();
-
 		heartShape.moveTo( myRivers[0].point[0][0],-myRivers[0].point[0][2] );
 		for(let i=1;i<myRivers[0].point.length;i++){
 			let point = myRivers[0].point[i];
@@ -1588,8 +1588,7 @@ class MyGround {
 	 */
 	loadLamp () {
 		let objects = new THREE.Object3D();
-
-		let postBox = new THREE.CylinderBufferGeometry(0.2,0.3,26,30);//灯柱
+		let postBox = new THREE.CylinderBufferGeometry(0.2,0.3,26,30); // 灯柱
 		let material = new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide});
 		let post = new THREE.Mesh(postBox,material);
 
@@ -1620,12 +1619,12 @@ class MyGround {
 		circleMaterial.transparent = true
 		circleMaterial.opacity = .5;
 		let circleMesh = new THREE.Mesh( circleGeometry, circleMaterial );
-		circleMesh.rotation.x = -Math.PI/2
+		circleMesh.rotation.x = -Math.PI/2;
 		circleMesh.position.set(0,-12,0);
 		circleMesh.visible = false
 
-		let cameraObj = this.addCameras()//灯柱上添加摄像头
-		cameraObj.name = "camera"
+		let cameraObj = this.addCameras();//灯柱上添加摄像头
+		cameraObj.name = "camera";
 
 		let spriteMap = new THREE.TextureLoader().load('./assets/image/camera_video.png')
 		let spriteMaterial = new THREE.SpriteMaterial({map:spriteMap,color:0xffffff,sizeAttenuation:false,depthTest:false})
@@ -1744,38 +1743,6 @@ class MyGround {
 		context.fillRect(0, 0, canvas.width, canvas.height);
 		return canvas;
 	}
-
-	/**
-	 * 添加绿植
-	 */
-	/**
-	 * 获取植物
-	 */
-	addPlant(size,img,position){
-		if(img&&size&&position){
-			let plant = new THREE.Object3D();
-			let leafTure = new THREE.TextureLoader().load(img);
-			let geometry1 = new THREE.PlaneGeometry(size[0],size[1]);
-			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true});
-
-			for(var i=1;i<4;i++){
-				var leaf = new THREE.Mesh(geometry1,leafMaterial);
-				leaf.position.set(0,10,0)
-				leaf.rotation.y = -Math.PI/(i+1)
-				plant.add(leaf);
-			}
-			plant.position.set(position[0],position[1],position[2]);
-		}else{
-			let plant = new THREE.Object3D();
-			let leafTure = new THREE.TextureLoader().load('../assets/image/tree_icon2.png');
-			let geometry1 = new THREE.PlaneGeometry(10,20);
-			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:0.8});
-
-			plant.castShadow = true;
-			return plant
-		}
-	}
-
 	/**
 	 * 添加一个tub对象
 	 */
@@ -1805,18 +1772,12 @@ class MyGround {
 				pointsData = []
 			}
 		}
-
-
-
 	}
-
 	/**
 	 * 构建树木
 	 */
 	addTree(scene){
 		let treeObj = new THREE.Object3D();
-
-
 		let plant = new THREE.Object3D();
 		for(let j=0;j<1000;j++){
 			let leafTure = new THREE.TextureLoader().load('../assets/image/leaf.png');

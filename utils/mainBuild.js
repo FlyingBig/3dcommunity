@@ -30,7 +30,7 @@ class MainBuild {
      shape.lineTo(path[i][0], path[i][1]);
    }
     const extrudeSettings = { depth: 40, bevelSegments: 1, steps: 0, bevelSize: 0, bevelThickness: 1 };
-    const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+    const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
     const texture = this.getTexture('/assets/image/14.png',{rx: 1/30, ry: 1/40});
     const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3", map: texture}));
     geometry.computeBoundingBox();
@@ -59,7 +59,7 @@ class MainBuild {
     for(let i=1; i<path.length; i++) {
       geometry.lineTo(path[i][0], path[i][1]);
     }
-    const shape = new THREE.ShapeGeometry(geometry);
+    const shape = new THREE.ShapeBufferGeometry(geometry);
     const texture = this.getTexture('/assets/image/15.png',{rx: 1/30, ry: 1/20});
     const mesh = new THREE.Mesh(shape, new THREE.MeshBasicMaterial({map: texture}));
     return mesh;
