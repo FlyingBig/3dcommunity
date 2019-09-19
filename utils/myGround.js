@@ -332,7 +332,7 @@ var myGrass= [
 		name:'grass1',//外侧道路
 		type:'grass',
 		point:[[462.64,0,-298.17],[113.21,0,-298.07],[92.62,0,117.19],[425.69,0,64.49]],
-		height:0.5,
+		height:0.3,
 		color:"",
 		repeatSize:[40,20],
 		img:"./assets/image/ground.jpg",
@@ -343,7 +343,7 @@ var myGrass= [
 		name:'grass2',//外侧道路
 		type:'grass',
 		point:[[113.21,0,-300.07],[-125.46,0,-300.99],[-116.44,0,248.47],[92.62,0,117.19]],
-		height:0.5,
+		height:0.3,
 		color:"",
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
@@ -354,7 +354,7 @@ var myGrass= [
 		name:'grass3',//外侧道路
 		type:'grass',
 		point:[[-124.34,0,-308.71],[-290.66,0,-308.68],[-294.89,0,222.31],[-114.55,0,245.88]],
-		height:0.5,
+		height:0.3,
 		color:"",
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
@@ -365,7 +365,7 @@ var myGrass= [
 		name:'grass4',//外侧道路
 		type:'grass',
 		point:[[-290.66,0,-309.68],[-395.74,0,-309.13],[-425.02,0,-161.65],[-294.89,0,222.31]],
-		height:0.5,
+		height:0.3,
 		color:"",
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
@@ -376,7 +376,7 @@ var myGrass= [
 		name:'grass5',//外侧道路
 		type:'grass',
 		point:[[-395.74,0,-309.13],[-551.92,0,-333.56],[-567.17,0,-228.44],[-425.02,0,-161.65]],
-		height:0.5,
+		height:0.3,
 		color:"",
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
@@ -512,13 +512,13 @@ var lamps = [
 	{
 		name:"",
 		id:"",
-		point:[-543.67,14,-281.72],
+		point:[-543.67,14,-265.72],
 		rotationY:Math.PI
 	},
 	{
 		name:"",
 		id:"",
-		point:[-389.62,14,-278.65],
+		point:[-389.62,14,-265.65],
 		rotationY:Math.PI*0.5
 	},
 	{
@@ -530,31 +530,31 @@ var lamps = [
 	{
 		name:"",
 		id:"",
-		point:[-103.18,14,-256.66],
+		point:[-103.18,14,-265.66],
 		rotationY:Math.PI*0.5
 	},
 	{
 		name:"",
 		id:"",
-		point:[36.49,14,-248.93],
+		point:[36.49,14,-265.93],
 		rotationY:Math.PI*0.5
 	},
 	{
 		name:"",
 		id:"",
-		point:[158.04,14,-242.63],
+		point:[158.04,14,-265.63],
 		rotationY:Math.PI*0.5
 	},
 	{
 		name:"",
 		id:"",
-		point:[269.67,14,-233.87],
+		point:[269.67,14,-265.87],
 		rotationY:Math.PI*0.5
 	},
 	{
 		name:"",
 		id:"",
-		point:[360.04,14,-228.56],
+		point:[360.04,14,-265.56],
 		rotationY:Math.PI*0.5
 	},
 	{
@@ -693,7 +693,7 @@ class MyGround {
         {
           width: 1063,
           height: 57,
-          position: [ -40, 2, -298],
+          position: [ -40, 1, -298],
           rotation: [Math.PI/2, 0, 0],
           wrap: [ 1, 20 ],
           textRotate: Math.PI/2
@@ -701,7 +701,7 @@ class MyGround {
         {
           width: 47,
           height: 328,
-          position: [ 452, 2, -105],
+          position: [ 452, 1, -105],
           rotation: [Math.PI/2, 0, Math.PI/60],
           wrap: [ 1, 7 ],
         }
@@ -1235,6 +1235,8 @@ class MyGround {
       ] // 弯曲不规则露点信息
     }
     this.lampLights = []
+		this.cameras = []
+		this.rain = null
   }
 	/**
 	 * 加载小区道路
@@ -1248,7 +1250,7 @@ class MyGround {
       for(let j=1; j<point.length; j++) {
         shape.lineTo(point[j][0], -point[j][2]);
       };
-      var extrudeSettings = { amount: 1.2, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+      var extrudeSettings = { amount: .8, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
       let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
       let mesh = {};
       mesh = new THREE.Mesh( geo, new THREE.MeshPhongMaterial({color: myRoads[i].color}));
@@ -1273,7 +1275,7 @@ class MyGround {
           texture.wrapS = THREE.RepeatWrapping;
           texture.wrapT = THREE.RepeatWrapping;
           texture.repeat.set(wrap[0], wrap[1]);
-          let geometry = new THREE.BoxBufferGeometry( width, height,2 );
+          let geometry = new THREE.BoxBufferGeometry( width, height,1 );
           let mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial( { map: texture } ));
           mesh.rotateX(rotation[0]);
           mesh.rotateY(rotation[1]);
@@ -1322,7 +1324,7 @@ class MyGround {
 	getBoxGeometry(size,type,imgOrColor,repeat,opacity){
 		let material;
 		if(type=="img"){
-			material = new THREE.MeshPhongMaterial({map:new THREE.TextureLoader().load(imgOrColor),side:THREE.DoubleSide});
+			material = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load(imgOrColor),side:THREE.DoubleSide});
 		}else{
 			material = new THREE.MeshLambertMaterial({color:imgOrColor});
 		}
@@ -1425,7 +1427,7 @@ class MyGround {
 			cube.position.y = 2.5;
 		}
 		if(type=="grass"){
-			cube.position.y = 0.5
+			cube.position.y = 0
 		}
 		return cube;
 	}
@@ -1542,8 +1544,8 @@ class MyGround {
 		boxRightMesh.material = material1;
 		boxRightMesh.position.z = 0.7
 
-		let otherWasteMesh = this.getBoxGeometry([0.1,2,1.4],"img","../assets/image/otherWaste.png");
-		let recycableMesh = this.getBoxGeometry([0.1,2,1.4],"img","../assets/image/recycable.png");
+		let otherWasteMesh = this.getBoxGeometry([0.2,2,1.4],"img","../assets/image/otherWaste.png");
+		let recycableMesh = this.getBoxGeometry([0.2	,2,1.4],"img","../assets/image/recycable.png");
 		otherWasteMesh.position.set(-.7,0,0.7);
 		recycableMesh.position.set(-.7,0,-0.7);
 		let otherWasteMesh2 = otherWasteMesh.clone();
@@ -1586,14 +1588,12 @@ class MyGround {
 	 */
 	loadLamp () {
 		let objects = new THREE.Object3D();
+
 		let postBox = new THREE.CylinderBufferGeometry(0.2,0.3,26,30);//灯柱
 		let material = new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide});
 		let post = new THREE.Mesh(postBox,material);
-		objects.add(post);
-		objects.position.set(-120,10,0);
 
 		let pointsData = [[0,0,0],[0.5,0.5,0],[1,0.7,0],[1.5,0.8,0],[2,0.9,0],[2.5,1,0],[5,1.4,0]];
-		let pointsData2 = [[0,0,0],[0.5,0.5,0],[1,0.7,0],[1.5,0.8,0],[5,1,0]]
 		let points=[];
 		for(let i=0;i<pointsData.length;i++){
 			points.push(new THREE.Vector3(pointsData[i][0],pointsData[i][1],pointsData[i][2]));
@@ -1602,7 +1602,6 @@ class MyGround {
 		let materialTube = new THREE.MeshPhongMaterial({color:0xffffff,side:THREE.DoubleSide});
 		let tubeMesh = new THREE.Mesh(tubeGeometry,materialTube);
 		tubeMesh.position.set(0.2,9,0);
-		objects.add(tubeMesh);
 
 		let lamp = new THREE.Object3D();
 		let lampPart1 = this.getBoxGeometry([1.2,0.2,0.6],"color",0x000000);
@@ -1611,42 +1610,228 @@ class MyGround {
 		lampPart2.position.y = -0.12;
 		lamp.add(lampPart2);
 		lamp.add(lampPart1);
+
 		lamp.position.set(5.2,10.4,0)
+		objects.position.set(-120,10,0);
+
+		let circleGeometry = new THREE.CircleGeometry( 12, 64 );
+		let canvasTexture = this.createCanvasTexture('243,196,16');
+		let circleMaterial = new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(canvasTexture)});
+		circleMaterial.transparent = true
+		circleMaterial.opacity = .5;
+		let circleMesh = new THREE.Mesh( circleGeometry, circleMaterial );
+		circleMesh.rotation.x = -Math.PI/2
+		circleMesh.position.set(0,-12,0);
+		circleMesh.visible = false
+
+		let cameraObj = this.addCameras()//灯柱上添加摄像头
+		cameraObj.name = "camera"
+
+		let spriteMap = new THREE.TextureLoader().load('./assets/image/camera_video.png')
+		let spriteMaterial = new THREE.SpriteMaterial({map:spriteMap,color:0xffffff,sizeAttenuation:false,depthTest:false})
+		let sprite = new THREE.Sprite(spriteMaterial)
+		sprite.position.set(0,10.5,1.5)
+		sprite.scale.set(.05,.05,.05)
+		sprite.name = 'camera'
+
+		objects.add(post);
+		objects.add(tubeMesh);
 		objects.add(lamp);
+		objects.add(circleMesh)
+		objects.add(cameraObj)
+		objects.add(sprite)
+
 		objects.scale.set(0.8,1,0.8)
-		let myLamps=[];
-		let spotLight = new THREE.SpotLight(0xff0000, 1, 5, 0.5,0.7,0.7);
-		let lightTargetObj = new THREE.Object3D();
+
+		let myLamps=[circleMesh];
 		for(let i=0;i<lamps.length;i++){
 			let lampClone = objects.clone();
+
 			lampClone.position.set(lamps[i].point[0],lamps[i].point[1],lamps[i].point[2]);
 			lampClone.rotation.y = lamps[i].rotationY;
+
 			myLamps.push(lampClone);
-
-
-			let lampPosition = lampClone.getWorldPosition();
-			let position = lampClone.children[2].getWorldPosition();
-			let oneRoadLamp = spotLight.clone();
-			oneRoadLamp.distance = 30;
-
-			oneRoadLamp.castShadow = true;
-			//var lightHelper1 = new THREE.SpotLightHelper( spotLight);
-			oneRoadLamp.shadow.mapSize.width = 5;
-			oneRoadLamp.shadow.mapSize.height = 5;
-			oneRoadLamp.angle = Math.PI/6;
-			oneRoadLamp.shadow.camera.near = 100;
-			oneRoadLamp.shadow.camera.far = 20;
-			oneRoadLamp.shadow.camera.fov = 10;
-			oneRoadLamp.position.set(position.x,position.y,position.z);
-			let targetObj = lightTargetObj.clone();
-			targetObj.add(new THREE.Vector3(position.x,0,position.z));
-			targetObj.position.set(position.x,0,position.z);
-			oneRoadLamp.target = targetObj;
-
-			myLamps.push(targetObj);
-			this.lampLights.push(oneRoadLamp)
+			this.lampLights.push(lampClone.children[3])
 		}
 		return myLamps;
+	}
+	// 构造监控摄像机
+	addCameras(){
+		let object = new THREE.Object3D();
+		let cyliderOut = new THREE.CylinderBufferGeometry(0.2,0.2,1,8);
+		let cylider = new THREE.CylinderBufferGeometry(0.16,0.16,.8,30)
+		let material1 = new THREE.MeshPhongMaterial({color:0xffffff});
+		let material2 = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load('../assets/image/camera.png'),side:THREE.DoubleSide})
+		let cyliderOutMesh = new THREE.Mesh(cyliderOut,material1);
+		let cyliderMesh = new THREE.Mesh(cylider,material2);
+		cyliderMesh.position.y=0.2
+
+		let pointsData = [[0,-.4,0],[0,0.6,0],[0.2,0.4,0]];
+		let points = [];
+		for(let i=0;i<pointsData.length;i++){
+			points.push(new THREE.Vector3(pointsData[i][0],pointsData[i][1],pointsData[i][2]));
+		}
+		let tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points),128,0.04,12)
+		let tubeMesh = new THREE.Mesh(tubeGeometry,material1);
+		tubeMesh.position.set(-0.4,-0.4,0);
+		cyliderOutMesh.name = "camera";
+		cyliderMesh.name="camera";
+		object.add(cyliderOutMesh);
+		object.add(cyliderMesh);
+		object.add(tubeMesh);
+		object.position.set(0,9.4,.7);
+		object.rotation.x = Math.PI/2;
+		object.rotation.y = Math.PI/2;
+		object.name="camera";
+		object.scale.set(1,1,1)
+		object.name='camera'
+		this.cameras.push(object)
+		return object
+	}
+	closeLampLight(){
+		for(let i=0;i<this.lampLights.length;i++){
+			this.lampLights[i].visible = false
+		}
+	}
+	openLampLight(){
+		for(let i=0;i<this.lampLights.length;i++){
+			this.lampLights[i].visible = true
+		}
+	}
+
+	/**
+	 * 雨滴
+	 */
+	createRain(){
+		let texture = new THREE.TextureLoader().load("../assets/image/rain.png")
+		let geom = new THREE.Geometry();
+		let material = new THREE.PointsMaterial({
+			size:2,
+			transparent:true,
+			opacity:.6,
+			vertexColors:true,
+			color:'#fff',
+			map:texture,
+			depthTest:false
+		})
+		let range = 600
+		for(let i=0;i<30000;i++){
+			let particle = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
+			particle.velocityY = 0.1 + Math.random() / 5;
+			particle.velocityX = (Math.random() - 0.5) / 3;
+			geom.vertices.push(particle);
+			let color = new THREE.Color(0xffffff);
+			geom.colors.push(color);
+		}
+		this.cloud = new THREE.Points(geom, material);
+		this.cloud.type = "rain";
+		this.cloud.visible = false;
+		this.cloud.verticesNeedUpdate = true;
+		return this.cloud;
+	}
+	/**
+	 * 创造canvas纹理
+	 */
+	createCanvasTexture(color){
+		let canvas = document.createElement("canvas");
+		canvas.width = 112;
+		canvas.height = 112;
+		let context = canvas.getContext("2d");
+		var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+		gradient.addColorStop(0, 'rgba(' + color + ',1)');
+		gradient.addColorStop(1, 'rgba(69,56,4,0)');
+		context.fillStyle = gradient;
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		return canvas;
+	}
+
+	/**
+	 * 添加绿植
+	 */
+	/**
+	 * 获取植物
+	 */
+	addPlant(size,img,position){
+		if(img&&size&&position){
+			let plant = new THREE.Object3D();
+			let leafTure = new THREE.TextureLoader().load(img);
+			let geometry1 = new THREE.PlaneGeometry(size[0],size[1]);
+			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true});
+
+			for(var i=1;i<4;i++){
+				var leaf = new THREE.Mesh(geometry1,leafMaterial);
+				leaf.position.set(0,10,0)
+				leaf.rotation.y = -Math.PI/(i+1)
+				plant.add(leaf);
+			}
+			plant.position.set(position[0],position[1],position[2]);
+		}else{
+			let plant = new THREE.Object3D();
+			let leafTure = new THREE.TextureLoader().load('../assets/image/tree_icon2.png');
+			let geometry1 = new THREE.PlaneGeometry(10,20);
+			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:0.8});
+
+			plant.castShadow = true;
+			return plant
+		}
+	}
+
+	/**
+	 * 添加一个tub对象
+	 */
+	addTube(scene){
+		let firstPoint = [0,10,0];
+		let pointsData = []
+		let firstRadius = 10;
+
+		let beforePoint = firstPoint
+		for(let i=0;i<20;i++){
+			let yPlus =  Math.random()*2 + beforePoint[1];
+			let xPlus = Math.random()-0.5+beforePoint[0];
+			let zPlus = Math.random()-0.5+beforePoint[2];
+			let nextPoint = [xPlus,yPlus,zPlus];
+			beforePoint = [xPlus,yPlus,zPlus];
+			pointsData.push(nextPoint)
+			if(pointsData.length==20){
+				let points = [];
+				for(let i=0;i<pointsData.length;i++){
+					points.push(new THREE.Vector3(pointsData[i][0],pointsData[i][1],pointsData[i][2]));
+				}
+				let path = new THREE.SplineCurve3(points)
+				let geometry = new THREE.TubeGeometry( path, 200, 2-Math.random()*.3, 100, false );
+				let material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('../assets/image/wall.png') } );
+				let tubeMesh = new THREE.Mesh(geometry,material)
+				scene.add(tubeMesh)
+				pointsData = []
+			}
+		}
+
+
+
+	}
+
+	/**
+	 * 构建树木
+	 */
+	addTree(scene){
+		let treeObj = new THREE.Object3D();
+
+
+		let plant = new THREE.Object3D();
+		for(let j=0;j<1000;j++){
+			let leafTure = new THREE.TextureLoader().load('../assets/image/leaf.png');
+			let geometry1 = new THREE.PlaneGeometry(10,20);
+			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:0.8});
+			let plantMesh = new THREE.Mesh(geometry1,leafMaterial)
+			plantMesh.scale.set(.1,.1,.1)
+			plantMesh.rotation.x = Math.random()*Math.PI;
+			plantMesh.position.set((Math.random()-0.5)*400,1,(Math.random())*100)
+			plant.add(plantMesh)
+
+		}
+		treeObj.add(plant)
+		scene.add( treeObj );
+
 	}
 }
 export default new MyGround();
