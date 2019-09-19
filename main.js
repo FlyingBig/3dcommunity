@@ -30,7 +30,8 @@ class RenderCanvas {
 		//相机
 		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 		// 渲染器
-		this.renderer = new THREE.WebGLRenderer({alpha: true});
+		this.renderer = new THREE.WebGLRenderer({alpha: false});
+		this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 		// 房屋建筑信息
 		this.positions = {
 			mybuild: { position:[[-360, 82 , -225]], rotation: [Math.PI*1.4] }, // 明宇
@@ -134,6 +135,7 @@ class RenderCanvas {
     this.scene.add(this.sceneBox );
 		// 设置相机位置
 		this.camera.position.set(100, 100, 100);
+		this.camera.lookAt(0, 0, 0);
 		this.roadGrass();
 		// 草地区域
     this.scene.add(grassarea.getArea());
@@ -143,28 +145,19 @@ class RenderCanvas {
 		this.axesHelper();
 		this.initControl();
 		this.loadWater();
+		this.addRain();
 		this.animate();
 		this.redCar();
 		this.loadGarbages();
 		this.loadLamps();
+		this.mouseEvent();
 		this.randomBuild( 150 );
-    var geometry = new THREE.Geometry();
-    geometry.vertices.push(
-      new THREE.Vector3( -10,  10, 0 ),
-      new THREE.Vector3( -10, -10, 0 ),
-      new THREE.Vector3(  10, -10, 0 )
-    );
-    geometry.faces.push( new THREE.Face3( 0, 1, 2 ) );
-    let mesh = new THREE.Mesh(geometry);
-    let g = new THREE.PlaneGeometry(5,5);
-    let mesh1= new THREE.Mesh(g);
 	}
 	// 添加缩放拖拽控制器
 	initControl() {
-		let controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-		controls.enableDamping = true
-		controls.dampingFactor = 0.25
-		controls.rotateSpeed = 0.35
+		this.controls.enableDamping = true
+		this.controls.dampingFactor = 0.25
+		this.controls.rotateSpeed = 0.35
 	}
 	// 房屋数量，位置，旋转角度信息
 	positionBuild() {
@@ -295,6 +288,10 @@ class RenderCanvas {
 		let aim = this.animate.bind(this);
 		requestAnimationFrame(aim);
 		this.stats.update();
+		TWEEN.update()
+		if(myGround.cloud&&myGround.cloud.visible){
+			this.renderRain();
+		}
 		this.renderer.render(this.scene, this.camera);
 	}
 	// 添加obj模型
@@ -311,13 +308,7 @@ class RenderCanvas {
 			deg: 0,
 			scale: 0.003,
 			position: this.computedRoal([-100, 2, -315])
-		},{
-      mtlUrl: '/models/fountain/file.mtl',
-      objUrl: '/models/fountain/file.obj',
-      scale: 6,
-      position: [-138, 0, -120],
-      noLight: true
-    }]
+		}]
 		let car = await Promise.all(objModel(param));
 		this.cars.smallCar = car[0];
 		this.cars.truck = car[1];
@@ -401,11 +392,9 @@ class RenderCanvas {
         that.scene.children[1].position.set( ...that.positionLight[1] );
         that.scene.children[2].position.set( ...that.positionLight[2] );
         that.sceneBox.material.map = that.sceneTexture.day;
-        that.scene.remove(...myGround.lampLights);
-        that.scene.dispose()
+        myGround.closeLampLight()
       } else {
-				that.scene.add(...myGround.lampLights);
-				that.scene.dispose()
+				myGround.openLampLight()
         that.scene.children[0].position.set( that.positionLight[0][0]*10, that.positionLight[0][1]*10, that.positionLight[0][2]*10 );
         that.scene.children[1].position.set( that.positionLight[1][0]*10, that.positionLight[1][1]*10, that.positionLight[2][2]*10 );
         that.scene.children[2].position.set( that.positionLight[2][0]*10, that.positionLight[2][1]*10, that.positionLight[2][2]*10 );
@@ -444,6 +433,23 @@ class RenderCanvas {
       }
 
     }, false)
+
+		let closeVideo = document.getElementById('closeVideo')
+		closeVideo.addEventListener('click',function(){
+			document.getElementsByTagName('video')[0].setAttribute('src','')
+			document.getElementById('videoPanel').style.display = 'none'
+		},false)
+
+		let rainBtn = document.getElementById('rain');
+		rainBtn.addEventListener('click',function(){
+    	if (myGround.cloud){
+				if(myGround.cloud.visible){
+					myGround.cloud.visible = false
+				}else {
+					myGround.cloud.visible = true
+				}
+			}
+		})
   }
   //添加垃圾桶
 	loadGarbages (){
@@ -456,5 +462,80 @@ class RenderCanvas {
 		let lamps = myGround.loadLamp();
 		this.scene.add(...lamps)
 	}
+	mouseEvent(){
+		let that = this;
+		//鼠标双击进入观察状态
+		document.addEventListener("dblclick",function(event){
+			let mouse = {x:'',y:''}
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			let raycaster = new THREE.Raycaster();
+			// 通过鼠标点的位置和当前相机的矩阵计算出raycaster
+			raycaster.setFromCamera( mouse, that.camera );
+			// 获取raycaster直线和所有模型相交的数组集合
+			var intersects = raycaster.intersectObjects(that.scene.children,true);
+			if(intersects.length>0){
+				let position = intersects[0].point;
+				let cameraPosition = that.camera.position;
+				that.camera.lookAt(position.x,position.y,position.z)
+				that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
+				let tween = new TWEEN.Tween(cameraPosition).to(
+						{
+							x:position.x+10,
+							y:position.y+10,
+							z:position.z+10
+						},4000
+				).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
+					that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
+					that.camera.lookAt(position.x,position.y,position.z)
+				}).start()
+
+				if(intersects[0].object.name=='camera'){
+
+					document.getElementById("videoPanel").style.display = "block";
+					document.getElementsByTagName("video")[0].style.display = "block"
+					document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
+					that.renderer.render(that.camera,that.scene)
+				}
+			}
+		})
+		document.addEventListener("contextmenu",function(event){
+			that.outlook()
+		})
+	}
+	outlook(){
+		let that = this;
+		that.camera.lookAt(0,0,0)
+		that.controls.target = new THREE.Vector3(0,0,0);
+		let cameraPosition = that.camera.position
+		let tween = new TWEEN.Tween(cameraPosition).to(
+				{
+					x:100,
+					y:100,
+					z:100
+				},2000
+		).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
+			that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
+			that.camera.lookAt(0,0,0)
+		}).start()
+	}
+	renderRain(){
+		let vertices = myGround.cloud.geometry.vertices;
+		vertices.forEach(function(v){
+			v.y = v.y - (v.velocityY)*9;
+			v.x = v.x - (v.velocityX)*.5;
+
+			if (v.y <= -60) v.y = 60;
+			if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
+		})
+		myGround.cloud.geometry.verticesNeedUpdate = true;
+		this.renderer.render(this.scene, this.camera);
+	}
+	addRain(){
+		let rain = myGround.createRain()
+		this.scene.add(rain)
+	}
+
+
 }
 new RenderCanvas().init();

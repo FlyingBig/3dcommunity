@@ -27,10 +27,10 @@ class GrassArea {
     let extrudeSettings = { amount: 0.1, bevelEnabled: false, bevelSegments: 1, steps: 0.1, bevelSize: 1, bevelThickness: 1 };
     let geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
     let texture = this.getTexture('/assets/image/grasslight.jpg',{ rx: 1/50, ry: 1/ 50 });
-    let material = new THREE.MeshBasicMaterial( { map: texture } );
+    let material = new THREE.MeshPhongMaterial( { map: texture } );
     let mesh = new THREE.Mesh( geometry, material );
     mesh.rotateX(Math.PI/2);
-    mesh.position.y = 1.5;
+    mesh.position.y = .7;
     return mesh;
   }
   // 贴图方法
