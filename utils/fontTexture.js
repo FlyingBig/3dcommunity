@@ -23,7 +23,7 @@ class FontTexture {
      font.position.z = 0.2;
      // 点形状
      let pointer = this.point();
-     pointer.position.set(-100, -80, 0);
+     pointer.position.set(-100, -60, 0);
      // 线形状
      let line = this.line();
      back.layers.mask = 2;
@@ -31,6 +31,7 @@ class FontTexture {
      box.layers.mask = 2;
      box.add(back, font, pointer, line);
      box.position.set(...position);
+     box.name =  'messageBox';
      return box;
    }
   /**
@@ -73,7 +74,7 @@ class FontTexture {
   }
   line() {
     let shape = new THREE.Shape();
-    shape.moveTo(-100, -80);
+    shape.moveTo(-100, -60);
     shape.lineTo(-80, 10);
     shape.lineTo(-60, 26);
     let line = new THREE.Line(new THREE.ShapeGeometry(shape), new THREE.MeshBasicMaterial({color: '#54AACA'}));

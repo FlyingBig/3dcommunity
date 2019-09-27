@@ -1714,7 +1714,7 @@ class MyGround {
 			depthTest:false
 		})
 		let range = 600
-		for(let i=0;i<30000;i++){
+		for(let i=0;i<20000;i++){
 			let particle = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
 			particle.velocityY = 0.1 + Math.random() / 5;
 			particle.velocityX = (Math.random() - 0.5) / 3;

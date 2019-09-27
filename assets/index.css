@@ -14,7 +14,7 @@ input,button,textarea{
 }
 /* 谷歌浏览器滚动条 */
 div::-webkit-scrollbar,
-textarea::-webkit-scrollbar {
+body::-webkit-scrollbar {
   -webkit-appearance: none;
   background-color: rgba(208,212,218,.05);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da, endColorstr=#0dd0d4da);
@@ -22,7 +22,7 @@ textarea::-webkit-scrollbar {
   height: 6px;
 }
 div::-webkit-scrollbar-thumb,
-textarea::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -58,10 +58,15 @@ textarea::-webkit-scrollbar-thumb {
   height: 100%;
 }
 #closeVideo{
-  position: absolute;
+  position: fixed;
   color: red;
   z-index: 111111;
   right: 6px;
   top: 2px;
   cursor: pointer;
+}
+#up{
+  position: absolute;
+  top: 150px;
+  left: 20px;
 }

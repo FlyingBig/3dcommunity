@@ -10,8 +10,8 @@ class ComputedBuild {
         color: "#EAD7A7"
       },
     };
-    let parent = new THREE.CylinderGeometry(15, 15, 6, 60);
-    let child = new THREE.CylinderGeometry(14.5, 14.5, 6, 60);
+    let parent = new THREE.CylinderGeometry(15, 15, 6, 32);
+    let child = new THREE.CylinderGeometry(14.5, 14.5, 6, 32);
     let result = new ThreeBSP(parent).subtract(new ThreeBSP(child)).toMesh();
     let texture = new THREE.TextureLoader().load( 'assets/image/cylinderTop.png' );
     texture.wrapS = THREE.RepeatWrapping;
@@ -36,6 +36,7 @@ export default new ComputedBuild();
  * */
 export const getTransparent = ( geometry, color = '#19EAFD', opacity = 0.2) => {
   let box = new THREE.Object3D();
+  box.userData = geometry.userData;
   box.layers.mask = 2;
   if( geometry.type === 'Group' || geometry.type === 'Object3D' ) {
     let { position, rotation } = geometry;

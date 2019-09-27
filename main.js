@@ -4,6 +4,7 @@ require('three-orbitcontrols');
 require('./assets/index');
 require('./node_modules/threebsp/index');
 require('./node_modules/three/src/extras/Earcut');
+let demoData = require('./json/build.json');
 
 import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import TWEEN from '@tweenjs/tween.js';
@@ -18,10 +19,10 @@ import myGround from './utils/myGround';
 import grassarea from './utils/grassArea';
 import parking from './utils/parking';
 import fontTexture from './utils/fontTexture';
+import elevator from './utils/elevator';
 
 // obj文件导出
 import { objModel } from './utils/modelOut';
-
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
 // 渲染房屋
 class RenderCanvas {
@@ -171,16 +172,17 @@ class RenderCanvas {
 		this.foot();
 		this.axesHelper();
 		this.initControl();
-		this.loadWater();
+		// this.loadWater();
 		this.animate();
 		this.redCar();
 		this.loadGarbages();
 		this.loadLamps();
 		this.randomBuild( 150 );
     this.loadParking();
-    this.messageBox();
     this.mouseEvent();
     this.addRain();
+    this.loadHydrant();
+    this.addElevator();
 	}
 	// 添加缩放拖拽控制器
 	initControl() {
@@ -244,21 +246,21 @@ class RenderCanvas {
 	// 加载草坪，道路
 	roadGrass() {
 	  // 加载小区的道路
-		let roadObjs = myGround.loadRoad();
-		this.scene.add(roadObjs);
-    // 加载公路
-    let driveRoad = myGround.loadDriveWay();
-    this.scene.add(driveRoad);
+		// let roadObjs = myGround.loadRoad();
+		// this.scene.add(roadObjs);
+    // // 加载公路
+    // let driveRoad = myGround.loadDriveWay();
+    // this.scene.add(driveRoad);
     // 加载河流
 		let riverObjs = myGround.loadRiver();
 		this.scene.add(...riverObjs);
     // 加载草坪
 		this.diffModel.grass = myGround.loadGrass();
 		this.scene.add(this.diffModel.grass);
-    // 加载树木
+/*    // 加载树木
 		myGround.loadTree().then(re => {
       this.scene.add(re);
-    })
+    })*/
 	}
 	// 添加辅助线工具
 	axesHelper() {
@@ -280,7 +282,7 @@ class RenderCanvas {
     car.position.z += this.roadDeflection*direction;
 	}
 	// 随机生成简单模型
-  randomBuild( num ) {
+    randomBuild( num ) {
 	  let path = new THREE.CatmullRomCurve3([
 	    new THREE.Vector3(650, 2, 500),
       new THREE.Vector3(650, 2, -500),
@@ -329,7 +331,7 @@ class RenderCanvas {
 		this.renderer.render(this.scene, this.camera);
 	}
 	// 添加obj模型
-	async redCar() {
+  async redCar() {
 		let param = [{
 			mtlUrl: '/models/redCar/file.mtl',
 			objUrl: '/models/redCar/file.obj',
@@ -377,6 +379,25 @@ class RenderCanvas {
     car2.updateMatrix();
     this.scene.add(car1, car2, car3, car4);
 	}
+	// 添加消防栓模型
+  async loadHydrant() {
+	  let position = [[20, 1, -3], [-20, 1, 7], [-70, 1, 7],  [-220, 1, 20], [-16, 1, -100], [100, 1, -70]];
+	  let param = [{
+     mtlUrl: '/models/hydrant/file.mtl',
+     objUrl: '/models/hydrant/file.obj',
+     //deg: -Math.PI/2,
+     //scale: 0.001,
+     noLight: true,
+    }];
+	  let model = await Promise.all(objModel(param)); // 获取模型
+    let obj = new THREE.Object3D();
+    position.map((v)=>{
+      let c = model[0].clone();
+      c.position.set(...v);
+      obj.add(c);
+    })
+	  this.scene.add(obj);
+  }
 	// 加载水波动画
 	loadWater() {
 	  // 河流水波
@@ -431,6 +452,7 @@ class RenderCanvas {
           build.position.set(...re);
           key === 'main' ? build.rotateZ(rotation[index]) : build.rotateY(rotation[index]);
           build.name = 'opacityBuild';
+          build.userData.id = `${key}${index}`;
           build.matrixAutoUpdate = false;
           build.updateMatrix();
           opacityBox.add(build);
@@ -492,7 +514,7 @@ class RenderCanvas {
       document.getElementsByTagName('video')[0].setAttribute('src','')
       document.getElementById('videoPanel').style.display = 'none'
     },false)
-
+    // 下雨状态
     let rainBtn = document.getElementById('rain');
     rainBtn.addEventListener('click',function(){
       if (myGround.cloud){
@@ -502,6 +524,19 @@ class RenderCanvas {
           myGround.cloud.visible = true;
         }
       }
+    })
+    // 电梯上升
+    let up = document.getElementById('up');
+    up.addEventListener('click',function(){
+      let childrens = that.scene.children;
+      let g = null;
+      for(let i=0, j=childrens.length; i<j; i++) {
+        if( childrens[i].name === 'elevator' ) {
+          g = childrens[i];
+          break;
+        }
+      }
+      elevator.runningElevator(g);
     })
   }
   //添加垃圾桶
@@ -522,10 +557,11 @@ class RenderCanvas {
 	  this.scene.add(groundPark);
   }
   // 消息提示框
-  messageBox() {
-	  let str = [{title: "房屋类型", content: '商业住宅房子'},{title: '楼牌号', content: "7幢1单元"},{title: '楼层数', content: '22层'},{title: '户型', content: '两梯四户'}];
+  messageBox( str, position ) {
+	  str = str || [{title: "房屋类型", content: '商业住宅房子'},{title: '楼牌号', content: "7幢1单元"},{title: '楼层数', content: '22层'},{title: '户型', content: '两梯四户'}];
 	  let message = fontTexture.init(str);
     message.scale.set(.5,.5,.5);
+    message.position.set(position.x+60, position.y+30, position.z);
 	  this.scene.add(message);
   }
   // 雨滴效果
@@ -541,28 +577,78 @@ class RenderCanvas {
       raycaster.setFromCamera( mouse, that.camera );
       // 获取raycaster直线和所有模型相交的数组集合
       var intersects = raycaster.intersectObjects(that.scene.children,true);
-      if(intersects.length>0){
-        let position = intersects[0].point;
-        let cameraPosition = that.camera.position;
-        that.camera.lookAt(position.x,position.y,position.z)
-        that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
-        let tween = new TWEEN.Tween(cameraPosition).to(
-          {
-            x:position.x+10,
-            y:position.y+10,
-            z:position.z+10
-          },1200
-        ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
-          that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
-          that.camera.lookAt(position.x,position.y,position.z)
-        }).onComplete(function () {
-          if(intersects[0].object.name==='camera'){
-            document.getElementById("videoPanel").style.display = "block";
-            document.getElementsByTagName("video")[0].style.display = "block"
-            document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
-            tween = null;
+      // 选中物体的第一个
+      let obj = intersects[0].object;
+      if( intersects.length ){
+        // 点击摄像机移动视角并播放视
+        if ( obj.name === 'camera') {
+            let position = intersects[0].point;
+            let cameraPosition = that.camera.position;
+            that.camera.lookAt(position.x,position.y,position.z)
+            that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
+            let tween = new TWEEN.Tween(cameraPosition).to(
+              {
+                x:position.x+10,
+                y:position.y+10,
+                z:position.z+10
+              },1200
+            ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
+              that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
+              that.camera.lookAt(position.x,position.y,position.z)
+            }).onComplete(function () {
+              document.getElementById("videoPanel").style.display = "block";
+              document.getElementsByTagName("video")[0].style.display = "block"
+              document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
+              tween = null;
+            }).start()
+        }
+        // 删除消息盒子
+        if ( obj.parent.name === 'messageBox') {
+          let t = new TWEEN.Tween({x: .5, y: .5, z: .5})
+            .to({x: 0, y: 0, z: 0}, 800)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(function (res) {
+              obj.parent.scale.set(res.x, res.y, res.z);
+            })
+            .onComplete(function () {
+              // 删除掉所有的模型组内的mesh
+              obj.parent.traverse(function (item) {
+                if (item instanceof THREE.Mesh) {
+                  item.geometry.dispose(); // 删除几何体
+                  item.material.dispose(); // 删除材质
+                }
+              });
+              that.scene.remove(obj.parent);
+              t = null;
+            }).start();
+        }
+      };
+
+      // 透明建筑射线碰撞
+      let opacityRay = new THREE.Raycaster();
+      opacityRay.setFromCamera( mouse, that.camera );
+      let targetMesh = null; //  碰撞对象
+      for(let i=0; i<that.scene.children.length; i++) {
+        if(that.scene.children[i].name === 'opacityBox') {
+          targetMesh = that.scene.children[i];
+          break;
+        }
+      }
+      let objs = raycaster.intersectObject(targetMesh, true);
+      if( objs.length ) {
+        let findParent = function( child ) {
+          if( child.parent.name !==  'opacityBuild' ) {
+            child = child.parent;
+            return findParent(child);
+          } else {
+            return child.parent;
           }
-        }).start()
+        }
+        let parent = findParent(objs[0].object);
+        let position = parent.position;
+        position.y = parent.userData.y;
+        let data = demoData[parent.userData.id];
+        that.messageBox( data, position );
       }
     })
     document.addEventListener("contextmenu",function(event){
@@ -601,6 +687,11 @@ class RenderCanvas {
     let rain = myGround.createRain()
     this.scene.add(rain)
   }
-
+  // 添加电梯模型
+  addElevator() {
+	  let model = elevator.init();
+    model.position.set(-10, 4 , -30);
+	  this.scene.add(model);
+  }
 }
 new RenderCanvas().init();

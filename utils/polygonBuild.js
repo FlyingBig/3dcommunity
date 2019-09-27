@@ -70,6 +70,7 @@ export default class PolygonBuild {
     box.add(k);
     box.add(copyk);
     box.rotateX( Math.PI * -0.5 );
+    box.userData = {y: 20};
     return box;
   }
   // 贴图方法

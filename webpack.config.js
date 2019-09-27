@@ -27,7 +27,7 @@ module.exports = {
   devServer: {
     contentBase: false, //静态资源
     port: 8081, //端口
-    host: 'localhost',
+    host: '0.0.0.0',
     open: true, //是否自动打开浏览器啊
     inline: true,
     overlay: true,
@@ -62,7 +62,8 @@ module.exports = {
     // 静态资源
     new CopyWebpackPlugin([
       { from: join('assets/image'), to:  join('dist/assets/image/') },
-      { from: join('models'), to:  join('dist/models/') }
+      { from: join('models'), to:  join('dist/models/') },
+      { from: join('json'), to:  join('dist/json/') }
     ])
   ],
 }
