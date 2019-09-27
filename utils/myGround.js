@@ -1,4 +1,5 @@
 import { Earcut } from '../node_modules/three/src/extras/Earcut';
+import {Fire} from '../node_modules/three/examples/js/objects/Fire.js';
 // 小区道路点位数据
 var myRoads= [
 	//小区内无箭头道路
@@ -1767,10 +1768,16 @@ class MyGround {
 			plant.position.set(position[0],position[1],position[2]);
 		}else{
 			let plant = new THREE.Object3D();
-			let leafTure = new THREE.TextureLoader().load('../assets/image/tree_icon2.png');
+			let leafTure = new THREE.TextureLoader().load('../assets/image/tree1.png');
 			let geometry1 = new THREE.PlaneGeometry(10,20);
 			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:0.8});
-
+			for(var i=1;i<3;i++){
+				var leaf = new THREE.Mesh(geometry1,leafMaterial);
+				leaf.position.set(0,10,0)
+				leaf.rotation.y = -Math.PI*(i-1)/2
+				plant.add(leaf);
+			}
+			plant.scale.set(.4,.4,.4)
 			plant.castShadow = true;
 			return plant
 		}
@@ -1815,23 +1822,253 @@ class MyGround {
 	 */
 	addTree(scene){
 		let treeObj = new THREE.Object3D();
+		let mainBark = new THREE.CylinderGeometry(.3,1,15,50)
+		let mainBarkMaterial = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('../assets/image/bark.jpg')});
+		let mainBarkMesh = new THREE.Mesh(mainBark,mainBarkMaterial);
+		treeObj.add(mainBarkMesh);
+		let secondBarkData = [
+			{
+				position:[0,0,-4],
+				rotation:[-Math.PI/3,-Math.PI/3,0]
+			},
+			{
+				position:[-3,3,-1.5],
+				rotation:[0,-Math.PI/6,Math.PI/3]
+			},
+			{
+				position:[1.5,1.5,1],
+				rotation:[0,-Math.PI/6,-Math.PI/6]
+			},{
+				position:[-0.8,4,1.2],
+				rotation:[0,-Math.PI*5/7,-Math.PI/5]
+			}
+		]
+		for(let i=0;i<4;i++){
+			let secondBark = new THREE.CylinderGeometry(.1,.4,8-i,40);
+			let secondBarkMesh = new THREE.Mesh(secondBark,mainBarkMaterial)
+			secondBarkMesh.position.set(
+					secondBarkData[i].position[0],
+					secondBarkData[i].position[1],
+					secondBarkData[i].position[2]
+			)
+			secondBarkMesh.rotation.x = secondBarkData[i].rotation[0]
+			secondBarkMesh.rotation.y = secondBarkData[i].rotation[1]
+			secondBarkMesh.rotation.z = secondBarkData[i].rotation[2]
+			treeObj.add(secondBarkMesh);
+		}
+		let footGeom = new THREE.BoxGeometry(6,.1,6);
+		let footMaterial = new THREE.MeshLambertMaterial({color:0xffffff})
+		let footMesh = new THREE.Mesh(footGeom,footMaterial);
+
+		let footPlane = new THREE.PlaneGeometry( 5,5);
+		let footPlaneMaterial = new THREE.MeshBasicMaterial( {map:new THREE.TextureLoader().load('../assets/image/grass1.png')});
+		let plane = new THREE.Mesh( footPlane, footPlaneMaterial );
+		plane.position.set(0,.1,0)
+		plane.rotation.x = -Math.PI/2
+		
+		let footObj = new THREE.Object3D();
+		footObj.add(footMesh);
+		footObj.add(plane)
+		footObj.position.set(0,-7.6,0)
 
 
 		let plant = new THREE.Object3D();
-		for(let j=0;j<1000;j++){
-			let leafTure = new THREE.TextureLoader().load('../assets/image/leaf.png');
-			let geometry1 = new THREE.PlaneGeometry(10,20);
-			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:0.8});
-			let plantMesh = new THREE.Mesh(geometry1,leafMaterial)
-			plantMesh.scale.set(.1,.1,.1)
-			plantMesh.rotation.x = Math.random()*Math.PI;
-			plantMesh.position.set((Math.random()-0.5)*400,1,(Math.random())*100)
-			plant.add(plantMesh)
+		let leafTure = new THREE.TextureLoader().load('../assets/image/myLeaf.png');
+		let geometry1 = new THREE.PlaneGeometry(10,20);
+		let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:1});
+		let plantMesh = new THREE.Mesh(geometry1,leafMaterial)
+		plantMesh.scale.set(.3,.3,.3)
+
+		for(let j=0;j<600;j++){
+			let plantMeshClone = plantMesh.clone()
+
+			let num = 0
+			if(j*.01<7){
+				num = Math.sqrt(7*7-(7-j*0.03)*(7-j*0.03))*2.5
+			}else {
+				num = Math.sqrt(7*7-(j*0.03-7)*(j*0.03-7))*2.5
+			}
+			plantMeshClone.position.set(num*(Math.random()-0.5),0+j*.06,num*(Math.random()-0.5))
+			plantMeshClone.rotation.x = Math.random()*Math.PI;
+			plantMeshClone.rotation.y = Math.random()*Math.PI;
+			plantMeshClone.rotation.z = Math.random()*Math.PI;
+			plant.add(plantMeshClone)
 
 		}
+
 		treeObj.add(plant)
-		scene.add( treeObj );
+		treeObj.add(footObj)
+		let treeObjs = new THREE.Object3D()
+		for(let i=0;i<8;i++){
+			let treeObjClone = treeObj.clone();
+			treeObjClone.position.set((Math.random()-0.5)*600,8,(Math.random()-.7)*300)
+			treeObjs.add(treeObjClone)
+		}
+		treeObjs.scale.set(.5,.5,.5)
+		scene.add( treeObjs );
+	}
+
+	/**
+	 * 添加建筑物测试贴图
+	 */
+	testUvTexture(scene){
+		let box = new THREE.BoxGeometry(10,10,10);
+		let material1 = new THREE.TextureLoader().load('../assets/image/11.jpg');
+		let material2 = new THREE.TextureLoader().load('../assets/image/12.jpg');
+		let material3 = new THREE.TextureLoader().load('../assets/image/14.png');
+		let material4 = new THREE.TextureLoader().load('../assets/image/15.png');
+		let material5 = new THREE.TextureLoader().load('../assets/image/16.png');
+		let material6 = new THREE.TextureLoader().load('../assets/image/17.png');
+		let materials = [material1,material2,material3,material4,material5,material6]
+		let meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
+		let mesh = new THREE.Mesh(box,meshFaceMaterial);
+		mesh.position.set(0,30,0);
+		scene.add(mesh);
+	}
+	/**
+	 * 楼层构建
+	 */
+	addBuildingByFloor(scene){
+		let x=0,y=0;
+		let floorShape = new THREE.Shape();
+		floorShape.moveTo(0,0);
+		floorShape.bezierCurveTo(5,0,5,5,3,5)
+		floorShape.bezierCurveTo(3,8,5,8,5,12)
+		floorShape.lineTo(0,12);
+		let shapeMaterial = new THREE.MeshBasicMaterial({color:"#ccc"})
+
+		let extrudeSettings = {
+			steps: 2,
+			depth: 16,
+			bevelEnabled: true,
+			bevelThickness: 1,
+			bevelSize: 1,
+			bevelOffset: 0,
+			bevelSegments: 1
+		};
+
+		let floorShapeMesh = new THREE.ExtrudeGeometry( floorShape, extrudeSettings );
+		scene.add(floorShapeMesh)
 
 	}
+
+	/**
+	 * 绘制围墙
+	 */
+	addOutWall(scene){
+		let objectBox = new THREE.Object3D();
+		//中间立柱
+		let bottomBoxMesh = new THREE.BoxGeometry(2,.4,2);
+		let boxMaterial = new THREE.MeshLambertMaterial({color:0xdee4ee})
+		let middleBoxMesh = new THREE.BoxGeometry(1.6,6,1.6);
+		let middleBoxMaterial = new THREE.MeshLambertMaterial({color:0xffe9d5});
+		let bottomBox = new THREE.Mesh(bottomBoxMesh,boxMaterial);
+		let middleBox = new THREE.Mesh(middleBoxMesh,middleBoxMaterial);
+		let topBox = bottomBox.clone()
+		bottomBox.position.set(0,-3,0)
+		topBox.position.set(0,3,0)
+		objectBox.add(bottomBox);
+		objectBox.add(middleBox);
+		objectBox.add(topBox)
+
+		//添加横杆
+		let lineHorizonMesh =  new THREE.CylinderGeometry( .1, .1, 20, 32 );
+		let lineHorizonMaterial = new THREE.MeshLambertMaterial({color:0x000000})
+		let lineHorizon = new THREE.Mesh(lineHorizonMesh,lineHorizonMaterial);
+		lineHorizon.position.set(0,2,0)
+		lineHorizon.rotation.z = Math.PI/2
+		let lineHorizon2 = lineHorizon.clone();
+		let lineHorizon3 = lineHorizon.clone();
+		lineHorizon2.position.set(0,1,0)
+		lineHorizon3.position.set(0,-2,0)
+		objectBox.add(lineHorizon)
+		objectBox.add(lineHorizon2)
+		objectBox.add(lineHorizon3)
+
+		//添加竖杆
+		let group = new THREE.Group();
+		let lineVertialMesh =  new THREE.CylinderGeometry( .07, .07, 6, 32 );
+		let lineVertialMaterial = new THREE.MeshLambertMaterial({color:0x000000})
+		let lineVertial = new THREE.Mesh(lineVertialMesh,lineVertialMaterial)
+		lineVertial.position.set(2,0,0)
+
+		let lineVertialTopMesh =  new THREE.CylinderGeometry( .1, .01, .2, 32 );
+		let lineVertialTopMaterial = new THREE.MeshLambertMaterial({color:0x000000})
+		let lineVertialTop = new THREE.Mesh(lineVertialTopMesh,lineVertialTopMaterial)
+		lineVertialTop.position.set(2,3.1,0)
+		lineVertialTop.rotation.x = Math.PI
+		group.add(lineVertial)
+		group.add(lineVertialTop)
+		for(let i=-14;i<7;i+=2){
+			let lineVertialTopClone = group.clone();
+			lineVertialTopClone.position.set(2+i,.1,0)
+			objectBox.add(lineVertialTopClone)
+		}
+		objectBox.position.set(0,4,0)
+
+		let walls = [];
+		for(let j=-500;j<440;j+=20){
+			let myObjectBox = objectBox.clone();
+			myObjectBox.position.set(j,4,-270);
+			walls.push(myObjectBox)
+		}
+		for(let j=-260;j<60;j+=20){
+			let myObjectBox = objectBox.clone();
+			myObjectBox.rotation.y = Math.PI/2-Math.PI/50
+			myObjectBox.position.set(415-j*.05,4,j);
+			walls.push(myObjectBox)
+		}
+		return walls;
+	}
+
+	/**
+	 * 添加火焰效果
+	 */
+	addFire(scene){
+	  let cube = new THREE.SphereGeometry(1,120)
+		let fire = new THREE.Fire(cube,{
+			textureWidth:512,
+			textureHeight:512,
+			debug:false,
+		})
+		fire.position.set(0,10,0);
+		fire.addSource(.1,.1,.2,1.0,4.0,2.0);
+		let arr= {
+			color1:'#ffffff',//内焰
+			color2:'#ffa000',//外焰arr
+			color3:'#000000',//烟雾
+			colorBias:0.8,//颜色偏差
+			burnRate:0.35,//燃烧率
+			diffuse:1.33,//扩散
+			viscosity:0.25,//粘度
+			expansion:-0.25,//膨胀
+			swirl:50.0,//旋转
+			drag:0.35,//拖拽
+			airSpeed:12.0,//空气速度
+			windX:0.0,//风向X
+			windY:0.75,//风向Y
+			speed:500.0,//火焰速度
+			massConservation:false,//质量守恒
+		}
+		fire.color1.set(arr[0]);
+		fire.color2.set(arr[1]);
+		fire.color3.set(arr[2]);
+		/*fire.windVector.x=arr[3];
+		fire.windVector.y=arr[4];
+		fire.colorBias=arr[5];
+		fire.burnRate=arr[6];*/
+		/*fire.diffuse=arr[7];
+		fire.viscosity=arr[8];
+		fire.expansion=arr[9];
+		fire.swirl=arr[10];
+		fire.drag=arr[11];
+		fire.airSpeed=arr[12];
+		fire.speed=arr[13];*/
+		fire.massConservation=arr[14];
+	  scene.add(fire)
+	}
+
+
+
 }
 export default new MyGround();
