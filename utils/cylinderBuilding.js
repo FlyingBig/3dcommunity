@@ -14,7 +14,7 @@ export default class CylinderBuild {
   };
   init() {
     const box = new THREE.Object3D();
-    const geometry = new THREE.CylinderGeometry( this.radiusTop, this.radiusBottom, this.height, 32 );
+    const geometry = new THREE.CylinderBufferGeometry( this.radiusTop, this.radiusBottom, this.height, 32 );
     const texture1 = this.getTexture('/assets/image/circle.png',{ rx: 16, ry: 17 });
     const material = new THREE.MeshBasicMaterial({map: texture1});
     const cylinder = new THREE.Mesh( geometry, material );

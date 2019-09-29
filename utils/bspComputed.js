@@ -36,6 +36,7 @@ export default new ComputedBuild();
  * */
 export const getTransparent = ( geometry, color = '#19EAFD', opacity = 0.2) => {
   let box = new THREE.Object3D();
+  box.layers.mask = 2;
   if( geometry.type === 'Group' || geometry.type === 'Object3D' ) {
     let { position, rotation } = geometry;
     for( let i=0; i< geometry.children.length; i++ ) {
@@ -67,6 +68,9 @@ export const getTransparent = ( geometry, color = '#19EAFD', opacity = 0.2) => {
     box.rotateX(rotation.x);
     box.rotateY(rotation.y);
     box.rotateZ(rotation.z);
+    face.layers.mask = 2;
+    line.layers.mask = 2;
+    point.layers.mask = 2;
     box.add(face);
     box.add(line);
     box.add(point);

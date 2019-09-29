@@ -18,6 +18,8 @@ import myGround from './utils/myGround';
 import grassarea from './utils/grassArea';
 import line from './utils/addline';
 import {pointerLock} from './node_modules/three/examples/js/controls/PointerLockControls'
+import parking from './utils/parking';
+import fontTexture from './utils/fontTexture';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 
@@ -88,7 +90,10 @@ class RenderCanvas {
 		// 车辆运动的速度
 		this.speed = 2;
     // 灯光位置i
-    this.positionLight = [[-500, 400, -1200], [200, 400, 1200 ], [500, 400, 1200]];
+    this.positionLight = [
+      [-500, 400, -1200], [200, 400, 1200 ], [500, 400, 1200],
+      [-5000, 4000, -12000], [2000, 4000, 12000 ], [5000, 4000, 12000],
+    ];
     // 场景贴图控制
 		let cubeTextureLoader = new THREE.CubeTextureLoader();
 		cubeTextureLoader.setPath( './assets/image/' );
@@ -116,10 +121,13 @@ class RenderCanvas {
     this.roadDeflection = 0;
     // 所有建筑类型
     this.builds = {};
+    // 草坪
+    this.diffModel = {};
     // 透明模式
     this.opacity = false;
     this.eventBtn();
 	}
+	// 启动函数
 	init() {
 		// 设置画布大小/颜色
 		const contrain = document.getElementById('app');
@@ -127,20 +135,30 @@ class RenderCanvas {
 		// this.renderer.setClearColor("red");
 		contrain.appendChild(this.renderer.domElement);
 		// 添加灯光
-    let lights = [];
-		lights[ 0 ] = new THREE.PointLight( '#FEFFDD', 1, 50000, 2 );
-		lights[ 1 ] = new THREE.PointLight( '#F9F8F6', 1, 50000, 2 );
-		lights[ 2 ] = new THREE.PointLight( '#F9F8F6', 1, 50000, 2 );
-		lights[ 0 ].position.set( ...this.positionLight[0] );
-		lights[ 1 ].position.set( ...this.positionLight[1] );
-		lights[ 2 ].position.set( ...this.positionLight[2] );
-
-		this.scene.add( ...lights );
+    let lightsDay = [];
+    lightsDay[ 0 ] = new THREE.PointLight( '#FEFFDD', 1, 50000, 2 );
+    lightsDay[ 1 ] = new THREE.PointLight( '#F9F8F6', 1, 50000, 2 );
+    lightsDay[ 2 ] = new THREE.PointLight( '#F9F8F6', 1, 50000, 2 );
+    lightsDay[ 0 ].position.set( ...this.positionLight[0] );
+    lightsDay[ 1 ].position.set( ...this.positionLight[1] );
+    lightsDay[ 2 ].position.set( ...this.positionLight[2] );
+		// 夜晚的灯光位置，层级信息
+		let lightsNight = [];
+    lightsNight.push(lightsDay[ 0 ].clone());
+    lightsNight.push(lightsDay[ 0 ].clone());
+    lightsNight.push(lightsDay[ 0 ].clone());
+    lightsNight[0].layers.mask = 2;
+    lightsNight[0].position.set(...this.positionLight[3]);
+    lightsNight[1].layers.mask = 2;
+    lightsNight[1].position.set(...this.positionLight[4]);
+    lightsNight[2].layers.mask = 2;
+    lightsNight[2].position.set(...this.positionLight[5]);
+		this.scene.add( ...lightsDay, ...lightsNight);
     // 添加性能指标
 		this.stats = new Stats();
 		this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 		document.body.appendChild( this.stats.dom );
-		// 添加整体风格
+		// 添加晴天天空
     let skyBoxMaterial = new THREE.MeshBasicMaterial({map: this.sceneTexture.day, side: THREE.DoubleSide, fog: false});
     this.sceneBox = new THREE.Mesh(
       new THREE.SphereGeometry( 5000, 10,10 ),  //盒子物体
@@ -154,8 +172,15 @@ class RenderCanvas {
 		// 设置相机位置
 		this.camera.position.set(7500, 7500, 7500);
 		this.camera.lookAt(0, 0, 0);
+//     // 添加夜晚天空
+//     let nightBoxMaterial = new THREE.MeshBasicMaterial({map: this.sceneTexture.night, side: THREE.DoubleSide, fog: false});
+//     let nightBoxM = new THREE.Mesh(
+//       new THREE.IcosahedronBufferGeometry( 5000, 1 ),  //盒子物体
+//       nightBoxMaterial
+//     );
+//     nightBoxM.layers.mask = 2;
+//     this.scene.add(sceneBox,  nightBoxM);
 		this.roadGrass();
-		// 草地区域
     this.scene.add(grassarea.getArea());
 		this.positionBuild();
 		this.getOpacity();
@@ -163,27 +188,27 @@ class RenderCanvas {
 		this.axesHelper();
 		this.initControl();
 		this.loadWater();
-		this.addRain();
 		this.animate();
 		this.redCar();
 		this.loadGarbages();
 		this.loadLamps();
-		this.mouseEvent();
 		this.randomBuild( 150 );
 		this.setView();
 		let walls = myGround.addOutWall()
 		this.scene.add(...walls)
 		//myGround.addFire(this.scene)
-
-
 		//myGround.addTree(this.scene)
 		//myGround.floorShapeMesh(this.scene)
+    this.loadParking();
+    this.messageBox();
+    this.mouseEvent();
+    this.addRain();
 	}
 	// 添加缩放拖拽控制器
 	initControl() {
-		this.controls.enableDamping = true
-		this.controls.dampingFactor = 0.25
-		this.controls.rotateSpeed = 0.35
+    this.controls.enableDamping = true
+    this.controls.dampingFactor = 0.25
+    this.controls.rotateSpeed = 0.35
 	}
 	// 房屋数量，位置，旋转角度信息
 	positionBuild() {
@@ -214,9 +239,11 @@ class RenderCanvas {
 				let { position, rotation } = positions[key];
 				position.map((re, index)=>{
 					let build = builds[key].clone();
-					build.position.set(...re);
+          build.position.set(...re);
 					key === 'main' ? build.rotateZ(rotation[index]) : build.rotateY(rotation[index]);
           build.name = 'entitiesBuild';
+          build.matrixAutoUpdate = false;
+          build.updateMatrix();
           entitiesBox.add(build);
 				})
 			}
@@ -231,7 +258,10 @@ class RenderCanvas {
 		mesh.position.set( 0, - 1, 0 );
 		mesh.rotation.x = - Math.PI * 0.5;
 		mesh.receiveShadow = true;
-		this.scene.add(mesh);
+		// 相机第二视角的底图
+		let meshIndex = mesh.clone();
+		meshIndex.layers.mask = 2;
+		this.scene.add(mesh, meshIndex);
 	}
 	// 加载草坪，道路
 	roadGrass() {
@@ -245,9 +275,9 @@ class RenderCanvas {
 		let riverObjs = myGround.loadRiver();
 		this.scene.add(...riverObjs);
     // 加载草坪
-		let grassObjs = myGround.loadGrass();
-		this.scene.add(grassObjs);
-		// 加载树木
+		this.diffModel.grass = myGround.loadGrass();
+		this.scene.add(this.diffModel.grass);
+    // 加载树木
 		myGround.loadTree().then(re => {
 			this.scene.add(re);
 		})
@@ -301,7 +331,8 @@ class RenderCanvas {
     }
     let geometry = BufferGeometryUtils.mergeBufferGeometries( geometers );
     let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352',transparent:true,opacity:.8}));
-    this.scene.add(mesh);
+    this.diffModel.random = mesh;
+    this.scene.add(this.diffModel.random);
   }
 	// 动画
 	animate(time) {
@@ -340,14 +371,44 @@ class RenderCanvas {
 			deg: 0,
 			scale: 0.003,
 			position: this.computedRoal([-100, 2, -315])
-		}]
+		},{
+      mtlUrl: '/models/fountain/file.mtl',
+      objUrl: '/models/fountain/file.obj',
+      scale: 6,
+      position: [-138, 0, -120],
+      noLight: true
+    }]
 		let car = await Promise.all(objModel(param));
 		this.cars.smallCar = car[0];
 		this.cars.truck = car[1];
 		this.scene.add(...car);
+    // 停车长汽车位置摆放
+    let car1 = car[0].children[2].clone();
+    car1.children.map((v)=>{
+      v.matrixAutoUpdate = false;
+    });
+    car1.position.set(-167,2,67);
+    car1.rotateY(Math.PI/2);
+    car1.matrixAutoUpdate = false;
+    car1.updateMatrix();
+    let car3 = car1.clone();
+    car3.position.x = -150;
+    car3.updateMatrix();
+    let car4 = car1.clone();
+    car4.position.x = -154;
+    car4.position.z = 38;
+    car4.rotateY(Math.PI);
+    car4.updateMatrix();
+    let car2 = car[1].children[2].clone();
+    car2.position.set(-185.5,2,65);
+    car2.rotateY(Math.PI/2);
+    car2.matrixAutoUpdate = false;
+    car2.updateMatrix();
+    this.scene.add(car1, car2, car3, car4);
 	}
 	// 加载水波动画
 	loadWater() {
+	  // 河流水波
 		let watergeometry = myGround.loadRiverWater();
 		let textureLoader = new TextureLoader();
 		let water = new Water(watergeometry,{
@@ -363,8 +424,14 @@ class RenderCanvas {
       fog: this.scene.fog !== undefined
 		});
 		water.position.y = 5
-		water.rotation.x = Math.PI*-0.5
-		this.scene.add(water);
+		water.rotation.x = Math.PI*-0.5;
+
+		let fountrinWater = new THREE.CircleBufferGeometry(8, 32);
+    let water1 = new THREE.Mesh(fountrinWater, new THREE.MeshPhongMaterial({color: '#a1d3ee'}))
+    water1.position.set(-138, 0, -120);
+    water1.rotation.x = Math.PI*-0.5;
+    water1.position.y = 2
+    this.scene.add( water, water1);
 	}
   // 计算道路的偏移量
   computedRoal( tanslate ) {
@@ -382,7 +449,9 @@ class RenderCanvas {
     let positions = this.positions;
     let opacityBox = new THREE.Object3D();
     opacityBox.name = 'opacityBox';
-    opacityBox.visible = this.opacity;
+    //opacityBox.visible = this.opacity;
+    // 图层显示
+    opacityBox.layers.mask = 2;
     for(let key in positions) {
       if( positions[key].position.length ) {
         let { position, rotation } = positions[key];
@@ -391,25 +460,41 @@ class RenderCanvas {
           build.position.set(...re);
           key === 'main' ? build.rotateZ(rotation[index]) : build.rotateY(rotation[index]);
           build.name = 'opacityBuild';
+          build.matrixAutoUpdate = false;
+          build.updateMatrix();
           opacityBox.add(build);
         })
       }
-    }
+    };
     this.scene.add(opacityBox);
   }
+  // 物体层级改变
+  changeBuildIndex() {
+    let cameraIndex = this.opacity ? 2 : 1;
+	  // 草坪层级
+    this.
+      .layers.mask = cameraIndex;
+    for(let i=0; i<this.diffModel.grass.children.length; i++) {
+      this.diffModel.grass.children[i].layers.mask = cameraIndex;
+    }
+    // 周围随机建筑
+    this.diffModel.random.layers.mask = cameraIndex;
+  }
   // 过度动画
-  transfrom(prop, sourceProp, time, show ) {
-    let tween = new TWEEN.Tween(prop.scale)
-      .to(sourceProp, time)
+  transfrom(prop, time, cameraIndex ) {
+	  let that = this;
+    let tween = new TWEEN.Tween({y: 1})
+      .to({y: 0}, time)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(function( p ) {
-        prop.scale.set(p.x, p.y, p.z);
+        prop.scale.y = p.y;
       })
       .onComplete(function () {
-        prop.visible = show;
-        tween = null;
-      })
-      .start();
+        that.camera.layers.mask = cameraIndex;
+        that.changeBuildIndex();
+        prop.scale.y = 1;
+        tween = that = null;
+      }).start();
   }
   // node事件
   eventBtn() {
@@ -421,56 +506,28 @@ class RenderCanvas {
 		})
 
 		let btn = document.getElementById('opc');
+    // 切换模式
     btn.addEventListener('click', function () {
       that.opacity = !that.opacity;
       let childrens = that.scene.children;
-      // 显示
-      if(!that.opacity) {
-        that.scene.children[0].position.set( ...that.positionLight[0] );
-        that.scene.children[1].position.set( ...that.positionLight[1] );
-        that.scene.children[2].position.set( ...that.positionLight[2] );
-        that.sceneBox.material.map = that.sceneTexture.day;
-        myGround.closeLampLight()
-      } else {
-				myGround.openLampLight()
-        that.scene.children[0].position.set( that.positionLight[0][0]*10, that.positionLight[0][1]*10, that.positionLight[0][2]*10 );
-        that.scene.children[1].position.set( that.positionLight[1][0]*10, that.positionLight[1][1]*10, that.positionLight[2][2]*10 );
-        that.scene.children[2].position.set( that.positionLight[2][0]*10, that.positionLight[2][1]*10, that.positionLight[2][2]*10 );
-        that.sceneBox.material.map = that.sceneTexture.night;
-      }
       for(let i=0, j=childrens.length; i<j; i++) {
-        if( childrens[i].name === 'entitiesBox' ) {
-          let tprop = that.opacity ? {y: 1} : {y: 0};
-          let sprop = that.opacity ? {y: 0} : {y: 1};
-          let m = new TWEEN.Tween(tprop)
-            .to(sprop, 600)
-            .easing(TWEEN.Easing.Quadratic.Out)
-            .onUpdate(function( p ) {
-              childrens[i].scale.y = p.y;
-            })
-            .onComplete(function () {
-              childrens[i].visible = !that.opacity;
-              m = null;
-            }).start();
+        if( childrens[i].name === 'entitiesBox' && that.opacity) {
+          let cameraIndex = that.opacity ? 2 : 1;
+          that.transfrom(childrens[i], 600, cameraIndex);
         }
-        if( childrens[i].name === 'opacityBox' ){
-          //[i].visible = that.opacity;
-          let tprop = !that.opacity ? {y: 1} : {y: 0};
-          let sprop = !that.opacity ? {y: 0} : {y: 1};
-          let m = new TWEEN.Tween(tprop)
-            .to(sprop, 600)
-            .easing(TWEEN.Easing.Quadratic.Out)
-            .onUpdate(function( p ) {
-              childrens[i].scale.y = p.y;
-            })
-            .onComplete(function () {
-              childrens[i].visible = that.opacity;
-              m = null;
-            }).start();
+        if( childrens[i].name === 'opacityBox' && !that.opacity){
+          let cameraIndex = that.opacity ? 2 : 1;
+          that.transfrom(childrens[i], 600, cameraIndex);
         }
       }
 
     }, false)
+    // 关闭video
+    let closeVideo = document.getElementById('closeVideo')
+    closeVideo.addEventListener('click',function(){
+      document.getElementsByTagName('video')[0].setAttribute('src','')
+      document.getElementById('videoPanel').style.display = 'none'
+    },false)
 
 		let closeVideo = document.getElementById('closeVideo')
 		closeVideo.addEventListener('click',function(){
@@ -513,7 +570,7 @@ class RenderCanvas {
   //添加垃圾桶
 	loadGarbages (){
 		let garbages = myGround.loadGarbageBin();
-		
+
 		this.scene.add(...garbages)
 	}
 	//添加路灯
@@ -521,6 +578,19 @@ class RenderCanvas {
 		let lamps = myGround.loadLamp();
 		this.scene.add(...lamps)
 	}
+  // 停车场
+  loadParking() {
+	  let groundPark = parking.init();
+    groundPark.position.set(-170,2,52);
+	  this.scene.add(groundPark);
+  }
+  // 消息提示框
+  messageBox() {
+	  let str = [{title: "房屋类型", content: '商业住宅房子'},{title: '楼牌号', content: "7幢1单元"},{title: '楼层数', content: '22层'},{title: '户型', content: '两梯四户'}];
+	  let message = fontTexture.init(str);
+    message.scale.set(.5,.5,.5);
+	  this.scene.add(message);
+  }
 	mouseEvent(){
 		let that = this;
 		//鼠标双击进入观察状态
@@ -534,23 +604,29 @@ class RenderCanvas {
 			// 获取raycaster直线和所有模型相交的数组集合
 			var intersects = raycaster.intersectObjects(that.scene.children,true);
 			if(intersects.length>0){
-				let position = intersects[0].point;
-				let cameraPosition = that.camera.position;
-				that.camera.lookAt(position.x,position.y,position.z)
-				that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
-				let tween = new TWEEN.Tween(cameraPosition).to(
-						{
-							x:position.x+10,
-							y:position.y+10,
-							z:position.z+10
-						},4000
-				).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
-					that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
-					that.camera.lookAt(position.x,position.y,position.z)
-				}).start()
+        let position = intersects[0].point;
+        let cameraPosition = that.camera.position;
+        that.camera.lookAt(position.x,position.y,position.z)
+        that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
+        let tween = new TWEEN.Tween(cameraPosition).to(
+          {
+            x:position.x+10,
+            y:position.y+10,
+            z:position.z+10
+          },1200
+        ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
+          that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
+          that.camera.lookAt(position.x,position.y,position.z)
+        }).onComplete(function () {
+          if(intersects[0].object.name==='camera'){
+            document.getElementById("videoPanel").style.display = "block";
+            document.getElementsByTagName("video")[0].style.display = "block"
+            document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
+            tween = null;
+          }
+        }).start()
 
 				if(intersects[0].object.name=='camera'){
-
 					document.getElementById("videoPanel").style.display = "block";
 					document.getElementsByTagName("video")[0].style.display = "block"
 					document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
