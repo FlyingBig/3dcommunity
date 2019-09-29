@@ -27,7 +27,7 @@ module.exports = {
   devServer: {
     contentBase: false, //静态资源
     port: 8081, //端口
-    host: '0.0.0.0',
+    host: 'localhost',
     open: true, //是否自动打开浏览器啊
     inline: true,
     overlay: true,

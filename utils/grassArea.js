@@ -31,6 +31,7 @@ class GrassArea {
     let mesh = new THREE.Mesh( geometry, material );
     mesh.rotateX(Math.PI/2);
     mesh.position.y = .7;
+    mesh.name = 'grassArea';
     return mesh;
   }
   // 贴图方法
