@@ -16,9 +16,10 @@ import myBuild from './utils/myBuild';
 import numBuild from './utils/numBuild';
 import myGround from './utils/myGround';
 import grassarea from './utils/grassArea';
+import line from './utils/addline';
+import {pointerLock} from './node_modules/three/examples/js/controls/PointerLockControls'
 import parking from './utils/parking';
 import fontTexture from './utils/fontTexture';
-
 // obj文件导出
 import { objModel } from './utils/modelOut';
 
@@ -32,8 +33,8 @@ class RenderCanvas {
 		//相机
 		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 		// 渲染器
-		this.renderer = new THREE.WebGLRenderer({alpha: true});
-    this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+		this.renderer = new THREE.WebGLRenderer({alpha: false,antialias:true});
+		this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 		// 房屋建筑信息
 		this.positions = {
 			mybuild: { position:[[-360, 82 , -225]], rotation: [Math.PI*1.4] }, // 明宇
@@ -94,14 +95,24 @@ class RenderCanvas {
       [-5000, 4000, -12000], [2000, 4000, 12000 ], [5000, 4000, 12000],
     ];
     // 场景贴图控制
+		let cubeTextureLoader = new THREE.CubeTextureLoader();
+		cubeTextureLoader.setPath( './assets/image/' );
+		//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
+		let nightCubeTexture = cubeTextureLoader.load( [
+			'night1.jpg', 'night_left.jpg',
+			'night_top.jpg', 'night_bottom.jpg',
+			'night_front.jpg', 'night_back.jpg'
+		] );
+
+
     this.sceneTexture = {
       day: new THREE.TextureLoader().load( '/assets/image/sky.jpg'),
-      night: new THREE.TextureLoader().load( '/assets/image/night.jpg', texture=>{
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(2, 2);
-      })
+      night: new THREE.TextureLoader().load( '/assets/image/night_bottom.jpg'),
+			sceneNight:nightCubeTexture,
+			out: new THREE.TextureLoader().load( '/assets/image/earth_atmos_2048.jpg')
     };
+    this.sceneBox = null;
+    this.earthBox = null;
 		// 车辆模型集合
 		this.cars = {};
 		// 性能指标
@@ -149,21 +160,26 @@ class RenderCanvas {
 		document.body.appendChild( this.stats.dom );
 		// 添加晴天天空
     let skyBoxMaterial = new THREE.MeshBasicMaterial({map: this.sceneTexture.day, side: THREE.DoubleSide, fog: false});
-    let sceneBox = new THREE.Mesh(
-      new THREE.IcosahedronBufferGeometry( 5000, 1 ),  //盒子物体
-      skyBoxMaterial
+    this.sceneBox = new THREE.Mesh(
+      new THREE.SphereGeometry( 5000, 10,10 ),  //盒子物体
+				skyBoxMaterial
     );
-    // 添加夜晚天空
-    let nightBoxMaterial = new THREE.MeshBasicMaterial({map: this.sceneTexture.night, side: THREE.DoubleSide, fog: false});
-    let nightBoxM = new THREE.Mesh(
-      new THREE.IcosahedronBufferGeometry( 5000, 1 ),  //盒子物体
-      nightBoxMaterial
-    );
-    nightBoxM.layers.mask = 2;
-    this.scene.add(sceneBox,  nightBoxM);
+    this.earthBox = new THREE.Mesh(new THREE.SphereGeometry(5110,30,30),new THREE.MeshBasicMaterial({map: this.sceneTexture.out, side: THREE.DoubleSide, fog: false}))
+    this.earthBox.rotation.y = -Math.PI*5/6
+		this.scene.background = this.sceneTexture.sceneNight
+		this.scene.add(this.earthBox)
+		this.scene.add(this.sceneBox );
 		// 设置相机位置
-		this.camera.position.set(100, 100, 100);
-		this.camera.lookAt(0,0,0);
+		this.camera.position.set(7500, 7500, 7500);
+		this.camera.lookAt(0, 0, 0);
+//     // 添加夜晚天空
+//     let nightBoxMaterial = new THREE.MeshBasicMaterial({map: this.sceneTexture.night, side: THREE.DoubleSide, fog: false});
+//     let nightBoxM = new THREE.Mesh(
+//       new THREE.IcosahedronBufferGeometry( 5000, 1 ),  //盒子物体
+//       nightBoxMaterial
+//     );
+//     nightBoxM.layers.mask = 2;
+//     this.scene.add(sceneBox,  nightBoxM);
 		this.roadGrass();
     this.scene.add(grassarea.getArea());
 		this.positionBuild();
@@ -177,6 +193,12 @@ class RenderCanvas {
 		this.loadGarbages();
 		this.loadLamps();
 		this.randomBuild( 150 );
+		this.setView();
+		let walls = myGround.addOutWall()
+		this.scene.add(...walls)
+		//myGround.addFire(this.scene)
+		//myGround.addTree(this.scene)
+		//myGround.floorShapeMesh(this.scene)
     this.loadParking();
     this.messageBox();
     this.mouseEvent();
@@ -257,8 +279,8 @@ class RenderCanvas {
 		this.scene.add(this.diffModel.grass);
     // 加载树木
 		myGround.loadTree().then(re => {
-      this.scene.add(re);
-    })
+			this.scene.add(re);
+		})
 	}
 	// 添加辅助线工具
 	axesHelper() {
@@ -281,31 +303,34 @@ class RenderCanvas {
 	}
 	// 随机生成简单模型
   randomBuild( num ) {
-	  let path = new THREE.CatmullRomCurve3([
-	    new THREE.Vector3(650, 2, 500),
-      new THREE.Vector3(650, 2, -500),
-      new THREE.Vector3(-650, 2, -500),
-      new THREE.Vector3(-650, 2, 500),
-    ], true);
-	  // 模糊物体所有的点位信息
-    let points = path.getPoints( num );
-    let geo = new THREE.BufferGeometry().setFromPoints( points );
-    this.scene.add(new THREE.Line(geo));
 	  let demoBuild = new THREE.BoxBufferGeometry(20, 45, 20);
 	  let geometers = [];
+	  let length = 350;
 	  // 合并为一个geometry对象
-    for( let i=0; i<points.length; i++ ) {
-      let { x, z } = points[i];
-      let mz = THREE.Math.randFloat(-50, 50); // 偏移随机
+    for( let i=0; i<length; i++ ) {
+    	let x,z;
+    	if(i<length/4){
+				x = 800+(Math.random()-.5)*300
+				z = 1800*(Math.random()-.5)
+			}else if(i<length/2){
+				x = -800+(Math.random()-.5)*300
+				z = 1800*(Math.random()-.5)
+			}else if(i<length*3/4){
+				z = -800+(Math.random()-.5)*300
+				x = 1800*(Math.random()-.5)
+			}else{
+				z = 800+(Math.random()-.5)*300
+				x = 1800*(Math.random()-.5)
+			}
+
       let s = THREE.Math.randFloat(0.6, 1.4);
       let cloneDemo = demoBuild.clone();
-      cloneDemo.translate(x+mz, 45*s/2, z+mz);
-      cloneDemo.scale( 1, s, 1 );
+			cloneDemo.scale( 1, s, 1 );
+			cloneDemo.translate(x, 45*s/2, z);
       geometers.push(cloneDemo);
     }
     let geometry = BufferGeometryUtils.mergeBufferGeometries( geometers );
-    // geometry.computeBoundingBox();
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352'}));
+    let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352',transparent:true,opacity:.8}));
     this.diffModel.random = mesh;
     this.scene.add(this.diffModel.random);
   }
@@ -323,9 +348,13 @@ class RenderCanvas {
 		let aim = this.animate.bind(this);
 		requestAnimationFrame(aim);
 		this.stats.update();
-    if(myGround.cloud&&myGround.cloud.visible){
-      this.renderRain();
-    }
+		TWEEN.update()
+		if(myGround.cloud&&myGround.cloud.visible){
+			this.renderRain();
+		}
+		if(line.lineArr[0].curveLine&&line.lineArr[0].curveLine.visible){
+			line.lineAnimate(this.scene)
+		}
 		this.renderer.render(this.scene, this.camera);
 	}
 	// 添加obj模型
@@ -443,7 +472,8 @@ class RenderCanvas {
   changeBuildIndex() {
     let cameraIndex = this.opacity ? 2 : 1;
 	  // 草坪层级
-    this.diffModel.grass.layers.mask = cameraIndex;
+    this.
+      .layers.mask = cameraIndex;
     for(let i=0; i<this.diffModel.grass.children.length; i++) {
       this.diffModel.grass.children[i].layers.mask = cameraIndex;
     }
@@ -468,8 +498,14 @@ class RenderCanvas {
   }
   // node事件
   eventBtn() {
-    let btn = document.getElementById('opc');
-    let that = this;
+		let that = this;
+		window.addEventListener('resize',function(){
+			that.camera.aspect = window.innerWidth/window.innerHeight;
+			that.camera.updateProjectionMatrix();
+			that.renderer.setSize(window.innerWidth,window.innerHeight)
+		})
+
+		let btn = document.getElementById('opc');
     // 切换模式
     btn.addEventListener('click', function () {
       that.opacity = !that.opacity;
@@ -493,16 +529,43 @@ class RenderCanvas {
       document.getElementById('videoPanel').style.display = 'none'
     },false)
 
-    let rainBtn = document.getElementById('rain');
-    rainBtn.addEventListener('click',function(){
-      if (myGround.cloud){
-        if(myGround.cloud.visible){
-          myGround.cloud.visible = false;
-        }else {
-          myGround.cloud.visible = true;
-        }
-      }
-    })
+		let closeVideo = document.getElementById('closeVideo')
+		closeVideo.addEventListener('click',function(){
+			document.getElementsByTagName('video')[0].setAttribute('src','')
+			document.getElementById('videoPanel').style.display = 'none'
+		},false)
+
+		let rainBtn = document.getElementById('rain');
+		rainBtn.addEventListener('click',function(){
+    	if (myGround.cloud){
+				if(myGround.cloud.visible){
+					myGround.cloud.visible = false
+				}else {
+					myGround.cloud.visible = true
+				}
+			}
+		})
+
+		let carFlow = document.getElementById("carFlow");
+		carFlow.addEventListener('click',function(){
+			if(!line.lineArr[0].curveLine){
+				let carFlow = line.addLine();
+				that.scene.add(carFlow)
+			}else {
+				if(line.lineArr[0].curveLine.visible){
+					for(let i=0;i<line.lineArr.length;i++){
+						line.lineArr[i].curveLine.visible = false;
+						line.lineArr[i].backLine.visible = false;
+					}
+				}else {
+					for(let i=0;i<line.lineArr.length;i++){
+						line.lineArr[i].curveLine.visible = true;
+						line.lineArr[i].backLine.visible = true;
+					}
+				}
+			}
+
+		})
   }
   //添加垃圾桶
 	loadGarbages (){
@@ -515,7 +578,7 @@ class RenderCanvas {
 		let lamps = myGround.loadLamp();
 		this.scene.add(...lamps)
 	}
-	// 停车场
+  // 停车场
   loadParking() {
 	  let groundPark = parking.init();
     groundPark.position.set(-170,2,52);
@@ -528,20 +591,19 @@ class RenderCanvas {
     message.scale.set(.5,.5,.5);
 	  this.scene.add(message);
   }
-  // 雨滴效果
-  mouseEvent(){
-    let that = this;
-    //鼠标双击进入观察状态
-    document.addEventListener("dblclick",function(event){
-      let mouse = {x:'',y:''}
-      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-      mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-      let raycaster = new THREE.Raycaster();
-      // 通过鼠标点的位置和当前相机的矩阵计算出raycaster
-      raycaster.setFromCamera( mouse, that.camera );
-      // 获取raycaster直线和所有模型相交的数组集合
-      var intersects = raycaster.intersectObjects(that.scene.children,true);
-      if(intersects.length>0){
+	mouseEvent(){
+		let that = this;
+		//鼠标双击进入观察状态
+		document.addEventListener("dblclick",function(event){
+			let mouse = {x:'',y:''}
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			let raycaster = new THREE.Raycaster();
+			// 通过鼠标点的位置和当前相机的矩阵计算出raycaster
+			raycaster.setFromCamera( mouse, that.camera );
+			// 获取raycaster直线和所有模型相交的数组集合
+			var intersects = raycaster.intersectObjects(that.scene.children,true);
+			if(intersects.length>0){
         let position = intersects[0].point;
         let cameraPosition = that.camera.position;
         that.camera.lookAt(position.x,position.y,position.z)
@@ -563,44 +625,64 @@ class RenderCanvas {
             tween = null;
           }
         }).start()
-      }
-    })
-    document.addEventListener("contextmenu",function(event){
-      that.outlook()
-    })
-  }
-  outlook(){
-    let that = this;
-    that.camera.lookAt(0,0,0)
-    that.controls.target = new THREE.Vector3(0,0,0);
-    let cameraPosition = that.camera.position
-    let tween = new TWEEN.Tween(cameraPosition).to(
-      {
-        x:100,
-        y:100,
-        z:100
-      },2000
-    ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
-      that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
-      that.camera.lookAt(0,0,0)
-    }).start()
-  }
-  renderRain(){
-    let vertices = myGround.cloud.geometry.vertices;
-    vertices.forEach(function(v){
-      v.y = v.y - (v.velocityY)*9;
-      v.x = v.x - (v.velocityX)*.5;
 
-      if (v.y <= -60) v.y = 60;
-      if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
-    })
-    myGround.cloud.geometry.verticesNeedUpdate = true;
-    this.renderer.render(this.scene, this.camera);
-  }
-  addRain(){
-    let rain = myGround.createRain()
-    this.scene.add(rain)
-  }
+				if(intersects[0].object.name=='camera'){
+					document.getElementById("videoPanel").style.display = "block";
+					document.getElementsByTagName("video")[0].style.display = "block"
+					document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
+					that.renderer.render(that.camera,that.scene)
+				}
+			}
+		})
+		document.addEventListener("contextmenu",function(event){
+			that.outlook()
+		})
+	}
+	outlook(time){
+		let that = this;
+		that.camera.lookAt(0,0,0)
+		that.controls.target = new THREE.Vector3(0,0,0);
+		let cameraPosition = that.camera.position
+		let tween = new TWEEN.Tween(cameraPosition).to(
+				{
+					x:100,
+					y:100,
+					z:100
+				},time||2000
+		).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
+			that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
+			that.camera.lookAt(0,0,0)
+		}).start()
+	}
+	renderRain(){
+		let vertices = myGround.cloud.geometry.vertices;
+		vertices.forEach(function(v){
+			v.y = v.y - (v.velocityY)*9;
+			v.x = v.x - (v.velocityX)*.5;
 
+			if (v.y <= -60) v.y = 60;
+			if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
+		})
+		myGround.cloud.geometry.verticesNeedUpdate = true;
+		this.renderer.render(this.scene, this.camera);
+	}
+	addRain(){
+		let rain = myGround.createRain()
+		this.scene.add(rain)
+	}
+	setView() {
+		let that =this;
+		let rotation = {rotationY:-Math.PI*5/6};
+		let tween = new TWEEN.Tween(rotation)
+				.to({rotationY:Math.PI*7/6}, 5000)
+				.easing(TWEEN.Easing.Quadratic.Out)
+				.onUpdate(function( p ) {
+					that.earthBox.rotation.y = rotation.rotationY;
+				})
+				.onComplete(function () {
+					that.outlook(4000)
+				})
+				.start();
+	}
 }
 new RenderCanvas().init();
