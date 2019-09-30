@@ -2000,6 +2000,9 @@ class MyGround {
 		let walls = new THREE.Object3D();
 		for(let j=-500;j<440;j+=20){
 			let myObjectBox = objectBox.clone();
+			if(j<160 && j> 80) {
+			  continue;
+      }
 			myObjectBox.position.set(j,4,-270);
       walls.add(myObjectBox)
 		}

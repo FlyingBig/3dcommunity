@@ -20,7 +20,8 @@ import grassarea from './utils/grassArea';
 import parking from './utils/parking';
 import fontTexture from './utils/fontTexture';
 import elevator from './utils/elevator';
-
+import doorModel from './utils/door';
+import line from './utils/addline';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
@@ -166,7 +167,7 @@ class RenderCanvas {
     this.scene.add(this.earthBox)
     this.scene.add(this.sceneBox);
     // 设置相机位置
-    this.camera.position.set(7500, 7500, 7500);
+    this.camera.position.set(100, 100, 100);
     this.camera.lookAt(0, 0, 0);
     this.eventBtn();
     this.roadGrass();
@@ -188,12 +189,15 @@ class RenderCanvas {
     this.addRain();
     this.loadHydrant();
     this.addElevator();
-    this.setView();
+    // this.setView();
     this.loadWall();
+    this.loadDoor();
   }
   // 添加缩放拖拽控制器
   initControl() {
     this.controls.enableDamping = true
+    this.controls.zoomSpeed = .5;
+    this.controls.panSpeed = .5;
     this.controls.dampingFactor = 0.25
     this.controls.rotateSpeed = 0.35
   }
@@ -334,6 +338,9 @@ class RenderCanvas {
     this.stats.update();
     if(myGround.cloud&&myGround.cloud.visible){
       this.renderRain();
+    }
+    if(line.lineArr[0].curveLine&&line.lineArr[0].curveLine.visible){
+      line.lineAnimate(this.scene)
     }
     this.renderer.render(this.scene, this.camera);
   }
@@ -512,11 +519,14 @@ class RenderCanvas {
           that.transfrom(childrens[i], 600, cameraIndex);
         }
         if( childrens[i].name === 'outWall' ){
-          console.log(childrens[i])
           changeModelIndex(childrens[i],cameraIndex);
         }
-        if( childrens[i].name === 'grassArea ' ){
+        if( childrens[i].name === 'grassArea' ){
           that.diffModel.grass.layers.mask = cameraIndex;
+        }
+        if( childrens[i].name === 'outdoor' ) {
+          console.log(childrens[i])
+          changeModelIndex(childrens[i],cameraIndex);
         }
       }
 
@@ -576,7 +586,6 @@ class RenderCanvas {
   //添加垃圾桶
   loadGarbages (){
     let garbages = myGround.loadGarbageBin();
-
     this.scene.add(...garbages)
   }
   //添加路灯
@@ -745,6 +754,11 @@ class RenderCanvas {
   loadWall() {
     this.diffModel.walls = myGround.addOutWall();
     this.scene.add(this.diffModel.walls);
+  }
+  // 添加大门
+  loadDoor() {
+    this.diffModel.door = doorModel.init();
+    this.scene.add(this.diffModel.door);
   }
 }
 new RenderCanvas().init();
