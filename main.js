@@ -556,6 +556,9 @@ class RenderCanvas {
 						document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
 						that.renderer.render(that.camera,that.scene)
 					}
+					if(intersects[0].object.name=="event"){
+						monitor.showEventDesc(intersects[0].object.attributes)
+					}
 				}).start()
 
 
