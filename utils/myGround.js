@@ -338,7 +338,7 @@ var myGrass= [
 		repeatSize:[40,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,1,0],
+		position:[0,0,0],
 	},
 	{
 		name:'grass2',//外侧道路
@@ -349,7 +349,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,-0.5,0],
+		position:[0,0,0],
 	},
 	{
 		name:'grass3',//外侧道路
@@ -360,7 +360,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,-0.5,0],
+		position:[0,0,0],
 	},
 	{
 		name:'grass4',//外侧道路
@@ -371,7 +371,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,-0.5,0],
+		position:[0,0,0],
 	},
 	{
 		name:'grass5',//外侧道路
@@ -382,7 +382,7 @@ var myGrass= [
 		repeatSize:[20,20],
 		img:"./assets/image/ground.jpg",
 		ifRepeat:true,
-		position:[0,-0.5,0],
+		position:[0,0,0],
 	},
 ];
 // 树木点位数据
@@ -686,6 +686,8 @@ var lamps = [
 	},
 
 ]
+//摄像头对象数据
+
 class MyGround {
   constructor() {
     // 公路点位数据
@@ -1238,6 +1240,15 @@ class MyGround {
     this.lampLights = []
 		this.cameras = []
 		this.rain = null
+		this.cameraData = [
+			/*{
+				id:null,//摄像头的id
+				name:null,//摄像头的名称
+				location:null,//摄像头的位置
+				status:null,//摄像头的状态 -- 损害、完好
+				src:null//摄像头的视频地址列表
+			}*/
+		]
   }
 	/**
 	 * 加载小区道路
@@ -1412,8 +1423,7 @@ class MyGround {
       geometry.faceVertexUvs[0][g] = [uv[0],uv[1],uv[2]];
       geometry.faceVertexUvs[0][g+1] = [uv[2],uv[3],uv[0]];
     }
-    let buffer = new THREE.BufferGeometry().fromGeometry( geometry ); // 转为buffer几何体
-    let cube = new THREE.Mesh(buffer, material);
+    let cube = new THREE.Mesh(geometry, material);
 		if(config.ifRepeat){
 			cube.material.map.wrapS = THREE.RepeatWrapping;
 			cube.material.map.wrapT = THREE.RepeatWrapping;
@@ -1438,6 +1448,7 @@ class MyGround {
 	 */
 	loadRiverWater(){
 		let heartShape = new THREE.Shape();
+
 		heartShape.moveTo( myRivers[0].point[0][0],-myRivers[0].point[0][2] );
 		for(let i=1;i<myRivers[0].point.length;i++){
 			let point = myRivers[0].point[i];
@@ -1589,7 +1600,8 @@ class MyGround {
 	 */
 	loadLamp () {
 		let objects = new THREE.Object3D();
-		let postBox = new THREE.CylinderBufferGeometry(0.2,0.3,26,30); // 灯柱
+
+		let postBox = new THREE.CylinderBufferGeometry(0.2,0.3,26,30);//灯柱
 		let material = new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide});
 		let post = new THREE.Mesh(postBox,material);
 
@@ -1620,12 +1632,12 @@ class MyGround {
 		circleMaterial.transparent = true
 		circleMaterial.opacity = .5;
 		let circleMesh = new THREE.Mesh( circleGeometry, circleMaterial );
-		circleMesh.rotation.x = -Math.PI/2;
+		circleMesh.rotation.x = -Math.PI/2
 		circleMesh.position.set(0,-12,0);
 		circleMesh.visible = false
 
-		let cameraObj = this.addCameras();//灯柱上添加摄像头
-		cameraObj.name = "camera";
+		let cameraObj = this.addCameras()//灯柱上添加摄像头
+		cameraObj.name = "camera"
 
 		let spriteMap = new THREE.TextureLoader().load('./assets/image/camera_video.png')
 		let spriteMaterial = new THREE.SpriteMaterial({map:spriteMap,color:0xffffff,sizeAttenuation:false,depthTest:false})
@@ -1649,9 +1661,21 @@ class MyGround {
 
 			lampClone.position.set(lamps[i].point[0],lamps[i].point[1],lamps[i].point[2]);
 			lampClone.rotation.y = lamps[i].rotationY;
-
 			myLamps.push(lampClone);
-			this.lampLights.push(lampClone.children[3])
+			let cameraAttr = {
+				id:'camera'+i,
+				name:'摄像头'+i,
+				location:{
+					x:lampClone.getWorldPosition().x,
+					y:lampClone.getWorldPosition().y+9.4,
+					z:lampClone.getWorldPosition().z+.7
+				},
+				src:'../assets/image/test.mp4',
+				status:"完好"
+			}
+			this.cameraData.push(cameraAttr)
+			lampClone.children[4].attributes = cameraAttr;
+		this.lampLights.push(lampClone.children[3])
 		}
 		return myLamps;
 	}
@@ -1744,6 +1768,7 @@ class MyGround {
 		context.fillRect(0, 0, canvas.width, canvas.height);
 		return canvas;
 	}
+
 	/**
 	 * 添加绿植
 	 */
@@ -1780,6 +1805,7 @@ class MyGround {
 			return plant
 		}
 	}
+
 	/**
 	 * 添加一个tub对象
 	 */
@@ -1809,7 +1835,11 @@ class MyGround {
 				pointsData = []
 			}
 		}
+
+
+
 	}
+
 	/**
 	 * 构建树木
 	 */
@@ -1863,6 +1893,8 @@ class MyGround {
 		footObj.add(footMesh);
 		footObj.add(plane)
 		footObj.position.set(0,-7.6,0)
+
+
 		let plant = new THREE.Object3D();
 		let leafTure = new THREE.TextureLoader().load('../assets/image/myLeaf.png');
 		let geometry1 = new THREE.PlaneGeometry(10,20);
@@ -2058,8 +2090,5 @@ class MyGround {
 		fire.massConservation=arr[14];
 	  scene.add(fire)
 	}
-
-
-
 }
 export default new MyGround();
