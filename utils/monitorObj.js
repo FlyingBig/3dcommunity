@@ -120,7 +120,7 @@ class Monitor {
 			{
 				name:"测试事件1",//事件标题
 				id:"lastest1",//事件id
-				localtion:{
+				location:{
 					x: 0,
 					y:2,
 					z:0
@@ -130,7 +130,7 @@ class Monitor {
 			{
 				name:"自行车乱停",//事件标题
 				id:'lastest2',//事件id
-				localtion:{
+				location:{
 					x:100,
 					y:2,
 					z:-100
@@ -140,7 +140,7 @@ class Monitor {
 			{
 				name:"测试事件",//事件标题
 				id:"lastest3",//事件id
-				localtion:{
+				location:{
 					x:-300,
 					y:2,
 					z:300
@@ -157,6 +157,12 @@ class Monitor {
 				object:null,
 			}*/
 		]
+		this.eventNewObj = {
+			sprite:null,
+			sphere:null,
+			pointLight:null,
+			interval:null,
+		}
 	}
 	init(scene,camera,controls){
 		this.scene = scene;
@@ -237,7 +243,9 @@ class Monitor {
 		document.querySelector(".weather-content").innerHTML = html
 	}
 	eventDom(){
-
+		document.getElementsByClassName("event-close")[0].addEventListener("click",function(){
+			document.querySelector(".event-detail").style.display = "none";
+		})
 	}
 	loadEventEcharts(){
 		let that =this;
@@ -381,24 +389,44 @@ class Monitor {
 			}
 		})
 		/*添加事件位置信息*/
-		/*$(".new-event-text").bind("click",function(){
-			let id = $(this).parent().data("id");
-			for(let i = 0;i<that.lastestEvent.length;i++){
-				let info = that.lastestEvent[i];
-				if(info.id==id){
-					that.addEventLocation(info);
+		let events = document.getElementsByClassName("new-event-text");
+		for(let i=0;i<events.length;i++){
+			events[i].addEventListener("click",function(){
+				let id = this.parentElement.getAttribute("data-id");
+				for(let i = 0;i<that.lastestEvent.length;i++){
+					let info = that.lastestEvent[i];
+					if(info.id==id){
+						that.addEventLocation(info);
+					}
 				}
-			}
-		})*/
+			})
+		}
 	}
 	//环境中添加事件对象
 	addEventLocation(info	){
 		let that = this;
-		let pointLight = new THREE.PointLight(0xff0000,1,100);
-		pointLight.position.set(info.location.x,info.location.y,info.location.z)
+		that.eventNewObj.pointLight = new THREE.PointLight(0xff0000,2,200);
+		that.eventNewObj.pointLight.position.set(info.location.x,info.location.y,info.location.z)
 		let sphereObj = new THREE.SphereGeometry(1,20,20);
-		sphereObj.location.set(info.localtion.x,info.location.y,info.location.z())
-		this.scene.add(pointLight);
+		let sphereMaterial = new THREE.MeshPhongMaterial({color:0xff0000});
+		that.eventNewObj.sphere = new THREE.Mesh(sphereObj,sphereMaterial)
+		that.eventNewObj.sphere.attributes = info;
+		that.eventNewObj.sphere.name="event";
+		that.eventNewObj.sphere.position.set(info.location.x,info.location.y,info.location.z)
+		this.scene.add(that.eventNewObj.pointLight);
+		this.scene.add(that.eventNewObj.sphere);
+		let key = 0;
+		that.eventNewObj.interval = setInterval(function(){
+			if(key==0){
+				that.eventNewObj.sphere.material.color.set(0xffffff)
+				that.eventNewObj.pointLight.intensity = 0
+				key=1;
+			}else {
+				that.eventNewObj.sphere.material.color.set(0xff0000)
+				that.eventNewObj.pointLight.intensity = 1
+				key=0;
+			}
+		},1000)
 
 		let position = info.location;
 		let cameraPosition = that.camera.position;
@@ -414,6 +442,52 @@ class Monitor {
 			that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
 			that.camera.lookAt(position.x,position.y,position.z)
 		}).start()
+
+		//that.addEventDesc(info);
+	}
+
+	/**
+	 * 添加事件详细描述面板
+	 */
+	addEventDesc(info){
+		let canvas = document.createElement("canvas");
+		canvas.width = 512;
+		canvas.height = 412;
+
+		let context = canvas.getContext("2d");
+		let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+		for(let i = 0; i < imageData.data.length; i ++) {
+// 当该像素是透明的,则设置成白色
+			if(imageData.data[i + 3] == 0) {
+				imageData.data[i] = 255;
+				imageData.data[i + 1] = 255;
+				imageData.data[i + 2] = 255;
+				imageData.data[i + 3] = 255;
+			}
+		}
+		context.putImageData(imageData, 0, 0);
+		context.fillStyle="rgb(0,0,0)";
+		context.font="35px bold 黑体";
+		context.textAlign = "center";
+		context.fillText(info.desc,50,50);
+		let spritMap = new THREE.CanvasTexture(canvas);
+		let spritMaterial = new THREE.SpriteMaterial({map:spritMap});
+		let sprite = new THREE.Sprite(spritMaterial);
+		sprite.position.set(info.location.x,4,info.location.z);
+		this.scene.add(sprite)
+
+	}
+
+	/**
+	 * 显示事件详情面板
+	 */
+	showEventDesc(info){
+		document.getElementsByClassName("event-title")[0].innerHTML = info.name;
+		document.getElementsByClassName("event-content")[0].innerHTML = info.desc;
+		document.querySelector(".event-detail").style.display = "block";
+		this.scene.remove(this.eventNewObj.sphere);
+		this.scene.remove(this.eventNewObj.pointLight);
+		clearInterval(this.eventNewObj.interval);
 	}
 }
 export default new Monitor()
