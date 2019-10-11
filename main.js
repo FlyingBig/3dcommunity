@@ -22,6 +22,7 @@ import fontTexture from './utils/fontTexture';
 import elevator from './utils/elevator';
 import doorModel from './utils/door';
 import line from './utils/addline';
+import monitor from './utils/monitorObj';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
@@ -36,6 +37,9 @@ class RenderCanvas {
     // 渲染器
     this.renderer = new THREE.WebGLRenderer({alpha: true});
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+		this.controls.maxPolarAngle = Math.PI * 0.4;
+		this.controls.minDistance = 20;
+		this.controls.maxDistance = 800;
     // 房屋建筑信息
     this.positions = {
       mybuild: { position:[[-360, 82 , -225]], rotation: [Math.PI*1.4] }, // 明宇
@@ -95,23 +99,28 @@ class RenderCanvas {
       [-500, 400, -1200], [200, 400, 1200 ], [500, 400, 1200],
       [-5000, 4000, -12000], [2000, 4000, 12000 ], [5000, 4000, 12000],
     ];
-    // 场景贴图控制
-    let cubeTextureLoader = new THREE.CubeTextureLoader();
-    cubeTextureLoader.setPath( './assets/image/' );
-    //六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
-    let nightCubeTexture = cubeTextureLoader.load( [
-      'night1.jpg', 'night_left.jpg',
-      'night_top.jpg', 'night_bottom.jpg',
-      'night_front.jpg', 'night_back.jpg'
-    ] );
-    this.sceneTexture = {
-      day: new THREE.TextureLoader().load( '/assets/image/sky.jpg'),
-      night: new THREE.TextureLoader().load( '/assets/image/night_bottom.jpg'),
-      sceneNight: nightCubeTexture,
-      out: new THREE.TextureLoader().load( '/assets/image/earth_atmos_2048.jpg')
-    };
-    this.sceneBox = null;
-    this.earthBox = null;
+		// 场景贴图控制
+		let cubeTextureLoader = new THREE.CubeTextureLoader();
+		cubeTextureLoader.setPath( './assets/image/' );
+		//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
+		let nightCubeTexture = cubeTextureLoader.load( [
+			'night1.jpg', 'night_left.jpg',
+			'night_top.jpg', 'night_bottom.jpg',
+			'night_front.jpg', 'night_back.jpg'
+		] );
+		//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
+		let dayCubeTexture = cubeTextureLoader.load( [
+			'posz.jpg', 'negz.jpg',
+			'posy.jpg', 'negy.jpg',
+			'negx.jpg', 'posx.jpg'
+		] );
+
+
+		this.sceneTexture = {
+			sceneNight:nightCubeTexture,
+			sceneDay:dayCubeTexture,
+		};
+
     // 车辆模型集合
     this.cars = {};
     // 性能指标
@@ -155,17 +164,11 @@ class RenderCanvas {
     this.stats = new Stats();
     this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild( this.stats.dom );
+		this.stats.dom.style.left = '20%';
+		this.scene.background = this.sceneTexture.sceneDay
     // 添加晴天天空
-    let skyBoxMaterial = new THREE.MeshBasicMaterial({map: this.sceneTexture.day, side: THREE.DoubleSide, fog: false});
-    this.sceneBox = new THREE.Mesh(
-      new THREE.SphereGeometry( 5000, 10,10 ),  //盒子物体
-      skyBoxMaterial
-    );
-    this.earthBox = new THREE.Mesh(new THREE.SphereGeometry(5110,30,30),new THREE.MeshBasicMaterial({map: this.sceneTexture.out, side: THREE.DoubleSide, fog: false}))
-    this.earthBox.rotation.y = -Math.PI*5/6
-    this.scene.background = this.sceneTexture.sceneNight
-    this.scene.add(this.earthBox)
-    this.scene.add(this.sceneBox);
+
+
     // 设置相机位置
     this.camera.position.set(100, 100, 100);
     this.camera.lookAt(0, 0, 0);
@@ -178,7 +181,7 @@ class RenderCanvas {
     this.foot();
     this.axesHelper();
     this.initControl();
-    // this.loadWater();
+    this.loadWater();
     this.animate();
     this.redCar();
     this.loadGarbages();
@@ -189,9 +192,11 @@ class RenderCanvas {
     this.addRain();
     this.loadHydrant();
     this.addElevator();
-    // this.setView();
     this.loadWall();
     this.loadDoor();
+		let walls = myGround.addOutWall()
+		this.scene.add(walls)
+		monitor.init(this.scene,this.camera,this.controls)
   }
   // 添加缩放拖拽控制器
   initControl() {
@@ -257,21 +262,24 @@ class RenderCanvas {
   // 加载草坪，道路
   roadGrass() {
     // 加载小区的道路
-    // let roadObjs = myGround.loadRoad();
-    // this.scene.add(roadObjs);
+    let roadObjs = myGround.loadRoad();
+    this.scene.add(roadObjs);
     // // 加载公路
-    // let driveRoad = myGround.loadDriveWay();
-    // this.scene.add(driveRoad);
+    let driveRoad = myGround.loadDriveWay();
+    this.scene.add(driveRoad);
     // 加载河流
     let riverObjs = myGround.loadRiver();
     this.scene.add(...riverObjs);
     // 加载草坪
     this.diffModel.grass = myGround.loadGrass();
     this.scene.add(this.diffModel.grass);
-    /*    // 加载树木
-        myGround.loadTree().then(re => {
-          this.scene.add(re);
-        })*/
+		// 加载树木
+		myGround.loadTree().then(re => {
+			this.scene.add(re);
+		})
+
+		let myGardens = myGround.addGarden();
+		this.scene.add(myGardens);
   }
   // 添加辅助线工具
   axesHelper() {
@@ -294,33 +302,35 @@ class RenderCanvas {
   }
   // 随机生成简单模型
   randomBuild( num ) {
-    let path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(650, 2, 500),
-      new THREE.Vector3(650, 2, -500),
-      new THREE.Vector3(-650, 2, -500),
-      new THREE.Vector3(-650, 2, 500),
-    ], true);
-    // 模糊物体所有的点位信息
-    let points = path.getPoints( num );
-    let geo = new THREE.BufferGeometry().setFromPoints( points );
-    this.scene.add(new THREE.Line(geo));
-    let demoBuild = new THREE.BoxBufferGeometry(20, 45, 20);
-    let geometers = [];
-    // 合并为一个geometry对象
-    for( let i=0; i<points.length; i++ ) {
-      let { x, z } = points[i];
-      let mz = THREE.Math.randFloat(-50, 50); // 偏移随机
-      let s = THREE.Math.randFloat(0.6, 1.4);
-      let cloneDemo = demoBuild.clone();
-      cloneDemo.translate(x+mz, 45*s/2, z+mz);
-      cloneDemo.scale( 1, s, 1 );
-      geometers.push(cloneDemo);
-    }
-    let geometry = BufferGeometryUtils.mergeBufferGeometries( geometers );
-    // geometry.computeBoundingBox();
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352'}));
-    this.diffModel.random = mesh;
-    this.scene.add(this.diffModel.random);
+		let demoBuild = new THREE.BoxBufferGeometry(20, 45, 20);
+		let geometers = [];
+		let length = 350;
+		// 合并为一个geometry对象
+		for( let i=0; i<length; i++ ) {
+			let x,z;
+			if(i<length/4){
+				x = 750+(Math.random()-.5)*350
+				z = 1800*(Math.random()-.5)
+			}else if(i<length/2){
+				x = -760+(Math.random()-.5)*340
+				z = 1800*(Math.random()-.5)
+			}else if(i<length*3/4){
+				z = -600+(Math.random()-.5)*500
+				x = 1800*(Math.random()-.5)
+			}else{
+				z = 600+(Math.random()-.5)*500
+				x = 1800*(Math.random()-.5)
+			}
+
+			let s = THREE.Math.randFloat(0.6, 1.4);
+			let cloneDemo = demoBuild.clone();
+			cloneDemo.scale( 1, s, 1 );
+			cloneDemo.translate(x, 45*s/2, z);
+			geometers.push(cloneDemo);
+		}
+		let geometry = BufferGeometryUtils.mergeBufferGeometries( geometers );
+		let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352',transparent:true,opacity:.8}));
+		this.scene.add(mesh);
   }
   // 动画
   animate(time) {
@@ -504,8 +514,14 @@ class RenderCanvas {
   }
   // node事件
   eventBtn() {
+		let that = this;
+		window.addEventListener('resize',function(){
+			that.camera.aspect = window.innerWidth/window.innerHeight;
+			that.camera.updateProjectionMatrix();
+			that.renderer.setSize(window.innerWidth,window.innerHeight)
+		})
+
     let btn = document.getElementById('opc');
-    let that = this;
     // 切换模式
     btn.addEventListener('click', function () {
       that.opacity = !that.opacity;
@@ -529,14 +545,13 @@ class RenderCanvas {
           changeModelIndex(childrens[i],cameraIndex);
         }
       }
-
     }, false)
     // 关闭video
-    let closeVideo = document.getElementById('closeVideo')
+   /* let closeVideo = document.getElementById('closeVideo')
     closeVideo.addEventListener('click',function(){
       document.getElementsByTagName('video')[0].setAttribute('src','')
       document.getElementById('videoPanel').style.display = 'none'
-    },false)
+    },false)*/
     // 下雨状态
     let rainBtn = document.getElementById('rain');
     rainBtn.addEventListener('click',function(){
@@ -624,7 +639,8 @@ class RenderCanvas {
       let obj = intersects[0].object;
       if( intersects.length ){
         // 点击摄像机移动视角并播放视
-        if ( obj.name === 'camera') {
+
+        if ( obj.name === 'camera'||obj.name=="event") {
           let position = intersects[0].point;
           let cameraPosition = that.camera.position;
           that.camera.lookAt(position.x,position.y,position.z)
@@ -639,11 +655,16 @@ class RenderCanvas {
             that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
             that.camera.lookAt(position.x,position.y,position.z)
           }).onComplete(function () {
-            document.getElementById("videoPanel").style.display = "block";
-            document.getElementsByTagName("video")[0].style.display = "block"
-            document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
-            tween = null;
-          }).start()
+            if(obj.name==="camera"){
+							document.getElementById("videoPanel").style.display = "block";
+							document.getElementsByTagName("video")[0].style.display = "block"
+							document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
+						}else{
+							monitor.showEventDesc(intersects[0].object.attributes)
+            }
+						tween = null;
+
+					}).start()
         }
         // 删除消息盒子
         if ( obj.parent.name === 'messageBox') {

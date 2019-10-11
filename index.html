@@ -9,10 +9,104 @@
   <button id="opc">转换</button>
   <button id="rain">雨水</button>
   <button id="up">up</button>
+  <!--监控预警左侧面板-->
+  <div class="monitor-left-panel">
+    <!--最新推送消息-->
+    <div class="new-events">
+      <div class="lastest-event">
+        <div class="new-event">
+          <img src="./assets/image/newEvent.gif" alt="">
+          <div class="new-event-text">2单元3栋503发生火灾预警</div>
+          <span class="moreEvent" style="float: right;margin-right: 14px;font-size: 13px;margin-top: 2px;color:#fff;cursor: pointer;">更多</span>
+        </div>
+      </div>
+      <div class="new-event-list" style="display: none;">
+        <div class="new-event">
+          <img src="./assets/image/newEvent.gif" alt="">
+          <div class="new-event-text">2单元3栋503发生火灾预警</div>
+        </div>
+        <div class="new-event">
+          <img src="./assets/image/newEvent.gif" alt="">
+          <div class="new-event-text">2单元3栋503发生火灾预警</div>
+        </div>
+        <div class="new-event">
+          <img src="./assets/image/newEvent.gif" alt="">
+          <div class="new-event-text">2单元3栋503发生火灾预警</div>
+        </div>
+        <div class="new-event">
+          <img src="./assets/image/newEvent.gif" alt="">
+          <div class="new-event-text">2单元3栋503发生火灾预警</div>
+        </div>
+      </div>
+    </div>
+    <!--推送事件统计-->
+    <div class="event-count">
+      <div class="event-count-title">事件管理</div>
+      <div id="event-pie">
+
+      </div>
+
+      <div class="event-count-list">
+        <div class="count-list-title">
+          <div class="event-count-list-item">
+            <div class="event-name">事件名称</div>
+            <div class="event-time">时间</div>
+            <div class="event-desc">概述</div>
+          </div>
+        </div>
+        <div class="count-list-content">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--监控预警右侧面板-->
+  <div class="monitor-right-panel">
+    <div class="weather-box">
+      <div class="weather-title" style="padding-left:40px">天气预报 <span class="more-weather">更多</span></div>
+      <div class="weather-content"></div>
+    </div>
+    <!--监控画面-->
+    <div class="camera-view">
+      <div class="camera-monitor-title">监控管理</div>
+      <div class="videoPanel" style="overflow: hidden;width: 100%;height:120px">
+        <!--<div class="closeVideo">X</div>-->
+        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      </div>
+      <div class="videoPanel" style="overflow: hidden;margin-right: 2%;">
+        <!--<div class="closeVideo">X</div>-->
+        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      </div>
+      <div class="videoPanel" style="overflow: hidden;">
+        <!--<div class="closeVideo">X</div>-->
+        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      </div>
+      <div class="videoPanel" style="overflow: hidden;margin-right: 2%;">
+        <!--<div class="closeVideo">X</div>-->
+        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      </div>
+      <div class="videoPanel" style="overflow: hidden;">
+        <!--<div class="closeVideo">X</div>-->
+        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      </div>
+    </div>
+    <!--监控列表-->
+    <div class="camera-list">
+      <div class="camera-list-title">列表摄像头</div>
+      <div class="camera-list-content">
+
+      </div>
+    </div>
+  </div>
   <button id="carFlow">车流量</button>
-  <div id="videoPanel">
-    <div id="closeVideo">X</div>
-    <video controls autoplay="autoplay" src="" style="display: none;"></video>
+  <div class="event-detail">
+    <div class="event-title">事件标题</div>
+    <div class="event-content">
+      事件内容
+    </div>
+    <div class="event-close">X</div>
   </div>
 </body>
 </html>
+

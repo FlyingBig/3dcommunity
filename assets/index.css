@@ -37,17 +37,17 @@ body::-webkit-scrollbar-thumb {
 #opc{
   position: absolute;
   top: 60px;
-  left: 20px;
+  left: 20%;
 }
 #rain{
   position: absolute;
   top: 90px;
-  left: 20px;
+  left: 20%;
 }
 #carFlow{
   position: absolute;
   top: 120px;
-  left: 20px;
+  left: 20%;
 }
 #videoPanel {
   position: absolute;
@@ -70,6 +70,325 @@ body::-webkit-scrollbar-thumb {
   top: 2px;
   cursor: pointer;
 }
+#up{
+  position: absolute;
+  top: 150px;
+  left: 20%;
+}
+
+
+
+/**********************事件面板开始***************************/
+html,body{
+  overflow: hidden;
+}
+.videoPanel {
+  position: relative;
+  overflow: hidden;
+  width: 49%;
+  height: 60px;
+  margin-top: 7px;
+  float: left
+;
+}
+.videoPanel video{
+  width: 100%;
+}
+.closeVideo{
+  position: absolute;
+  color: red;
+  z-index: 111111;
+  right: 6px;
+  top: 2px;
+  cursor: pointer;
+}
+.monitor-right-panel {
+  width: 18%;
+  float: right;
+  height: 100%;
+  background-color: rgba(22,52,82,.9);
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 10px;
+}
+.weather-box {
+  width: 100%;
+  height: auto;
+}
+.camera-view {
+  width: 100%;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+}
+.camera-list {
+  height: auto;
+  height: auto;
+  position: absolute;
+  top: 400px;
+  bottom: 24px;
+  left: 10px;
+  right: 10px;
+  background-color: #0f0e2a;
+  border-radius: 5px;
+}
+
+.camera-list-content {
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  width: 100%;
+  overflow: auto;
+}
+/*天气预报模块*/
+.weather-content {
+  width: 100%;
+  padding: 0 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.weather-title,
+.camera-monitor-title,
+.camera-list-title {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.weather-item{
+  width: 100%;
+  height: 40px;
+  margin: 5px 0;
+  border-bottom: 1px solid #999;
+}
+.weather-box-left {
+  float: left;
+  width: auto;
+  width: 100px;
+  height:40px;
+}
+.weather-day,
+.weather-temperature {
+  font-size: 13px;
+  color: #ffffff;
+  height: 20px;
+  line-height: 20px;
+  width:100%;
+}
+.weather-box-right{
+  height: 40px;
+  width:auto;
+  float: left;
+}
+.weather-icon{
+  height: 37px;
+  width:auto;
+  float: left;
+}
+.weather-icon img {
+  height: 100%;
+}
+.weather-text {
+  font-size: 13px;
+  height: 40px;
+  line-height: 40px;
+  color:#fff;
+  float: left;
+  margin-left:35px;
+}
+.more-weather {
+  float: right;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 13px;
+}
+.camera-item {
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px solid #999999;
+}
+.camera-title{
+  width: 60%;
+  height: 100%;
+  line-height: 30px;
+  float: left;
+  color: #ffffff;
+  font-size: 13px;
+  text-align: center;
+}
+.camera-status{
+  width: 30%;
+  height: 100%;
+  line-height: 30px;
+  float: left;
+  color: #ffffff;
+  font-size: 13px;
+  text-align: center;
+}
+.camera-play{
+  margin-top: 10px;
+}
+/*监控模块左侧面板*/
+.monitor-left-panel {
+  width: 18%;
+  float: right;
+  height: 100%;
+  background-color: rgba(22,52,82,.9);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 11;
+  padding: 10px;
+}
+.new-events {
+  width: 100%;
+  height: auto;
+}
+.new-event{
+  width: 100%;
+  padding: 5px 10px;
+  height: 30px;
+  border-bottom: 1px solid #999;
+  box-sizing: border-box;
+
+}
+.new-event-list {
+  width: 100%;
+  height: auto;
+}
+.new-event img {
+  height: 15px;
+  float: left;
+  margin-top: 3px;
+}
+.new-event .new-event-text {
+  height: 20px;
+  line-height: 20px;
+  float: left;
+  color: #ffffff;
+  font-size: 13px;
+}
+.event-count {
+  width: 100%;
+  height: auto;
+}
+.event-count-title {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+}
+#event-pie {
+  width: 100%;
+  height: 200px;
+}
+.event-count-list {
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  background-color: #0f0e2a;
+  padding: 10px;
+  border-radius: 5px;
+}
+.count-list-title{
+  width: 100%;
+  height: auto;
+}
+.count-list-content{
+  width: 100%;
+  height: auto;
+}
+.event-count-list-item {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  border-bottom: 1px dashed #999;
+}
+.event-name,
+.event-time,
+.event-desc {
+  width: 33.3%;
+  font-size: 12px;
+  color: #ffffff;
+  float: left;
+  height:auto;
+  line-height: 35px;
+}
+.count-list-title .event-name,
+.count-list-title .event-time,
+.count-list-title .event-desc {
+  width: 33.3%;
+  font-size: 14px;
+  color: #ffffff;
+  float: left;
+  height:auto;
+  line-height: 20px;
+}
+.count-list-title .event-count-list-item {
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #999;
+}
+/*事件详细描述*/
+.event-detail {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  z-index: 111;
+  background-color: #fff;
+  width: 300px;
+  height: 240px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  display: none;
+}
+.event-detail .event-title{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+  border-bottom: 1px solid #999;
+}
+.event-content {
+  width: 100%;
+  height: 100px;
+  color: #000;
+  font-size:13px;
+  text-align: left;
+  text-indent: 20px;
+  line-height: 25px;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.event-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background-color: #ff0000;
+  color: #ffffff;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+}
+/**********************事件面板结束***************************/
+
 #up{
   position: absolute;
   top: 150px;
