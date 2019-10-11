@@ -40,6 +40,7 @@ class MainBuild {
     box.add(foot);
     box.add(mesh);
     box.rotateX(Math.PI * -0.5);
+    box.userData = {y: 40};
     return box;
   }
   // 贴图方法

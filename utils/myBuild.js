@@ -29,6 +29,7 @@ class MyBuild {
     const basic = this.bottomBuild();
     basic.position.set(20, -80, 50);
     box.add(basic);
+    box.userData = {y: 80};
     return box;
   }
   // 贴图方法

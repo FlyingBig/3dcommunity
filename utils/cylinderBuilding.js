@@ -14,12 +14,12 @@ export default class CylinderBuild {
   };
   init() {
     const box = new THREE.Object3D();
-    const geometry = new THREE.CylinderBufferGeometry( this.radiusTop, this.radiusBottom, this.height, 32 );
+    const geometry = new THREE.CylinderBufferGeometry( this.radiusTop, this.radiusBottom, this.height, 16 );
     const texture1 = this.getTexture('/assets/image/circle.png',{ rx: 16, ry: 17 });
     const material = new THREE.MeshBasicMaterial({map: texture1});
     const cylinder = new THREE.Mesh( geometry, material );
     // 顶上遮盖
-    const top = new THREE.CircleBufferGeometry(15, 10);
+    const top = new THREE.CircleBufferGeometry(15, 8);
     const texture = this.getTexture('/assets/image/19.png',{ rx: 4, ry: 4 });
     const mesh = new THREE.Mesh(top, new THREE.MeshBasicMaterial({color: "#F6F7F8", map: texture}));
     cylinder.position.set(0,21,0);
@@ -32,6 +32,7 @@ export default class CylinderBuild {
     let cTop = computed.cylinder();
     cTop.position.set(0, 47, 0);
     box.add(cTop);
+    box.userData = {y: 47};
     return box;
   }
   // 贴图方法

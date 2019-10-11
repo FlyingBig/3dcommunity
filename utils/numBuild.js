@@ -49,6 +49,7 @@ class NumBuild {
     mesh1.rotateX(Math.PI * -0.5);
     mesh1.position.set(0, 40.2, 0);
     box.add(mesh,mesh1);
+    box.userData = {y: 40};
     return box;
   }
 }
