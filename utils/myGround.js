@@ -322,7 +322,7 @@ var myRivers= [
 		name:"",
 		type:"river",
 		point:[[-609.7,0,-145.75],[-493.26,0,-109.72],[-457.41,0,-73.21],[-439.49,0,-44.75],[-417.67,0,125.82],[-395.96,0,182.83],[-360.45,0,235.44],[-317.48,0,274.63],[-243.12,0,309.7],[-181.67,0,320.53],[-134.59,0,314.59],[-40.97,0,274.53],[141.38,0,172.67],[189.80,0,158.97],[265.05,0,161.37],[455.85,0,141.91],[465.54,0,52.13],[355.67,0,60.66],[176.22,0,82.12],[89.28,0,115.08],[60.56,0,126.97],[24.04,0,145.46],[-57.66,0,197.97],[-81.15,0,210.91],[-88.28,0,215.22],[-124.9,0,227.68],[-192.03,0,232.76],[-249.02,0,217.62],[-281.64,0,190.02],[-316.59,0,145.46],[-334.18,0,99.18],[-350.66,0,-50.21],[-370.69,0,-109.33],[-403.64,0,-152.07],[-445.06,0,-182.54],[-581.2,0,-235.34]],
-		height:2,
+		height:.2,
 		repeatSize:[],
 		color:'#a1d3ee',
 	},
@@ -330,7 +330,7 @@ var myRivers= [
 // 草坪点位数据
 var myGrass= [
 	{
-		name:'grass1',//外侧道路
+		name:'grass1',
 		type:'grass',
 		point:[[462.64,0,-298.17],[113.21,0,-298.07],[92.62,0,117.19],[425.69,0,64.49]],
 		height:0.3,
@@ -341,7 +341,7 @@ var myGrass= [
 		position:[0,0,0],
 	},
 	{
-		name:'grass2',//外侧道路
+		name:'grass2',
 		type:'grass',
 		point:[[113.21,0,-300.07],[-125.46,0,-300.99],[-116.44,0,248.47],[92.62,0,117.19]],
 		height:0.3,
@@ -352,7 +352,7 @@ var myGrass= [
 		position:[0,0,0],
 	},
 	{
-		name:'grass3',//外侧道路
+		name:'grass3',
 		type:'grass',
 		point:[[-124.34,0,-308.71],[-290.66,0,-308.68],[-294.89,0,222.31],[-114.55,0,245.88]],
 		height:0.3,
@@ -363,7 +363,7 @@ var myGrass= [
 		position:[0,0,0],
 	},
 	{
-		name:'grass4',//外侧道路
+		name:'grass4',
 		type:'grass',
 		point:[[-290.66,0,-309.68],[-395.74,0,-309.13],[-425.02,0,-161.65],[-294.89,0,222.31]],
 		height:0.3,
@@ -374,7 +374,7 @@ var myGrass= [
 		position:[0,0,0],
 	},
 	{
-		name:'grass5',//外侧道路
+		name:'grass5',
 		type:'grass',
 		point:[[-395.74,0,-309.13],[-551.92,0,-333.56],[-567.17,0,-228.44],[-425.02,0,-161.65]],
 		height:0.3,
@@ -385,6 +385,71 @@ var myGrass= [
 		position:[0,0,0],
 	},
 ];
+let gardens = [
+	{
+		name:"garden1",
+		type:"garden",
+		point:[[88.39,0,-140.29],[41.08,0,-179.96],[32.95,0,-180.15],[-20.59,0,-124.76],[-20.04,0,-116.52],[1.56,0,-90.74],[4.68,0,-91.22],[8.79,0,-87.1],[14.36,0,-81.26],[22.15,0,-81.35],[29.83,0,-91.13],[35.96,0,-99.37],[50.43,0,-100.9],[58.11,0,-100.33],[65.23,0,-108.09],[67.35,0,-112.69],[66.35,0,-116.81],[67.35,0,-120.93],[88.94,0,-139.42]]
+	},
+	{
+		name:"garden2",
+		type:"garden",
+		point:[[-107.53,0,-243.97],[-111.1,0,-3.35],[-164.86,0,-4.41],[-159.85,0,-242.91]]
+	},
+	{
+		name:"garden3",
+		type:"garden",
+		point:[[299.56,0,-63.44],[303.12,0,-150.35],[298.78,0,-167.5],[291.21,0,-175.64],[280.75,0,-181.2],[243.57,0,-175.84],[234.77,0,-173.25],[240.67,0,-123.9],[244.35,0,-68.32],[263.83,0,-68.32],[277.19,0,-65.26],[298.22,0,-63.72]]
+	},
+	{
+		name:"garden4",
+		type:"garden",
+		point:[[-199.48,0,-194.14],[-214.96,0,-201.8],[-228.87,0,-199.98],[-232.66,0,-194.33],[-238.22,0,-179.48],[-237.89,0,-142.87],[-239.45,0,-105.02],[-237.44,0,-94.77],[-230.32,0,-83.56],[-213.84,0,-75.89],[-206.61,0,-76.66],[-202.04,0,-83.85],[-198.93,0,-129.07],[-198.59,0,-189.25]]
+	},
+	{
+		name:"garden5",
+		type:"garden",
+		point:[[414.78,0,26.83],[341.31,0,31.43],[345.20,0,-25.87],[351.88,0,-87.1],[354.89,0,-163],[356.45,0,-189.16],[345.20,0,-216.56],[334.40,0,-255],[434.26,0,-255],[473.78,0,-255],[466.76,0,-13.89],[446.17,0,27.21]]
+	},
+	{
+		name:"garden6",
+		type:"garden",
+		point:[[367,0,-235],[-561.79,0,-234],[-561.45,0,-255],[367,0,-255]]
+	},
+	{
+		name:"garden7",
+		type:"garden",
+		point:[[288.76,0,-10.06],[195.48,0,-0.28],[160.41,0,5.17],[179.89,0,21.18],[205.50,0,33.35],[225.09,0,39.38],[241.56,0,39.38],[292.88,0,36.32]]
+	},
+	{
+		name:"garden8",
+		type:"garden",
+		point:[[169.54,0,-5.85],[150.28,0,-2.3],[142.71,0,-9.77],[121.00,0,-34.3],[110.09,0,-57.88],[117.00,0,-67.08],[137.48,0,-95.82],[141.15,0,-95.82],[146.27,0,-92.76],[169.43,0,-78.38],[171.99,0,-74.74],[172.66,0,-68.03],[171.88,0,-57.78],[169.87,0,-43.89],[168.32,0,-32.58],[170.43,0,-8.43]]
+	},
+	{
+		name:"garden9",
+		type:"garden",
+		point:[[-57.33,0,-217.71],[-92.28,0,-218.67],[-95.07,0,-217.14],[-95.96,0,-171.62],[-93.4,0,-171.05],[-55.88,0,-214.36]]
+	},
+	{
+		name:"garden10",
+		type:"garden",
+		point:[[146.39,0,-216.47],[147.72,0,-185.61],[146.27,0,-166.64],[145.72,0,-165.87],[111.99,0,-166.54],[109.54,0,-168.07],[109.32,0,-216.85],[112.32,0,-218.57],[144.16,0,-218.96]]
+	},
+	{
+		name:"garden11",
+		type:"garden",
+		point:[[182.23,0,-217.62],[182.45,0,-189.35],[180.56,0,-187.05],[163.75,0,-187.43],[162.08,0,-188.96],[162.75,0,-217.71],[164.86,0,-219.82],[181.23,0,-219.92]]
+	}
+]
+//添加花坪
+let flowers = [
+	{
+		name:"flower1",
+		type:"flower",
+		point:[[-147.05,0,68.99],[-186.46,0,66.98],[-191.14,0,68.99],[-192.47,0,76.66],[-191.69,0,83.65],[-188.02,0,86.62],[-146.94,0,89.12],[-141.71,0,87.77],[-140.15,0,82.12],[-139.37,0,75.41],[-138.93,0,71.29],[-140.26,0,69.28],[-145.94,0,68.8]]
+	}
+]
 // 树木点位数据
 var myTrees= [
 	{
@@ -401,6 +466,16 @@ var myTrees= [
 		name:'tree4',
 		type:'tree',
 		point:[[179.80,0,71.4], [69.80,0,91.4], [209.80,0,68.4], [259.80,0,65.4], [309.80,0,63.4], [349.80,0,55.4], [379.80,0,55.4],[399.80,0,55.4]],
+	},
+	{
+		name:"tree5",
+		type:"tree",
+		point:[[-498.49,0,-224.37],[-468.08,0,-224.89],[-156.07,0,-245.57],[-51.76,0,-245.92],[88.83,0,-245.04],[280.41,0,-245.72],[392.74,0,-245.96]]
+	},
+	{
+		name:"tree6",
+		type:"tree",
+		point:[[366.35,0,-14.85],[378.26,0,-80.78],[426.58,0,-142.01],[381.05,0,-159.64],[369.25,0,-206.5]]
 	}
 
 ];
@@ -494,7 +569,7 @@ var garbageBins = [
 		id: '',
 		point:[-178.11,0,218.67],
 		rotationY:Math.PI*.5,
-},
+	},
 	{
 		name: '',
 		id: '',
@@ -689,555 +764,555 @@ var lamps = [
 //摄像头对象数据
 
 class MyGround {
-  constructor() {
-    // 公路点位数据
-    this.driveway = {
-      normal: [
-        {
-          width: 1063,
-          height: 57,
-          position: [ -40, 1, -298],
-          rotation: [Math.PI/2, 0, 0],
-          wrap: [ 1, 20 ],
-          textRotate: Math.PI/2
-        },
-        {
-          width: 47,
-          height: 328,
-          position: [ 452, 1, -105],
-          rotation: [Math.PI/2, 0, Math.PI/60],
-          wrap: [ 1, 7 ],
-        }
-      ], // 规则路段点位数据信息
-      irregular: [
-        {
-          name:'road8',//外侧道路
-          type:'road_branchRoad',
-          point:[[-552.48,0,-247.9],[-522.42,0,-265.91],[-524.87,0,-270.32],[-550.59,0,-254.51]],
-          height:.3,
-          color:"",
-          repeatSize:[1,1],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road9',//外侧道路
-          type:'road_branchRoad',
-          point:[[-522.42,0,-265.91],[-499.6,0,-274.15],[-501.49,0,-279.04],[-524.87,0,-270.32]],
-          height:.3,
-          color:"",
-          repeatSize:[1/5,1/5],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road10',//外侧道路
-          type:'road_branchRoad',
-          point:[[-499.6,0,-274.15],[-407.87,0,-286.8],[-415,0,-291.5],[-501.49,0,-279.04]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        //小区内部主路
-        {
-          name:'road11',//外侧道路
-          type:'road_branchRoad',
-          point:[[-281.75,0,-260.54],[-281.42,0,-122.75],[-290.54,0,-122.75],[-290.32,0,-261.6]],
-          height:.3,
-          color:"",
-          repeatSize:[1,6],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road12',//外侧道路
-          type:'road_branchRoad',
-          point:[[-281.42,0,-122.75],[-273.73,0,-73.02],[-283.2,0,-72.73],[-290.54,0,-122.75]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road13',//外侧道路
-          type:'road_branchRoad',
-          point:[[-273.73,0,-73.02],[-263.49,0,-54.52],[-270.51,0,-48.87],[-283.2,0,-72.73]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road14',//外侧道路
-          type:'road_branchRoad',
-          point:[[-263.49,0,-54.52],[-231.54,0,-21.56],[-237.33,0,-13.89],[-270.51,0,-48.87]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road15',//外侧道路
-          type:'road_branchRoad',
-          point:[[-231.54,0,-21.56],[-216.63,0,-12.84],[-220.41,0,-4.41],[-237.33,0,-13.89]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road16',//外侧道路
-          type:'road_branchRoad',
-          point:[[-216.63,0,-12.84],[-200.26,0,-7.86],[-202.94,0,1.44],[-220.41,0,-4.41]],
-          height:.3,
-          color:"",
-          repeatSize:[1,1],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road17',//外侧道路
-          type:'road_branchRoad',
-          point:[[-200.26,0,-7.86],[-184.79,0,-5.17],[-185.9,0,4.41],[-202.94,0,1.44]],
-          height:.3,
-          color:"",
-          repeatSize:[1,1],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road18',//外侧道路
-          type:'road_branchRoad',
-          point:[[-184.79,0,-5.17],[-30.28,0,-5.65],[-29.61,0,4.6],[-185.9,0,4.41]],
-          height:.3,
-          color:"",
-          repeatSize:[1,8],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road19',//外侧道路
-          type:'road_branchRoad',
-          point:[[-30.28,0,-5.65],[-10.58,0,-5.65],[-10.46,0,3.83],[-29.61,0,4.6]],
-          height:.3,
-          color:"",
-          repeatSize:[1,2],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road20',//外侧道路
-          type:'road_branchRoad',
-          point:[[-10.58,0,-5.65],[16.14,0,-12.84],[17.59,0,-4.41],[-10.46,0,3.83]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road21',//外侧道路
-          type:'road_branchRoad',
-          point:[[16.14,0,-12.84],[68.57,0,-37.56],[71.80,0,-29.03],[17.59,0,-4.41]],
-          height:.3,
-          color:"",
-          repeatSize:[1,4],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road21',//外侧道路
-          type:'road_branchRoad',
-          point:[[68.57,0,-37.56],[80.48,0,-45.04],[84.71,0,-38.62],[71.80,0,-29.03]],
-          height:.3,
-          color:"",
-          repeatSize:[1,1],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road22',//外侧道路
-          type:'road_branchRoad',
-          point:[[80.48,0,-45.04],[90.28,0,-54.52],[95.85,0,-48.1],[84.71,0,-38.62]],
-          height:.3,
-          color:"",
-          repeatSize:[1,1],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road23',//外侧道路
-          type:'road_branchRoad',
-          point:[[90.28,0,-54.52],[106.87,0,-72.44],[112.21,0,-67.36],[95.85,0,-48.1]],
-          height:.3,
-          color:"",
-          repeatSize:[1,2],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road24',//外侧道路
-          type:'road_branchRoad',
-          point:[[106.87,0,-72.44],[128.46,0,-103.87],[134.25,0,-100.23],[112.21,0,-67.36]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road25',//外侧道路
-          type:'road_branchRoad',
-          point:[[128.46,0,-103.87],[141.38,0,-133.1],[146.83,0,-130.61],[134.25,0,-100.23]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road25',//外侧道路
-          type:'road_branchRoad',
-          point:[[141.38,0,-133.1],[148.05,0,-157.34],[154.29,0,-156.29],[146.83,0,-130.61]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road26',//外侧道路
-          type:'road_branchRoad',
-          point:[[148.05,0,-157.34],[150.84,0,-184.84],[157.41,0,-184.84],[154.29,0,-156.29]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road27',//外侧道路
-          type:'road_branchRoad',
-          point:[[150.84,0,-184.84],[149.95,0,-225.38],[156.96,0,-225.95],[157.41,0,-184.84]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        //内部向河边走道路
-        {
-          name:'road28',//外侧道路
-          type:'road_branchRoad',
-          point:[[101.19,0,-57.02],[115.33,0,-32.87],[109.54,0,-29.03],[96.18,0,-52.32]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road29',//外侧道路
-          type:'road_branchRoad',
-          point:[[115.33,0,-32.87],[140.82,0,-6.13],[135.81,0,-0.77],[109.54,0,-29.03]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road30',//外侧道路
-          type:'road_branchRoad',
-          point:[[140.82,0,-6.13],[172.21,0,22.61],[167.98,0,28.56],[135.81,0,-0.77]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road31',//外侧道路
-          type:'road_branchRoad',
-          point:[[172.21,0,22.61],[199.71,0,38.04],[197.48,0,44.17],[167.98,0,28.56]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road32',//外侧道路
-          type:'road_branchRoad',
-          point:[[199.71,0,38.04],[223.64,0,44.75],[221.64,0,51.17],[197.48,0,44.17]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road33',//外侧道路
-          type:'road_branchRoad',
-          point:[[223.64,0,44.75],[240.12,0,45.42],[237.67,0,51.84],[221.64,0,51.17]],
-          height:.3,
-          color:"",
-          repeatSize:[1,2],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road34',//外侧道路
-          type:'road_branchRoad',
-          point:[[240.12,0,45.42],[367.80,0,34.59],[367.69,0,39.96],[237.67,0,51.84]],
-          height:.3,
-          color:"",
-          repeatSize:[1,9],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road34',//外侧道路
-          type:'road_branchRoad',
-          point:[[367.80,0,34.59],[422.57,0,31.14],[423.13,0,36.22],[367.69,0,39.96]],
-          height:.3,
-          color:"",
-          repeatSize:[1,9],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        //右上斜外
-        {
-          name:'road35',//外侧道路
-          type:'road_branchRoad',
-          point:[[370.14,0,35.45],[384.83,0,-20.51],[381.38,0,-21.27],[367.02,0,35.36]],
-          height:.3,
-          color:"",
-          repeatSize:[1,9],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        //右上斜外
-        {
-          name:'road36',//外侧道路
-          type:'road_branchRoad',
-          point:[[384.83,0,-20.51],[403.87,0,-128.12],[400.86,0,-129.65],[381.38,0,-21.27]],
-          height:.3,
-          color:"",
-          repeatSize:[1,10],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road37',//外侧道路
-          type:'road_branchRoad',
-          point:[[403.87,0,-128.12],[433.37,0,-176.12],[432.92,0,-182.35],[400.86,0,-129.65]],
-          height:.3,
-          color:"",
-          repeatSize:[1,8],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road38',//外侧道路
-          type:'road_branchRoad',
-          point:[[384.16,0,-19.74],[388.62,0,-3.35],[385.61,0,-2.78],[382.49,0,-16.39]],
-          height:.3,
-          color:"",
-          repeatSize:[1,5],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road39',//外侧道路
-          type:'road_branchRoad',
-          point:[[388.62,0,-3.35],[394.74,0,10.83],[392.07,0,11.79],[385.61,0,-2.78]],
-          height:.3,
-          color:"",
-          repeatSize:[1,5],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road40',//外侧道路
-          type:'road_branchRoad',
-          point:[[394.74,0,10.83],[399.19,0,18.49],[396.41,0,19.84],[392.07,0,11.79]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road41',//外侧道路
-          type:'road_branchRoad',
-          point:[[399.19,0,18.49],[403.76,0,24.63],[401.08,0,25.97],[396.41,0,19.84]],
-          height:.3,
-          color:"",
-          repeatSize:[1,3],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road42',//外侧道路
-          type:'road_branchRoad',
-          point:[[403.76,0,24.63],[413.66,0,30.86],[411.77,0,32.68],[401.08,0,25.97]],
-          height:.3,
-          color:"",
-          repeatSize:[1,4],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road43',//外侧道路
-          type:'road_branchRoad',
-          point:[[368.02,0,-233.14],[397.63,0,-219.24],[395.96,0,-213.88],[357.34,0,-232.28]]
-          ,
-          height:.3,
-          color:"",
-          repeatSize:[1,4],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road44',//外侧道路
-          type:'road_branchRoad',
-          point:[[397.63,0,-219.24],[446.73,0,-203.05],[446.06,0,-198.45],[395.96,0,-213.88]]
-          ,
-          height:.3,
-          color:"",
-          repeatSize:[1,5],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road45',//外侧道路
-          type:'road_branchRoad',
-          point:[[402.98,0,-214.36],[419.67,0,-196.92],[416.22,0,-193.28],[395.18,0,-215.6]]
-          ,
-          height:.3,
-          color:"",
-          repeatSize:[1,4],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road46',//外侧道路
-          type:'road_branchRoad',
-          point:[[419.67,0,-196.92],[428.13,0,-184.75],[423.90,0,-180.91],[416.22,0,-193.28]]
-          ,
-          height:.3,
-          color:"",
-          repeatSize:[1,2],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        },
-        {
-          name:'road47',//外侧道路
-          type:'road_branchRoad',
-          point:[[428.13,0,-184.75],[440.16,0,-153.22],[439.27,0,-143.16],[423.90,0,-180.91]]
-          ,
-          height:.3,
-          color:"",
-          repeatSize:[1,4],
-          img:"./assets/image/road1.jpg",
-          ifRepeat:true,
-          position:[0,0,0],
-          rotate:Math.PI/2
-        }
-      ] // 弯曲不规则露点信息
-    }
-    this.lampLights = []
+	constructor() {
+		// 公路点位数据
+		this.driveway = {
+			normal: [
+				{
+					width: 1063,
+					height: 57,
+					position: [ -40, 1, -298],
+					rotation: [Math.PI/2, 0, 0],
+					wrap: [ 1, 20 ],
+					textRotate: Math.PI/2
+				},
+				{
+					width: 47,
+					height: 328,
+					position: [ 452, 1, -105],
+					rotation: [Math.PI/2, 0, Math.PI/60],
+					wrap: [ 1, 7 ],
+				}
+			], // 规则路段点位数据信息
+			irregular: [
+				/*{
+					name:'road8',//外侧道路
+					type:'road_branchRoad',
+					point:[[-552.48,0,-247.9],[-522.42,0,-265.91],[-524.87,0,-270.32],[-550.59,0,-254.51]],
+					height:.3,
+					color:"",
+					repeatSize:[1,1],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road9',//外侧道路
+					type:'road_branchRoad',
+					point:[[-522.42,0,-265.91],[-499.6,0,-274.15],[-501.49,0,-279.04],[-524.87,0,-270.32]],
+					height:.3,
+					color:"",
+					repeatSize:[1/5,1/5],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road10',//外侧道路
+					type:'road_branchRoad',
+					point:[[-499.6,0,-274.15],[-407.87,0,-286.8],[-415,0,-291.5],[-501.49,0,-279.04]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},*/
+				//小区内部主路
+				{
+					name:'road11',//外侧道路
+					type:'road_branchRoad',
+					point:[[-281.75,0,-280],[-281.42,0,-122.75],[-290.54,0,-122.75],[-290.32,0,-280]],
+					height:.3,
+					color:"",
+					repeatSize:[1,6],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road12',//外侧道路
+					type:'road_branchRoad',
+					point:[[-281.42,0,-122.75],[-273.73,0,-73.02],[-283.2,0,-72.73],[-290.54,0,-122.75]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road13',//外侧道路
+					type:'road_branchRoad',
+					point:[[-273.73,0,-73.02],[-263.49,0,-54.52],[-270.51,0,-48.87],[-283.2,0,-72.73]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road14',//外侧道路
+					type:'road_branchRoad',
+					point:[[-263.49,0,-54.52],[-231.54,0,-21.56],[-237.33,0,-13.89],[-270.51,0,-48.87]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road15',//外侧道路
+					type:'road_branchRoad',
+					point:[[-231.54,0,-21.56],[-216.63,0,-12.84],[-220.41,0,-4.41],[-237.33,0,-13.89]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road16',//外侧道路
+					type:'road_branchRoad',
+					point:[[-216.63,0,-12.84],[-200.26,0,-7.86],[-202.94,0,1.44],[-220.41,0,-4.41]],
+					height:.3,
+					color:"",
+					repeatSize:[1,1],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road17',//外侧道路
+					type:'road_branchRoad',
+					point:[[-200.26,0,-7.86],[-184.79,0,-5.17],[-185.9,0,4.41],[-202.94,0,1.44]],
+					height:.3,
+					color:"",
+					repeatSize:[1,1],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road18',//外侧道路
+					type:'road_branchRoad',
+					point:[[-184.79,0,-5.17],[-30.28,0,-5.65],[-29.61,0,4.6],[-185.9,0,4.41]],
+					height:.3,
+					color:"",
+					repeatSize:[1,8],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road19',//外侧道路
+					type:'road_branchRoad',
+					point:[[-30.28,0,-5.65],[-10.58,0,-5.65],[-10.46,0,3.83],[-29.61,0,4.6]],
+					height:.3,
+					color:"",
+					repeatSize:[1,2],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road20',//外侧道路
+					type:'road_branchRoad',
+					point:[[-10.58,0,-5.65],[16.14,0,-12.84],[17.59,0,-4.41],[-10.46,0,3.83]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road21',//外侧道路
+					type:'road_branchRoad',
+					point:[[16.14,0,-12.84],[68.57,0,-37.56],[71.80,0,-29.03],[17.59,0,-4.41]],
+					height:.3,
+					color:"",
+					repeatSize:[1,4],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road21',//外侧道路
+					type:'road_branchRoad',
+					point:[[68.57,0,-37.56],[80.48,0,-45.04],[84.71,0,-38.62],[71.80,0,-29.03]],
+					height:.3,
+					color:"",
+					repeatSize:[1,1],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road22',//外侧道路
+					type:'road_branchRoad',
+					point:[[80.48,0,-45.04],[90.28,0,-54.52],[95.85,0,-48.1],[84.71,0,-38.62]],
+					height:.3,
+					color:"",
+					repeatSize:[1,1],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road23',//外侧道路
+					type:'road_branchRoad',
+					point:[[90.28,0,-54.52],[106.87,0,-72.44],[112.21,0,-67.36],[95.85,0,-48.1]],
+					height:.3,
+					color:"",
+					repeatSize:[1,2],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road24',//外侧道路
+					type:'road_branchRoad',
+					point:[[106.87,0,-72.44],[128.46,0,-103.87],[134.25,0,-100.23],[112.21,0,-67.36]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road25',//外侧道路
+					type:'road_branchRoad',
+					point:[[128.46,0,-103.87],[141.38,0,-133.1],[146.83,0,-130.61],[134.25,0,-100.23]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road25',//外侧道路
+					type:'road_branchRoad',
+					point:[[141.38,0,-133.1],[148.05,0,-157.34],[154.29,0,-156.29],[146.83,0,-130.61]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road26',//外侧道路
+					type:'road_branchRoad',
+					point:[[148.05,0,-157.34],[150.84,0,-184.84],[157.41,0,-184.84],[154.29,0,-156.29]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road27',//外侧道路
+					type:'road_branchRoad',
+					point:[[150.84,0,-184.84],[149.95,0,-285],[156.96,0,-285],[157.41,0,-184.84]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				//内部向河边走道路
+				{
+					name:'road28',//外侧道路
+					type:'road_branchRoad',
+					point:[[101.19,0,-57.02],[115.33,0,-32.87],[109.54,0,-29.03],[96.18,0,-52.32]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road29',//外侧道路
+					type:'road_branchRoad',
+					point:[[115.33,0,-32.87],[140.82,0,-6.13],[135.81,0,-0.77],[109.54,0,-29.03]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road30',//外侧道路
+					type:'road_branchRoad',
+					point:[[140.82,0,-6.13],[172.21,0,22.61],[167.98,0,28.56],[135.81,0,-0.77]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road31',//外侧道路
+					type:'road_branchRoad',
+					point:[[172.21,0,22.61],[199.71,0,38.04],[197.48,0,44.17],[167.98,0,28.56]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road32',//外侧道路
+					type:'road_branchRoad',
+					point:[[199.71,0,38.04],[223.64,0,44.75],[221.64,0,51.17],[197.48,0,44.17]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road33',//外侧道路
+					type:'road_branchRoad',
+					point:[[223.64,0,44.75],[240.12,0,45.42],[237.67,0,51.84],[221.64,0,51.17]],
+					height:.3,
+					color:"",
+					repeatSize:[1,2],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road34',//外侧道路
+					type:'road_branchRoad',
+					point:[[240.12,0,45.42],[367.80,0,34.59],[367.69,0,39.96],[237.67,0,51.84]],
+					height:.3,
+					color:"",
+					repeatSize:[1,9],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road34',//外侧道路
+					type:'road_branchRoad',
+					point:[[367.80,0,34.59],[422.57,0,31.14],[423.13,0,36.22],[367.69,0,39.96]],
+					height:.3,
+					color:"",
+					repeatSize:[1,9],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				//右上斜外
+				{
+					name:'road35',//外侧道路
+					type:'road_branchRoad',
+					point:[[370.14,0,35.45],[384.83,0,-20.51],[381.38,0,-21.27],[367.02,0,35.36]],
+					height:.3,
+					color:"",
+					repeatSize:[1,9],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				//右上斜外
+				{
+					name:'road36',//外侧道路
+					type:'road_branchRoad',
+					point:[[384.83,0,-20.51],[403.87,0,-128.12],[400.86,0,-129.65],[381.38,0,-21.27]],
+					height:.3,
+					color:"",
+					repeatSize:[1,10],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road37',//外侧道路
+					type:'road_branchRoad',
+					point:[[403.87,0,-128.12],[433.37,0,-176.12],[432.92,0,-182.35],[400.86,0,-129.65]],
+					height:.3,
+					color:"",
+					repeatSize:[1,8],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road38',//外侧道路
+					type:'road_branchRoad',
+					point:[[384.16,0,-19.74],[388.62,0,-3.35],[385.61,0,-2.78],[382.49,0,-16.39]],
+					height:.3,
+					color:"",
+					repeatSize:[1,5],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road39',//外侧道路
+					type:'road_branchRoad',
+					point:[[388.62,0,-3.35],[394.74,0,10.83],[392.07,0,11.79],[385.61,0,-2.78]],
+					height:.3,
+					color:"",
+					repeatSize:[1,5],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road40',//外侧道路
+					type:'road_branchRoad',
+					point:[[394.74,0,10.83],[399.19,0,18.49],[396.41,0,19.84],[392.07,0,11.79]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road41',//外侧道路
+					type:'road_branchRoad',
+					point:[[399.19,0,18.49],[403.76,0,24.63],[401.08,0,25.97],[396.41,0,19.84]],
+					height:.3,
+					color:"",
+					repeatSize:[1,3],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road42',//外侧道路
+					type:'road_branchRoad',
+					point:[[403.76,0,24.63],[413.66,0,30.86],[411.77,0,32.68],[401.08,0,25.97]],
+					height:.3,
+					color:"",
+					repeatSize:[1,4],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road43',//外侧道路
+					type:'road_branchRoad',
+					point:[[368.02,0,-273],[397.63,0,-219.24],[395.96,0,-213.88],[366.34,0,-267]]
+					,
+					height:.3,
+					color:"",
+					repeatSize:[1,4],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road44',//外侧道路
+					type:'road_branchRoad',
+					point:[[397.63,0,-219.24],[446.73,0,-203.05],[446.06,0,-198.45],[395.96,0,-213.88]]
+					,
+					height:.3,
+					color:"",
+					repeatSize:[1,5],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road45',//外侧道路
+					type:'road_branchRoad',
+					point:[[402.98,0,-214.36],[419.67,0,-196.92],[416.22,0,-193.28],[395.18,0,-215.6]]
+					,
+					height:.3,
+					color:"",
+					repeatSize:[1,4],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road46',//外侧道路
+					type:'road_branchRoad',
+					point:[[419.67,0,-196.92],[428.13,0,-184.75],[423.90,0,-180.91],[416.22,0,-193.28]]
+					,
+					height:.3,
+					color:"",
+					repeatSize:[1,2],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				},
+				{
+					name:'road47',//外侧道路
+					type:'road_branchRoad',
+					point:[[428.13,0,-184.75],[440.16,0,-153.22],[439.27,0,-143.16],[423.90,0,-180.91]]
+					,
+					height:.3,
+					color:"",
+					repeatSize:[1,4],
+					img:"./assets/image/road1.jpg",
+					ifRepeat:true,
+					position:[0,0,0],
+					rotate:Math.PI/2
+				}
+			] // 弯曲不规则露点信息
+		}
+		this.lampLights = []
 		this.cameras = []
 		this.rain = null
 		this.cameraData = [
@@ -1249,68 +1324,68 @@ class MyGround {
 				src:null//摄像头的视频地址列表
 			}*/
 		]
-  }
+	}
 	/**
 	 * 加载小区道路
 	 */
 	loadRoad(){
 		let roadObjs = new THREE.Object3D();
 		for(let i=0;i<myRoads.length;i++) {
-		  let point = myRoads[i].point;
-		  let shape = new THREE.Shape();
-      shape.moveTo(point[0][0], -point[0][2]);
-      for(let j=1; j<point.length; j++) {
-        shape.lineTo(point[j][0], -point[j][2]);
-      };
-      var extrudeSettings = { amount: .8, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
-      let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
-      let mesh = {};
-      mesh = new THREE.Mesh( geo, new THREE.MeshPhongMaterial({color: myRoads[i].color}));
-      roadObjs.add(mesh);
+			let point = myRoads[i].point;
+			let shape = new THREE.Shape();
+			shape.moveTo(point[0][0], -point[0][2]);
+			for(let j=1; j<point.length; j++) {
+				shape.lineTo(point[j][0], -point[j][2]);
+			};
+			var extrudeSettings = { amount: .8, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+			let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
+			let mesh = {};
+			mesh = new THREE.Mesh( geo, new THREE.MeshPhongMaterial({color: myRoads[i].color}));
+			roadObjs.add(mesh);
 		}
-    roadObjs.rotateX(-Math.PI/2)
+		roadObjs.rotateX(-Math.PI/2)
 		return roadObjs;
 	}
 
-  /**
-   * 加载公路
-   */
+	/**
+	 * 加载公路
+	 */
 	loadDriveWay() {
-	  let box = new THREE.Object3D(); // 道路外层容器
-    for(let key in this.driveway) {
-      if(key === 'normal') {
-        // 正常规则道路
-        this.driveway[key].map( ( val )=>{
-          let { width, height, position, rotation, wrap, textRotate } = val;
-          let texture = new THREE.TextureLoader().load('/assets/image/road1.jpg'); //公路统一贴图
-          texture.rotation = textRotate || 0;
-          texture.wrapS = THREE.RepeatWrapping;
-          texture.wrapT = THREE.RepeatWrapping;
-          texture.repeat.set(wrap[0], wrap[1]);
-          let geometry = new THREE.BoxBufferGeometry( width, height,1 );
-          let mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial( { map: texture } ));
-          mesh.rotateX(rotation[0]);
-          mesh.rotateY(rotation[1]);
-          mesh.rotateZ(rotation[2]);
-          mesh.position.set(...position);
-          box.add(mesh);
-        })
-      } else {
-        // 非规则道路
-        this.driveway[key].map( ( val )=>{
-          box.add(this.loadBoxObject(val, 'road'));
-        })
-      }
-    }
-    box.position.y = 0.1;
-    return box;
-  }
+		let box = new THREE.Object3D(); // 道路外层容器
+		for(let key in this.driveway) {
+			if(key === 'normal') {
+				// 正常规则道路
+				this.driveway[key].map( ( val )=>{
+					let { width, height, position, rotation, wrap, textRotate } = val;
+					let texture = new THREE.TextureLoader().load('/assets/image/road1.jpg'); //公路统一贴图
+					texture.rotation = textRotate || 0;
+					texture.wrapS = THREE.RepeatWrapping;
+					texture.wrapT = THREE.RepeatWrapping;
+					texture.repeat.set(wrap[0], wrap[1]);
+					let geometry = new THREE.BoxBufferGeometry( width, height,1 );
+					let mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial( { map: texture } ));
+					mesh.rotateX(rotation[0]);
+					mesh.rotateY(rotation[1]);
+					mesh.rotateZ(rotation[2]);
+					mesh.position.set(...position);
+					box.add(mesh);
+				})
+			} else {
+				// 非规则道路
+				this.driveway[key].map( ( val )=>{
+					box.add(this.loadBoxObject(val, 'road'));
+				})
+			}
+		}
+		box.position.y = 0.1;
+		return box;
+	}
 	/**
 	 * 加载河流
 	 */
 	loadRiver(){
 		let myRiver = [];
-    myRiver.push(this.loadBoxObject(myRivers[0], 'river'));
+		myRiver.push(this.loadBoxObject(myRivers[0], 'river'));
 		return myRiver;
 	}
 	/**
@@ -1321,7 +1396,7 @@ class MyGround {
 		for(let i=0;i<myGrass.length;i++){
 			myGrassObjs.add(this.loadBoxObject(myGrass[i], 'grass'))
 		}
-    myGrassObjs.rotateY(Math.PI/60);
+		myGrassObjs.rotateY(Math.PI/60);
 		return myGrassObjs;
 	}
 	/**
@@ -1373,17 +1448,17 @@ class MyGround {
 		let length = points.length;
 		let faces = [];
 		/**
-     * 侧面可以不需要贴图
-     * */
-		// for(let n=0;n<length;n++) {                      //侧面生成三角形
-		// 	if(n!=length-1) {
-		// 		faces.push(new THREE.Face3(n,n+1,length+n+1));
-		// 		faces.push(new THREE.Face3(length+n+1,length+n,n));
-		// 	}else {
-		// 		faces.push(new THREE.Face3(n,0,length));
-		// 		faces.push(new THREE.Face3(length,length+n,n));
-		// 	}
-		// }
+		 * 侧面可以不需要贴图
+		 * */
+				// for(let n=0;n<length;n++) {                      //侧面生成三角形
+				// 	if(n!=length-1) {
+				// 		faces.push(new THREE.Face3(n,n+1,length+n+1));
+				// 		faces.push(new THREE.Face3(length+n+1,length+n,n));
+				// 	}else {
+				// 		faces.push(new THREE.Face3(n,0,length));
+				// 		faces.push(new THREE.Face3(length,length+n,n));
+				// 	}
+				// }
 		let data=[];
 		for(let m=0;m<length;m++) {
 			data.push(points[m][0],points[m][2]);
@@ -1392,8 +1467,8 @@ class MyGround {
 		let triangles = Earcut.triangulate(data);
 		if(triangles && triangles.length) {
 			for(let l=0; l<triangles.length; l+=3) {
-        faces.push(new THREE.Face3(triangles[l],triangles[l+1],triangles[l+2]));                            //底部的三角面
-        faces.push(new THREE.Face3(triangles[l]+length,triangles[l+1]+length,triangles[l+2]+length));        //顶部的三角面
+				faces.push(new THREE.Face3(triangles[l],triangles[l+1],triangles[l+2]));                            //底部的三角面
+				faces.push(new THREE.Face3(triangles[l]+length,triangles[l+1]+length,triangles[l+2]+length));        //顶部的三角面
 			}
 		}
 		let geometry = new THREE.Geometry();
@@ -1402,28 +1477,28 @@ class MyGround {
 		geometry.computeFaceNormals();      //自动计算法向量
 		//给立方体设置贴图
 
-    let material = null; // 材质贴图
-    if( config.img ) {
-      let texture = new THREE.TextureLoader().load(config.img); //公路统一贴图
-      texture.rotation = Math.PI/2;
-      texture.repeat.set(...config.repeatSize);
-      material = new THREE.MeshPhongMaterial({
-        side: THREE.DoubleSide, // 两面可见
-        map: texture
-      });
-    } else {
-      material = new THREE.MeshLambertMaterial({
-        side: THREE.DoubleSide, // 两面可见
-        color: config.color
-      });
-    }
-    // 每个面都是整块图形
-    let uv = [new THREE.Vector2(0,0),new THREE.Vector2(1,0),new THREE.Vector2(1,1),new THREE.Vector2(0,1)];
-    for(let g=0;g<geometry.faces.length;g++){
-      geometry.faceVertexUvs[0][g] = [uv[0],uv[1],uv[2]];
-      geometry.faceVertexUvs[0][g+1] = [uv[2],uv[3],uv[0]];
-    }
-    let cube = new THREE.Mesh(geometry, material);
+		let material = null; // 材质贴图
+		if( config.img ) {
+			let texture = new THREE.TextureLoader().load(config.img); //公路统一贴图
+			texture.rotation = Math.PI/2;
+			texture.repeat.set(...config.repeatSize);
+			material = new THREE.MeshPhongMaterial({
+				side: THREE.DoubleSide, // 两面可见
+				map: texture
+			});
+		} else {
+			material = new THREE.MeshLambertMaterial({
+				side: THREE.DoubleSide, // 两面可见
+				color: config.color
+			});
+		}
+		// 每个面都是整块图形
+		let uv = [new THREE.Vector2(0,0),new THREE.Vector2(1,0),new THREE.Vector2(1,1),new THREE.Vector2(0,1)];
+		for(let g=0;g<geometry.faces.length;g++){
+			geometry.faceVertexUvs[0][g] = [uv[0],uv[1],uv[2]];
+			geometry.faceVertexUvs[0][g+1] = [uv[2],uv[3],uv[0]];
+		}
+		let cube = new THREE.Mesh(geometry, material);
 		if(config.ifRepeat){
 			cube.material.map.wrapS = THREE.RepeatWrapping;
 			cube.material.map.wrapT = THREE.RepeatWrapping;
@@ -1495,28 +1570,28 @@ class MyGround {
 	 */
 	loadTree () {
 		return new Promise(function (resolve, reject) {
-      let mtlLoader = new THREE.MTLLoader();
-      let objLoader = new THREE.OBJLoader();
-      let trees = new THREE.Object3D();
-      mtlLoader.load('../models/tree/file.mtl',function(materials){
-        materials.preload();
-        materials.alphaTest = 0;
-        materials.blendDstAlpha = 0;
-        objLoader.setMaterials(materials);
-        objLoader.load('../models/tree//file.obj',function(obj){
-          obj.scale.set(0.05, 0.06, 0.05);
-          for(let i=0;i<myTrees.length;i++){
-            let treePoints = myTrees[i].point;
-            for(let j=0;j<treePoints.length;j++){
-              let obj1 = obj.clone();
-              obj1.position.set(treePoints[j][0],treePoints[j][1],treePoints[j][2]);
-              trees.add(obj1);
-            }
-          }
-          resolve(trees);
-        },null, (e)=>{console.log(e); reject(e)})
-      })
-    })
+			let mtlLoader = new THREE.MTLLoader();
+			let objLoader = new THREE.OBJLoader();
+			let trees = new THREE.Object3D();
+			mtlLoader.load('../models/tree/file.mtl',function(materials){
+				materials.preload();
+				materials.alphaTest = 0;
+				materials.blendDstAlpha = 0;
+				objLoader.setMaterials(materials);
+				objLoader.load('../models/tree//file.obj',function(obj){
+					obj.scale.set(0.05, 0.06, 0.05);
+					for(let i=0;i<myTrees.length;i++){
+						let treePoints = myTrees[i].point;
+						for(let j=0;j<treePoints.length;j++){
+							let obj1 = obj.clone();
+							obj1.position.set(treePoints[j][0],treePoints[j][1],treePoints[j][2]);
+							trees.add(obj1);
+						}
+					}
+					resolve(trees);
+				},null, (e)=>{console.log(e); reject(e)})
+			})
+		})
 	}
 
 	/**
@@ -1643,7 +1718,7 @@ class MyGround {
 		let spriteMaterial = new THREE.SpriteMaterial({map:spriteMap,color:0xffffff,sizeAttenuation:false,depthTest:false})
 		let sprite = new THREE.Sprite(spriteMaterial)
 		sprite.position.set(0,10.5,1.5)
-		sprite.scale.set(.05,.05,.05)
+		sprite.scale.set(.02,.02,.02)
 		sprite.name = 'camera'
 
 		objects.add(post);
@@ -1675,7 +1750,7 @@ class MyGround {
 			}
 			this.cameraData.push(cameraAttr)
 			lampClone.children[4].attributes = cameraAttr;
-		this.lampLights.push(lampClone.children[3])
+			this.lampLights.push(lampClone.children[3])
 		}
 		return myLamps;
 	}
@@ -1888,7 +1963,7 @@ class MyGround {
 		let plane = new THREE.Mesh( footPlane, footPlaneMaterial );
 		plane.position.set(0,.1,0)
 		plane.rotation.x = -Math.PI/2
-		
+
 		let footObj = new THREE.Object3D();
 		footObj.add(footMesh);
 		footObj.add(plane)
@@ -2029,18 +2104,22 @@ class MyGround {
 		}
 		objectBox.position.set(0,4,0)
 
-		let walls = [];
+		let walls = new THREE.Object3D();
 		for(let j=-500;j<440;j+=20){
 			let myObjectBox = objectBox.clone();
-			myObjectBox.position.set(j,4,-270);
-			walls.push(myObjectBox)
+			if(j<160 && j> 80) {
+				continue;
+			}
+			myObjectBox.position.set(j,4,-263);
+			walls.add(myObjectBox)
 		}
-		for(let j=-260;j<60;j+=20){
+		for(let j=-253;j<60;j+=20){
 			let myObjectBox = objectBox.clone();
 			myObjectBox.rotation.y = Math.PI/2-Math.PI/50
 			myObjectBox.position.set(415-j*.05,4,j);
-			walls.push(myObjectBox)
+			walls.add(myObjectBox)
 		}
+		walls.name = 'outWall';
 		return walls;
 	}
 
@@ -2048,7 +2127,7 @@ class MyGround {
 	 * 添加火焰效果
 	 */
 	addFire(scene){
-	  let cube = new THREE.SphereGeometry(1,120)
+		let cube = new THREE.SphereGeometry(1,120)
 		let fire = new THREE.Fire(cube,{
 			textureWidth:512,
 			textureHeight:512,
@@ -2088,7 +2167,60 @@ class MyGround {
 		fire.airSpeed=arr[12];
 		fire.speed=arr[13];*/
 		fire.massConservation=arr[14];
-	  scene.add(fire)
+		scene.add(fire)
+	}
+
+	/**
+	 * 添加花园
+	 */
+	addGarden(){
+		let gardenObjs = new THREE.Object3D();
+		for(let i=0;i<gardens.length;i++) {
+			let point = gardens[i].point;
+			let shape = new THREE.Shape();
+			shape.moveTo(point[0][0], -point[0][2]);
+			for(let j=1; j<point.length; j++) {
+				shape.lineTo(point[j][0], -point[j][2]);
+			};
+			let extrudeSettings = { amount: .4, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+			let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
+			let mesh = {};
+			let texture = new THREE.TextureLoader().load('../assets/image/grass2.jpg');
+			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapT = THREE.RepeatWrapping;
+			texture.repeat.set(.05,.05);
+			mesh = new THREE.Mesh( geo, new THREE.MeshPhongMaterial({map: texture}));
+			gardenObjs.add(mesh);
+		}
+		gardenObjs.rotateX(-Math.PI/2)
+		gardenObjs.position.y = .2;
+		return gardenObjs;
+	}
+	/**
+	 * 添加花坪
+	 */
+	addFlower(){
+		let flowerObjs = new THREE.Object3D();
+		for(let i=0;i<flowers.length;i++) {
+			let point = flowers[i].point;
+			let shape = new THREE.Shape();
+			shape.moveTo(point[0][0], -point[0][2]);
+			for(let j=1; j<point.length; j++) {
+				shape.lineTo(point[j][0], -point[j][2]);
+			};
+			let extrudeSettings = { amount:1.4, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+			let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
+			let mesh = {};
+			let texture = new THREE.TextureLoader().load('../assets/image/flower.jpg');
+			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapT = THREE.RepeatWrapping;
+			texture.repeat.set(.1,.1);
+			mesh = new THREE.Mesh( geo, new THREE.MeshPhongMaterial({map: texture}));
+			flowerObjs.add(mesh);
+		}
+		flowerObjs.rotateX(-Math.PI/2)
+		flowerObjs.position.y = 1.2;
+		return flowerObjs;
 	}
 }
 export default new MyGround();
