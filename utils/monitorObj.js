@@ -252,8 +252,6 @@ class Monitor {
 	 */
 	loadWeather(){
 		let that = this;
-
-
 		//创建 script 标签并加入到页面中
 		let oHead = document.getElementsByTagName('head')[0];
 		let oS = document.createElement('script');
@@ -262,21 +260,23 @@ class Monitor {
 		//创建jsonp回调函数
 		window["getWeather"] = function (data) {
 			oHead.removeChild(oS);
-			clearTimeout(oS.timer);
+			// clearTimeout(oS.timer);
 			window["getWeather"] = null;
 			if(data.error==0){
 				let info = data.results[0].weather_data;
 				that.weatherInfo = info;
-				that.createWeather([info[0]]);
+				that.createWeather([info[0]], '.weather-content');
 				document.getElementsByClassName("more-weather")[0].addEventListener("click",function(){
-					if(document.getElementsByClassName("weather-item").length>1){
-						document.getElementsByClassName('more-weather')[0].innerText="更多"
+				  let flag = this.innerText;
+					if(flag === '收起'){
+            this.innerText = "更多"
 						document.querySelector(".camera-list").style.top = "394px"
-						that.createWeather([that.weatherInfo[0]]);
+						that.createWeather([that.weatherInfo[0]], '.weather-content');
 					}else {
-						document.querySelector('.more-weather').innerText = "收起"
-						document.querySelector(".camera-list").style.top = "530px"
-						that.createWeather(that.weatherInfo);
+            this.innerText = "收起";
+						document.querySelector(".camera-list").style.top = "530px";
+						console.log(that.weatherInfo)
+						that.createWeather(that.weatherInfo, '.weather-content');
 					}
 				})
 			}
@@ -294,7 +294,7 @@ class Monitor {
 			}, time);
 		}*/
 	}
-	createWeather(list){
+	createWeather(list, name){
 		let html = '';
 		for(let i=0;i<list.length;i++){
 			let info = list[i]
@@ -311,7 +311,7 @@ class Monitor {
 			html+='</div>'
 			html+='</div>'
 		}
-		document.querySelector(".weather-content").innerHTML = html
+		document.querySelector(name).innerHTML = html
 	}
 	eventDom(){
 		document.getElementsByClassName("event-close")[0].addEventListener("click",function(){
@@ -423,12 +423,14 @@ class Monitor {
 									x:position.x+10,
 									y:position.y+10,
 									z:position.z+10
-								},4000
+								},1200
 						).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
 							that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
 							that.camera.lookAt(position.x,position.y,position.z)
-							document.getElementsByTagName("video")[0].setAttribute("src",src);
-						}).start()
+						}).onComplete(function () {
+              document.getElementById("full-scene").style.height = '100%';
+              document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
+            }).start()
 					}
 				}
 			})

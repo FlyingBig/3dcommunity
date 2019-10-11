@@ -23,6 +23,8 @@ import elevator from './utils/elevator';
 import doorModel from './utils/door';
 import line from './utils/addline';
 import monitor from './utils/monitorObj';
+import  houseManege from './utils/houseManagement';
+import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene } from './utils/event';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
@@ -31,18 +33,18 @@ class RenderCanvas {
   constructor(){
     //创建场景.
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog('#BCC1BB', 600, 1000);
+    this.scene.fog = new THREE.Fog('#BCC1BB', 300, 1000);
     //相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     // 渲染器
     this.renderer = new THREE.WebGLRenderer({alpha: true});
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-		this.controls.maxPolarAngle = Math.PI * 0.4;
+		this.controls.maxPolarAngle = Math.PI * 0.45;
 		this.controls.minDistance = 20;
 		this.controls.maxDistance = 800;
     // 房屋建筑信息
     this.positions = {
-      mybuild: { position:[[-360, 82 , -225]], rotation: [Math.PI*1.4] }, // 明宇
+      mybuild: { position:[[-355, 82 , -205]], rotation: [Math.PI*1.5] }, // 明宇
       cylinder: { position:[
           [40, 4 , -55],
           [-10, 4 , -30],
@@ -104,9 +106,9 @@ class RenderCanvas {
 		cubeTextureLoader.setPath( './assets/image/' );
 		//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
 		let nightCubeTexture = cubeTextureLoader.load( [
-			'night1.jpg', 'night_left.jpg',
-			'night_top.jpg', 'night_bottom.jpg',
-			'night_front.jpg', 'night_back.jpg'
+			'd1.jpg', 'd2.jpg',
+			'd3.jpg', 'd4.jpg',
+			'd1.jpg', 'd1.jpg'
 		] );
 		//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
 		let dayCubeTexture = cubeTextureLoader.load( [
@@ -114,14 +116,10 @@ class RenderCanvas {
 			'posy.jpg', 'negy.jpg',
 			'negx.jpg', 'posx.jpg'
 		] );
-
-
 		this.sceneTexture = {
 			sceneNight:nightCubeTexture,
 			sceneDay:dayCubeTexture,
 		};
-    //this.sceneBox = null;
-    //this.earthBox = null;
     // 车辆模型集合
     this.cars = {};
     // 性能指标
@@ -167,8 +165,6 @@ class RenderCanvas {
     document.body.appendChild( this.stats.dom );
 		this.stats.dom.style.left = '20%';
 		this.scene.background = this.sceneTexture.sceneDay
-    // 添加晴天天空
-
     // 设置相机位置
     this.camera.position.set(100, 100, 100);
     this.camera.lookAt(0, 0, 0);
@@ -181,7 +177,7 @@ class RenderCanvas {
     this.foot();
     this.axesHelper();
     this.initControl();
-    this.loadWater();
+    // this.loadWater();
     this.animate();
     this.redCar();
     this.loadGarbages();
@@ -194,9 +190,10 @@ class RenderCanvas {
     this.addElevator();
     this.loadWall();
     this.loadDoor();
-		let walls = myGround.addOutWall()
-		this.scene.add(walls)
-		monitor.init(this.scene,this.camera,this.controls)
+    houseManege.init(); // 物业管理模块
+    this.eventClick();
+		monitor.init(this.scene,this.camera,this.controls);
+
   }
   // 添加缩放拖拽控制器
   initControl() {
@@ -330,7 +327,8 @@ class RenderCanvas {
 		}
 		let geometry = BufferGeometryUtils.mergeBufferGeometries( geometers );
 		let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352',transparent:true,opacity:.8}));
-		this.scene.add(mesh);
+    this.diffModel.random = mesh;
+		this.scene.add(this.diffModel.random);
   }
   // 动画
   animate(time) {
@@ -461,6 +459,8 @@ class RenderCanvas {
     for( let key in this.builds ) {
       let opc = getTransparent(this.builds[key]);
       builds[key] = opc;
+      let error = getTransparent(this.builds[key], "#FA4233");
+      builds[key+'error'] = error;
     }
     let positions = this.positions;
     let opacityBox = new THREE.Object3D();
@@ -472,7 +472,8 @@ class RenderCanvas {
       if( positions[key].position.length ) {
         let { position, rotation } = positions[key];
         position.map((re, index)=>{
-          let build = builds[key].clone();
+          let build = null; // 建筑模型
+          build = (index == 8 || index == 9) ? builds[key+'error'].clone() : builds[key].clone();
           build.position.set(...re);
           key === 'main' ? build.rotateZ(rotation[index]) : build.rotateY(rotation[index]);
           build.name = 'opacityBuild';
@@ -541,7 +542,6 @@ class RenderCanvas {
           that.diffModel.grass.layers.mask = cameraIndex;
         }
         if( childrens[i].name === 'outdoor' ) {
-          console.log(childrens[i])
           changeModelIndex(childrens[i],cameraIndex);
         }
       }
@@ -552,17 +552,6 @@ class RenderCanvas {
       document.getElementsByTagName('video')[0].setAttribute('src','')
       document.getElementById('videoPanel').style.display = 'none'
     },false)*/
-    // 下雨状态
-    let rainBtn = document.getElementById('rain');
-    rainBtn.addEventListener('click',function(){
-      if (myGround.cloud){
-        if(myGround.cloud.visible){
-          myGround.cloud.visible = false;
-        }else {
-          myGround.cloud.visible = true;
-        }
-      }
-    })
     // 电梯上升
     let up = document.getElementById('up');
     up.addEventListener('click',function(){
@@ -655,8 +644,8 @@ class RenderCanvas {
             that.camera.lookAt(position.x,position.y,position.z)
           }).onComplete(function () {
             if(obj.name==="camera"){
-							document.getElementsByTagName("video")[0].style.display = "block"
-							document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
+              document.getElementById("full-scene").style.height = '100%';
+              document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
 						}else{
 							monitor.showEventDesc(intersects[0].object.attributes)
             }
@@ -778,6 +767,15 @@ class RenderCanvas {
   loadDoor() {
     this.diffModel.door = doorModel.init();
     this.scene.add(this.diffModel.door);
+  }
+  // 业务事件
+  eventClick() {
+    logChange();
+    changeScene();
+    closeBigScene();
+    equipmentRunning.bind(this)();
+    houseMessage.bind(this)();
+    changeModel.bind(this)();
   }
 }
 new RenderCanvas().init();

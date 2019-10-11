@@ -37,7 +37,7 @@ class Door {
     bigdoor.scale.set(1.3,1.3,1.3);
     box.add(bigdoor);
     box.scale.set(2,2,2);
-    box.position.set( 120,10 ,-270);
+    box.position.set( 120,10 ,-263);
     box.name = 'outdoor';
     return box;
   }
