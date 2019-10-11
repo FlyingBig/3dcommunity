@@ -35,7 +35,7 @@ class RenderCanvas {
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.Fog('#BCC1BB', 300, 1000);
     //相机
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+    this.camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 10000);
     // 渲染器
     this.renderer = new THREE.WebGLRenderer({alpha: true});
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
