@@ -31,7 +31,7 @@ class RenderCanvas {
   constructor(){
     //创建场景.
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog('#BCC1BB', 300, 1000);
+    this.scene.fog = new THREE.Fog('#BCC1BB', 600, 1000);
     //相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     // 渲染器
@@ -120,7 +120,8 @@ class RenderCanvas {
 			sceneNight:nightCubeTexture,
 			sceneDay:dayCubeTexture,
 		};
-
+    //this.sceneBox = null;
+    //this.earthBox = null;
     // 车辆模型集合
     this.cars = {};
     // 性能指标
@@ -167,7 +168,6 @@ class RenderCanvas {
 		this.stats.dom.style.left = '20%';
 		this.scene.background = this.sceneTexture.sceneDay
     // 添加晴天天空
-
 
     // 设置相机位置
     this.camera.position.set(100, 100, 100);
@@ -639,7 +639,6 @@ class RenderCanvas {
       let obj = intersects[0].object;
       if( intersects.length ){
         // 点击摄像机移动视角并播放视
-
         if ( obj.name === 'camera'||obj.name=="event") {
           let position = intersects[0].point;
           let cameraPosition = that.camera.position;
@@ -656,7 +655,6 @@ class RenderCanvas {
             that.camera.lookAt(position.x,position.y,position.z)
           }).onComplete(function () {
             if(obj.name==="camera"){
-							document.getElementById("videoPanel").style.display = "block";
 							document.getElementsByTagName("video")[0].style.display = "block"
 							document.getElementsByTagName("video")[0].setAttribute("src","./assets/image/test.mp4");
 						}else{
