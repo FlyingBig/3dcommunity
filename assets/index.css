@@ -14,7 +14,7 @@ input,button,textarea{
 }
 /* 谷歌浏览器滚动条 */
 div::-webkit-scrollbar,
-textarea::-webkit-scrollbar {
+body::-webkit-scrollbar {
   -webkit-appearance: none;
   background-color: rgba(208,212,218,.05);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da, endColorstr=#0dd0d4da);
@@ -22,21 +22,17 @@ textarea::-webkit-scrollbar {
   height: 6px;
 }
 div::-webkit-scrollbar-thumb,
-textarea::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
   background-color: rgba(208,212,218,.3);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da, endColorstr=#4dd0d4da);
 }
-html,body{
-  overflow: hidden;
-}
 #app {
   width: 100%;
   height: 100%;
   height: 100vh;
-  overflow: hidden;
 }
 #opc{
   position: absolute;
@@ -53,10 +49,44 @@ html,body{
   top: 120px;
   left: 20%;
 }
+#videoPanel {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 300px;
+  height: 200px;
+  background-color: #000;
+  display: none;
+}
+#videoPanel video{
+  width: 100%;
+  height: 100%;
+}
+#closeVideo{
+  position: fixed;
+  color: red;
+  z-index: 111111;
+  right: 6px;
+  top: 2px;
+  cursor: pointer;
+}
+#up{
+  position: absolute;
+  top: 150px;
+  left: 20%;
+}
+
+
+
+/**********************事件面板开始***************************/
+html,body{
+  overflow: hidden;
+}
 .videoPanel {
   position: relative;
   overflow: hidden;
   width: 49%;
+  height: 60px;
   margin-top: 7px;
   float: left
 ;
@@ -96,7 +126,7 @@ html,body{
   height: auto;
   height: auto;
   position: absolute;
-  top: 394px;
+  top: 400px;
   bottom: 24px;
   left: 10px;
   right: 10px;
@@ -127,6 +157,8 @@ html,body{
   text-align: center;
   color: #fff;
   font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 .weather-item{
   width: 100%;
@@ -289,7 +321,7 @@ html,body{
   color: #ffffff;
   float: left;
   height:auto;
-  line-height: 20px;
+  line-height: 35px;
 }
 .count-list-title .event-name,
 .count-list-title .event-time,
@@ -306,4 +338,57 @@ html,body{
   line-height: 30px;
   border-bottom: 1px solid #999;
 }
+/*事件详细描述*/
+.event-detail {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  z-index: 111;
+  background-color: #fff;
+  width: 300px;
+  height: 240px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  display: none;
+}
+.event-detail .event-title{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+  border-bottom: 1px solid #999;
+}
+.event-content {
+  width: 100%;
+  height: 100px;
+  color: #000;
+  font-size:13px;
+  text-align: left;
+  text-indent: 20px;
+  line-height: 25px;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.event-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background-color: #ff0000;
+  color: #ffffff;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+}
+/**********************事件面板结束***************************/
+
+
+
 
