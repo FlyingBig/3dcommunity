@@ -32,7 +32,7 @@ class MainBuild {
 		const extrudeSettings = { depth: 40, bevelSegments: 1, steps: 0, bevelSize: 0, bevelThickness: 1 };
 		const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
 		const texture = this.getTexture('/assets/image/build2.jpg',{rx: .05, ry: .03});
-		const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3", map: texture}));
+		const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#C9C9D3", map: texture}));
 		geometry.computeBoundingBox();
 		// 顶上地面
 		const foot = this.getBuildTop();

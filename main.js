@@ -24,6 +24,7 @@ import doorModel from './utils/door';
 import line from './utils/addline';
 import monitor from './utils/monitorObj';
 import  houseManege from './utils/houseManagement';
+import  parterre from './utils/parteree';
 import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene } from './utils/event';
 // obj文件导出
 import { objModel } from './utils/modelOut';
@@ -39,9 +40,7 @@ class RenderCanvas {
     // 渲染器
     this.renderer = new THREE.WebGLRenderer({alpha: true});
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-		this.controls.maxPolarAngle = Math.PI * 0.45;
-		this.controls.minDistance = 20;
-		this.controls.maxDistance = 800;
+
     // 房屋建筑信息
     this.positions = {
       mybuild: { position:[[-355, 82 , -205]], rotation: [Math.PI*1.5] }, // 明宇
@@ -67,13 +66,13 @@ class RenderCanvas {
       nums: {
         position:[
           [310, 3 , -180],
-          [330, 3 , -130],
+          [325, 3 , -130],
           [320, 3 , -70],
           [295, 3 , -50],
           [235, 3 , -50],
           [225, 3 , -100],
           [215, 3 , -160],
-          [275, 3 , -170],
+          [265, 3 , -183],
           [-45, 3 , -100],
           [-35, 3 , -170],
           [-15, 3 , -190],
@@ -82,7 +81,7 @@ class RenderCanvas {
           [-240, 3 , -125],
           [-230, 3 , -185],
         ],
-        rotation: [-Math.PI/3, -Math.PI/2, -Math.PI*0.6, -Math.PI*1.2, -Math.PI*1.2, -Math.PI*1.5, -Math.PI*1.8, -Math.PI*1.8, -Math.PI*1.5, -Math.PI*1.7, -Math.PI*1.8, -Math.PI/6, -Math.PI/3, Math.PI/2, Math.PI*0.2]
+        rotation: [-Math.PI/3, -Math.PI/2, -Math.PI*0.6, -Math.PI*1.2, -Math.PI*1.2, -Math.PI*1.5, -Math.PI*1.8, -Math.PI*2, -Math.PI*1.5, -Math.PI*1.7, -Math.PI*1.8, -Math.PI/6, -Math.PI/3, Math.PI/2, Math.PI*0.2]
       }, // 住宅2
     };
     // 草坪位置
@@ -178,7 +177,6 @@ class RenderCanvas {
     this.axesHelper();
     this.initControl();
     // this.loadWater();
-    this.animate();
     this.redCar();
     this.loadGarbages();
     this.loadLamps();
@@ -192,8 +190,9 @@ class RenderCanvas {
     this.loadDoor();
     houseManege.init(); // 物业管理模块
     this.eventClick();
+    this.loadParterre();
+    this.animate();
 		monitor.init(this.scene,this.camera,this.controls);
-
   }
   // 添加缩放拖拽控制器
   initControl() {
@@ -202,6 +201,9 @@ class RenderCanvas {
     this.controls.panSpeed = .5;
     this.controls.dampingFactor = 0.25
     this.controls.rotateSpeed = 0.35
+    // this.controls.maxPolarAngle = Math.PI * 0.45;
+    // this.controls.minDistance = 20;
+    // this.controls.maxDistance = 800;
   }
   // 房屋数量，位置，旋转角度信息
   positionBuild() {
@@ -366,12 +368,6 @@ class RenderCanvas {
       deg: 0,
       scale: 0.003,
       position: this.computedRoal([-100, 2, -315])
-    },{
-      mtlUrl: '/models/fountain/file.mtl',
-      objUrl: '/models/fountain/file.obj',
-      scale: 6,
-      position: [-138, 0, -120],
-      noLight: true
     }]
     let car = await Promise.all(objModel(param));
     this.cars.smallCar = car[0];
@@ -602,6 +598,13 @@ class RenderCanvas {
     let groundPark = parking.init();
     groundPark.position.set(-170,2,52);
     this.scene.add(groundPark);
+  }
+  // 花坛
+  loadParterre() {
+    let n = parterre.init();
+    n.position.set(-134, 1, -120);
+    n.scale.set(2,2,2);
+    this.scene.add(n);
   }
   // 消息提示框
   messageBox( str, position ) {

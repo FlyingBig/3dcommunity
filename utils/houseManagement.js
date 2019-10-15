@@ -18,9 +18,9 @@ require('echarts/lib/component/axis');
  class HouseManagement {
   constructor() {
     this.pieData = {
-      title: '2018小区收入情况',
-      xdata: ['18-23周岁', '23-30周岁', '30-45周岁', '45-60周岁'],
-      ydata: [3500, 5800, 7503, 4102]
+      title: '小区户型占比',
+      xdata: ['76平方米', '92平方米', '107平方米', '129平方米'],
+      ydata: [500, 1201, 900, 699]
     };
     this.advise = {
       xdata: ['名称', '关系人', '时间'],
@@ -150,7 +150,7 @@ require('echarts/lib/component/axis');
       },
       series : [
         {
-          name: '每月收入总数',
+          name: '小区户型占比',
           type: 'pie',
           radius : '55%',
           center: ['30%', '50%'],
