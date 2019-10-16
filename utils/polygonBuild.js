@@ -28,11 +28,11 @@ export default class PolygonBuild {
     const extrudeSettings = { depth: 12, bevelSegments: 2, steps: 1, bevelSize: 1, bevelThickness: 1 };
     const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
 
-    let texture = this.getTexture( '/assets/image/wall.png' );
+    let texture = this.getTexture( `${BASEPATH.basePth}/assets/image/wall.png` );
     const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3"}));
     box.add(mesh);
     // 窗户贴图
-    const window =  this.getWindowForOne('/assets/image/door1.jpg',20, 12);
+    const window =  this.getWindowForOne(`${BASEPATH.basePth}/assets/image/door1.jpg`,20, 12);
     window.rotateX(Math.PI*0.5);
     window.position.set(9, -16.2, 6);
     let windowFon = window.clone();
@@ -60,7 +60,7 @@ export default class PolygonBuild {
     topBuild.position.set(11, -7, 16);
     const wapian = this.getTopBuildWap(24, 14);
     wapian.position.set(11, -7, 18.6);
-    const window2 =  this.getWindowForOne('/assets/image/12.jpg',24, 5, 4, 1);
+    const window2 =  this.getWindowForOne(`${BASEPATH.basePth}/assets/image/door1.jpg`,24, 5, 4, 1);
     window2.rotateX(Math.PI * 0.5);
     window2.position.set(11, -14.2, 16);
     const k = new THREE.Object3D();
@@ -126,13 +126,13 @@ export default class PolygonBuild {
   }
   getDoor( w, h ) {
     const geometry = new THREE.PlaneBufferGeometry( w, h );
-    const texture = this.getTexture('/assets/image/door.jpg', { rx: 1, ry: 1});
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/door.jpg`, { rx: 1, ry: 1});
     const door = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#fff", map: texture}));
     return door;
   }
   getTop( w, h ) {
     const geometry = new THREE.PlaneBufferGeometry( w, h );
-    const texture = this.getTexture('/assets/image/11.jpg', { rx: 5, ry: 5});
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/11.jpg`, { rx: 5, ry: 5});
     const door = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#fff", map: texture}));
     return door;
   }

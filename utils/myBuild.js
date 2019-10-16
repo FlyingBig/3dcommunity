@@ -16,7 +16,7 @@ class MyBuild {
     }
     const extrudeSettings = { depth: 80, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
     const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-    const texture = this.getTexture('/assets/image/16.png',{ rx: 1/ 4, ry: 1/10 });
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 4, ry: 1/10 });
     const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3", map: texture}));
     mesh.rotateX(Math.PI * 0.5);
     // 房屋顶上
@@ -50,7 +50,7 @@ class MyBuild {
       shape.lineTo(points[i].x, points[i].y);
     }
     const geometry = new THREE.ShapeBufferGeometry(shape);
-    const texture = this.getTexture('/assets/image/19.png',{ rx: 1/ 4, ry: 1/10 });
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/19.png`,{ rx: 1/ 4, ry: 1/10 });
     const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: "#F6F7F8", map: texture}));
     return mesh;
   }
@@ -65,11 +65,11 @@ class MyBuild {
     }
     const extrudeSettings = { depth: 10, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
     const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-    const texture = this.getTexture('/assets/image/16.png',{ rx: 1/ 4, ry: 1/10 });
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 4, ry: 1/10 });
     const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ map: texture}));
     // 贴纸
     const foot = new THREE.ShapeBufferGeometry(shape);
-    const texture1 = this.getTexture('/assets/image/17.png',{ rx: 1/ 4, ry: 1/10 });
+    const texture1 = this.getTexture(`${BASEPATH.basePth}/assets/image/17.png`,{ rx: 1/ 4, ry: 1/10 });
     const footImg = new THREE.Mesh(foot, new THREE.MeshBasicMaterial({map: texture1}))
     box.add(mesh);
     footImg.position.set(0, 0, 11.1);
@@ -100,12 +100,12 @@ class MyBuild {
     shape.bezierCurveTo(30,32,30,-10,0,-10);
     const extrudeSettings = { depth: 20, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
     const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-    const texture = this.getTexture('/assets/image/16.png',{ rx: 1/ 4, ry: 1/10 });
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 4, ry: 1/10 });
     const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ map: texture}));
     mesh.rotateX(Math.PI * -0.5);
     // 顶上贴纸
     const foot = new THREE.ShapeBufferGeometry(shape);
-    const texture1 = this.getTexture('/assets/image/17.png',{ rx: 1/ 4, ry: 1/10 });
+    const texture1 = this.getTexture(`${BASEPATH.basePth}/assets/image/17.png`,{ rx: 1/ 4, ry: 1/10 });
     const footImg = new THREE.Mesh(foot, new THREE.MeshBasicMaterial({map: texture1}))
     box.add(mesh);
     footImg.rotateX(Math.PI * -0.5);
@@ -131,7 +131,7 @@ class MyBuild {
   // 草坪
   getLawn() {
     const geometry = new THREE.CircleBufferGeometry( 5, 32 );
-    const texture = this.getTexture('/assets/image/18.png');
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/18.png`);
     const material = new THREE.MeshBasicMaterial( { map: texture } );
     const lawn = new THREE.Mesh( geometry, material );
     lawn.rotateX(Math.PI * -0.5);

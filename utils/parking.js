@@ -9,7 +9,7 @@
 class Parking {
   init() {
     let box = new THREE.Object3D();
-    let texture = this.getTexture('/assets/image/ground.jpg',{ rx: 10, ry: 10 });
+    let texture = this.getTexture(`${BASEPATH.basePth}/assets/image/ground.jpg`,{ rx: 10, ry: 10 });
     let park = new THREE.Mesh(new THREE.PlaneBufferGeometry(100, 50), new THREE.MeshPhongMaterial({map: texture}));
     let line = this.drawParkLine(10);
     line.position.set(0, 8, 0);

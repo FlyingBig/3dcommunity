@@ -174,7 +174,7 @@ class RenderCanvas {
     this.positionBuild();
     this.getOpacity();
     this.foot();
-    this.axesHelper();
+    // this.axesHelper();
     this.initControl();
     // this.loadWater();
     this.redCar();
@@ -357,14 +357,14 @@ class RenderCanvas {
   // 添加obj模型
   async redCar() {
     let param = [{
-      mtlUrl: '/models/redCar/file.mtl',
-      objUrl: '/models/redCar/file.obj',
+      mtlUrl: `${BASEPATH.basePth}/models/redCar/file.mtl`,
+      objUrl: `${BASEPATH.basePth}/models/redCar/file.obj`,
       deg: -Math.PI/2,
       scale: 0.001,
       position: this.computedRoal([-550, 2, -280])
     },{
-      mtlUrl: '/models/scar/file.mtl',
-      objUrl: '/models/scar/file.obj',
+      mtlUrl: `${BASEPATH.basePth}/models/scar/file.mtl`,
+      objUrl: `${BASEPATH.basePth}/models/scar/file.obj`,
       deg: 0,
       scale: 0.003,
       position: this.computedRoal([-100, 2, -315])
@@ -401,8 +401,8 @@ class RenderCanvas {
   async loadHydrant() {
     let position = [[20, 1, -3], [-20, 1, 7], [-70, 1, 7],  [-220, 1, 20], [-16, 1, -100], [100, 1, -70]];
     let param = [{
-      mtlUrl: '/models/hydrant/file.mtl',
-      objUrl: '/models/hydrant/file.obj',
+      mtlUrl: `${BASEPATH.basePth}/models/hydrant/file.mtl`,
+      objUrl: `${BASEPATH.basePth}/models/hydrant/file.obj`,
       //deg: -Math.PI/2,
       //scale: 0.001,
       noLight: true,

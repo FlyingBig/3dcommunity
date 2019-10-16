@@ -22,7 +22,10 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
-    extensions: ['.js','.css']
+    extensions: ['.js','.css'],
+    alias: {
+      basePath: resolve('utils/util'),
+    }
   },
   devServer: {
     contentBase: false, //静态资源
@@ -53,6 +56,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       THREE:'three',
+      BASEPATH: 'basePath',
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
