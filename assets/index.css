@@ -405,10 +405,11 @@ body::-webkit-scrollbar-thumb {
   position: absolute;
   top: 0;
   height: 100%;
-  width: 18%;
-  background-color: rgba(22,52,82,.7);
+  width: 21.35rem;
+  background-image: linear-gradient(270deg, rgba(5,19,49,0.2) 0%, #020816 100%);
   padding-bottom: 15px;
   overflow: auto;
+  font-family: PingFangSC-Medium;
 }
 #house-left{
   left: 0;
@@ -416,11 +417,13 @@ body::-webkit-scrollbar-thumb {
 #house-right{
   right: 0;
 }
-#house-nums > p{
-  margin: 10px 0 20px 0;
-  color: #fff;
-  font-size: 20px;
-  text-align: center;
+.left-icon{
+  position: absolute;
+  top: 10px;
+  left: 2px;
+  height: 24.03rem;
+  width: 1.67rem;
+  background: url("./image/monitor/decorate-left@1x.png") no-repeat;
 }
 .content{
   text-align: center;
@@ -430,38 +433,64 @@ body::-webkit-scrollbar-thumb {
   width: 40%;
   padding: 10px 0;
   margin: 0 5px 18px 5px;
-  background-color: #1890FF;
+  background: url("./image/housemsg/people.png") no-repeat 10% 50%;
   color: #fff;
   font-size: 16px;
   text-align: center;
   border-radius: 5px;
+}
+.box-content-card p {
+  margin-left: 2rem;
+  font-size: 16px;
+  color: #FFFFFF;
+  letter-spacing: 0.15px;
+}
+.box-content-card .card-big {
+  font-size: 28px;
+  color: #FCD071;
+  letter-spacing: 0.26px;
 }
 #pay,
 #house-log{
   width: 98%;
   height: 180px;
   margin: 0 auto;
+
 }
 #house-log{
-  text-align: center;
-  height: 280px;
+  height: 15.63rem;
+  padding-top: 1rem;
+  background: url("./image/housemsg/log.png") no-repeat;
 }
 #house-car{
   margin-top: 30px;
-  text-align: center;
 }
+#house-nums > p,
 #house-car > p,
 #house-log > p,
 #house-weather > p,
 #house-message > p,
 #house-equipment> p,
 #models> p{
-  margin: 10px 0;
-  font-size: 18px;
-  color: #fff;
+  margin: 1.77rem 0 .89rem 1.56rem;
+  font-size: 20px;
+  color: #BAE1FF;
+  background: url("./image/monitor/Lightbar@1x.png") no-repeat 80% 50%;
+}
+.title-dv{
+  margin: 0 0 .89rem 1.56rem;
+  font-size: 20px;
+  color: #BAE1FF;
 }
 #house-log .nav{
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
   background-color: #093653;
+}
+#log-list{
+  width: 90%;
+  margin: 0 auto;
 }
 #house-log .nav div {
   display: inline-block;
@@ -528,12 +557,14 @@ body::-webkit-scrollbar-thumb {
   text-align: center;
 }
 .t-head {
-  background-color: #16446F;
+  border: 1px solid #1C99FF;
+  background-color: rgba(28,153,255,0.33);
+  color: #87EDFC;
 }
 .t-head-tr {
   width: 32%;
   padding: 5px 0;
-  color: #1F6CB0;
+  color: #87EDFC;
   font-size: 15px;
   font-weight: 900;
   text-align: center;
@@ -541,13 +572,13 @@ body::-webkit-scrollbar-thumb {
 }
 .t-body {
   height: 180px;
-  background-color: #052B5A;
+  /*background-color: #052B5A;*/
   color: #fff;
   overflow: auto;
 }
 .event-node{
   cursor: pointer;
-  color: #8DB6D0;
+  /*color: #8DB6D0;*/
 }
 .event-right{
   color: #00A5FF;
@@ -566,9 +597,9 @@ body::-webkit-scrollbar-thumb {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.t-body-tr:nth-child(even){
-  background: rgba(196,228,245,0.05);
-}
+/*.t-body-tr:nth-child(even){*/
+  /*background: rgba(196,228,245,0.05);*/
+/*}*/
 /****************** 导航栏 *********************/
 #pro-nav{
   position: absolute;
