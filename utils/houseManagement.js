@@ -248,6 +248,7 @@ require('echarts/lib/component/polar');
       this.modelType = 2;
       ctx.clearRect(0,0,400,400);
       rb(null, this.activeModel);
+      node.className = 'scale-box';
       return;
     }
     ctx.beginPath();
@@ -297,6 +298,7 @@ require('echarts/lib/component/polar');
       this.modelType = 1;
       ctx.clearRect(0,0,400,400);
       render();
+      node.className = 'shake-box';
       return;
     }
     // 环形

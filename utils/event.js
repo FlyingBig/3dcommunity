@@ -104,13 +104,10 @@ function changeModel() {
   }
 
   formNode.addEventListener('click',function(e) {
-    let i = that.activeModel;
     let p = getEventPosition(e);
     if (that.modelType == 1) {
-      this.className = 'shake-box';
       model1(p, model2);
     } else {
-      this.className = 'scale-box';
       model2(p, -1, model1, changeModel);
     }}
   )}
