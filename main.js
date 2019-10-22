@@ -26,6 +26,7 @@ import monitor from './utils/monitorObj';
 import  houseManege from './utils/houseManagement';
 import  parterre from './utils/parteree';
 import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene } from './utils/event';
+import { computRem } from './utils/util';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
@@ -130,6 +131,10 @@ class RenderCanvas {
     this.diffModel = {};
     // 透明模式
     this.opacity = false;
+    // 模式状态（1->收缩 2->展开）
+    this.modelType = 1;
+    // 已选择模式
+    this.activeModel = 1;
   }
   // 启动函数
   init() {
@@ -192,7 +197,8 @@ class RenderCanvas {
     this.eventClick();
     this.loadParterre();
     this.animate();
-		monitor.init(this.scene,this.camera,this.controls);
+    monitor.init(this.scene,this.camera,this.controls);
+
   }
   // 添加缩放拖拽控制器
   initControl() {
@@ -515,7 +521,7 @@ class RenderCanvas {
 		window.addEventListener('resize',function(){
 			that.camera.aspect = window.innerWidth/window.innerHeight;
 			that.camera.updateProjectionMatrix();
-			that.renderer.setSize(window.innerWidth,window.innerHeight)
+			that.renderer.setSize(window.innerWidth,window.innerHeight);
 		})
 
     let btn = document.getElementById('opc');
@@ -781,4 +787,7 @@ class RenderCanvas {
     changeModel.bind(this)();
   }
 }
-new RenderCanvas().init();
+computRem(document, window);
+window.onload = function () {
+  new RenderCanvas().init();
+}

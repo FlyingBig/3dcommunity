@@ -154,17 +154,6 @@ body::-webkit-scrollbar-thumb {
   box-sizing: border-box;
   text-align: center;
 }
-.weather-title,
-.camera-monitor-title,
-.camera-list-title {
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  color: #fff;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
 .weather-item{
   width: 100%;
   height: 40px;
@@ -404,11 +393,13 @@ body::-webkit-scrollbar-thumb {
 #house-right{
   position: absolute;
   top: 0;
+  box-sizing: border-box;
   height: 100%;
   width: 21.35rem;
-  background-image: linear-gradient(270deg, rgba(5,19,49,0.2) 0%, #020816 100%);
+  background-image: linear-gradient(270deg, rgba(5,19,49,0.89) 0%, #020816 100%);
+  opacity: .9;
   padding-bottom: 15px;
-  overflow: auto;
+  /*overflow: auto;*/
   font-family: PingFangSC-Medium;
 }
 #house-left{
@@ -419,10 +410,10 @@ body::-webkit-scrollbar-thumb {
 }
 .left-icon{
   position: absolute;
-  top: 10px;
-  left: 2px;
-  height: 24.03rem;
-  width: 1.67rem;
+  top: 1rem;
+  left: 0;
+  height: 27.03rem;
+  width: 1.47rem;
   background: url("./image/monitor/decorate-left@1x.png") no-repeat;
 }
 .content{
@@ -431,39 +422,87 @@ body::-webkit-scrollbar-thumb {
 .box-content-card{
   display: inline-block;
   width: 40%;
-  padding: 10px 0;
-  margin: 0 5px 18px 5px;
+  padding: .52px  0;
+  margin: 0 5px 1rem 5px;
   background: url("./image/housemsg/people.png") no-repeat 10% 50%;
+  background-size: 2.08rem 1.56rem;
   color: #fff;
   font-size: 16px;
   text-align: center;
   border-radius: 5px;
 }
+.car-node{
+  width: 49%;
+  margin: 0;
+  padding: 0;
+  background: url("./image/housemsg/carposion.png") no-repeat 25% 50%;
+  background-size: 3.125rem 3.125rem;
+}
 .box-content-card p {
   margin-left: 2rem;
+  font-size: .833rem;
+  letter-spacing: 0.15px;
+}
+.box-content-card .car-n{
+  margin-left: 5rem;
+  font-size: 1.46rem;
+  color: #FFFFFF;
+  letter-spacing: 0.26px;
+}
+.box-content-card .car-num{
+  margin-left: 5rem;
+  font-size: .833rem;
+  color: #2CF7FE;
+  letter-spacing: 0.15px;
+}
+.box-content-card .car-n span{
   font-size: 16px;
   color: #FFFFFF;
   letter-spacing: 0.15px;
 }
 .box-content-card .card-big {
-  font-size: 28px;
+  font-size: 1.46rem;
   color: #FCD071;
   letter-spacing: 0.26px;
 }
-#pay,
-#house-log{
-  width: 98%;
-  height: 180px;
+#pay{
+  width: 20.5rem;
+  height: 8.7rem;
   margin: 0 auto;
-
 }
 #house-log{
-  height: 15.63rem;
+  position: absolute;
+  top: 29rem;
+  bottom: 0;
+  width: 20.5rem;
+  margin: 0 auto;
+  padding-top: 4.94rem;
+}
+.table-box{
+  position: relative;
   padding-top: 1rem;
   background: url("./image/housemsg/log.png") no-repeat;
+  background-size: 100% 100%;
 }
-#house-car{
-  margin-top: 30px;
+.table-box::before{
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 100%;
+  height: 18px;
+  background: url("./image/monitor/light@1x.png") no-repeat 50% 50%;
+}
+.table-box::after{
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 100%;
+  height: 18px;
+  background: url("./image/monitor/light@1x.png") no-repeat 50% 50%;
 }
 #house-nums > p,
 #house-car > p,
@@ -471,26 +510,71 @@ body::-webkit-scrollbar-thumb {
 #house-weather > p,
 #house-message > p,
 #house-equipment> p,
-#models> p{
-  margin: 1.77rem 0 .89rem 1.56rem;
-  font-size: 20px;
+#models> p,
+#pay-box > p{
+  margin: 1rem 0 .89rem 1.56rem;
+  font-size: 1.04rem;
   color: #BAE1FF;
   background: url("./image/monitor/Lightbar@1x.png") no-repeat 80% 50%;
+  background-size: 6.823rem 1rem;
+}
+#house-weather{
+  height: 10.833rem;
+}
+#pay-box > p{
+  margin: 0 0 .39rem 1.56rem;
 }
 .title-dv{
-  margin: 0 0 .89rem 1.56rem;
-  font-size: 20px;
+  margin: -3.5rem 0 .39rem 1.56rem;
+  font-size: 1.05rem;
   color: #BAE1FF;
 }
+.title-dvl{
+  margin: 0rem 0 .39rem 1.56rem;
+  font-size: 1.05rem;
+  color: #BAE1FF;
+}
+#pay-box{
+  position: relative;
+}
+.pay-icon{
+  position: absolute;
+  top: 74%;
+  left: 23%;
+  width: 3rem;
+  height: .5rem;
+  background: url("./image/monitor/light-selection@1x.png") no-repeat 50% 50%;
+}
 #house-log .nav{
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
   text-align: center;
   background-color: #093653;
 }
-#log-list{
-  width: 90%;
+#house-message{
+  width: 20.5rem;
+  margin-top: 2rem;
+  margin: 2rem auto 0 auto;
+}
+#house-equipment{
+  position: absolute;
+  top: 32rem;
+  bottom: 0;
+  left: .5rem;
+  width: 20.5rem;
+  padding-top: 2.4rem;
+}
+#house-equipment .title-dvl{
+  margin-top: -1.4rem;
+}
+#log-list,
+#house-message-chart,
+#house-equipment-chart {
+  width: 95%;
   margin: 0 auto;
+}
+#log-list{
+  height: 100%;
 }
 #house-log .nav div {
   display: inline-block;
@@ -500,20 +584,63 @@ body::-webkit-scrollbar-thumb {
   font-size: 13px;
   cursor: pointer;
 }
-#house-weather,
-#house-message,
-#house-equipment{
-  text-align: center;
-}
 #today-weather{
   height: 150px;
 }
 #house-message-chart{
-  margin-top: 20px;
-  height: 220px;
+  margin-top: 10px;
+  height: 14rem;
 }
 #house-equipment-chart{
-  height: 220px;
+  height: 100%;
+}
+#circle{
+  position: absolute;
+  left: 50%;
+  bottom: 3rem;
+  margin-left: -100px;
+}
+.shake-box{
+  animation: shake-box ease-in .8s;
+}
+.scale-box{
+  animation: scale-box ease-in .8s;
+}
+@keyframes shake-box {
+  10%{
+    transform: rotate(15deg);
+  }
+  20%{
+    transform: rotate(-10deg);
+  }
+  30%{
+    transform: rotate(5deg);
+   }
+  40%{
+    transform: rotate(-5deg);
+   }
+  50%,
+  100%{
+    transform: rotate(0deg);
+  }
+}
+@keyframes scale-box {
+
+  30%{
+    transform: scale(.8,.8);
+  }
+  60%{
+    transform: scale(1.2,1.2);
+  }
+  75%{
+    transform: scale(.9,.9);
+  }
+  90%{
+    transform: scale(1.1,1.1);
+  }
+  100%{
+    transform: scale(1,1);
+  }
 }
 #models{
   margin-bottom: 15px;
@@ -554,10 +681,14 @@ body::-webkit-scrollbar-thumb {
 .t-table{
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
+  padding-top: 32px;
   text-align: center;
 }
 .t-head {
-  border: 1px solid #1C99FF;
+  margin-top: -32px;
+  border-top: 1px solid #1C99FF;
+  border-bottom: 1px solid #1C99FF;
   background-color: rgba(28,153,255,0.33);
   color: #87EDFC;
 }
@@ -565,34 +696,37 @@ body::-webkit-scrollbar-thumb {
   width: 32%;
   padding: 5px 0;
   color: #87EDFC;
-  font-size: 15px;
+  font-size: .78rem;
   font-weight: 900;
   text-align: center;
   display: inline-block;
 }
 .t-body {
-  height: 180px;
+  height: 95%;
   /*background-color: #052B5A;*/
   color: #fff;
   overflow: auto;
 }
 .event-node{
   cursor: pointer;
-  /*color: #8DB6D0;*/
+  background: url("./image/housemsg/check.png") no-repeat 32% 53%;
+}
+.event-node span{
+  margin-left: 15px;
 }
 .event-right{
-  color: #00A5FF;
+  color: #ADFD00;
   cursor: pointer;
 }
 .event-error{
-  color: #f00;
+  color: #F56323;
   cursor: pointer;
 }
 .t-body-td{
   width: 32%;
   padding: 10px 0;
   display: inline-block;
-  font-size: 13px;
+  font-size: .677rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -658,20 +792,4 @@ body::-webkit-scrollbar-thumb {
   width: 95%;
   border: none;
   outline: none;
-}
-@media screen and (min-width: 1367px){
-  #pay {
-    width: 339px;
-  }
-  #event-pie{
-    width: 326px;
-  }
-}
-@media screen and (max-width: 1366px){
-  #pay {
-    width: 265px;
-  }
-  #event-pie{
-    width: 257px;
-  }
 }

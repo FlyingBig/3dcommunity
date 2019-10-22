@@ -45,11 +45,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        use: [ 'style-loader', 'css-loader' ],
+
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader'
+        loader: 'url-loader',
       }
     ]
   },

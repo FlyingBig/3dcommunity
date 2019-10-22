@@ -112,18 +112,29 @@
   </div>
   <!-- 物业监控 -->
   <div class="hide" id="house-left">
+    <div class="left-icon"></div>
+    <div id="house-car">
+      <p>车位管理</p>
+      <div class="box-content-card car-node"><p class="car-num">车位总数:</p><p class="car-n">1880<span>个</span></p></div>
+      <div class="box-content-card car-node"><p class="car-num">车位剩余:</p><p class="car-n">800<span>个</span></p></div>
+    </div>
     <div id="house-nums">
       <p>小区人口分析</p>
       <div class="content">
-        <div class="box-content-card"><p>人口总数:</p><p>4300</p></div>
-        <div class="box-content-card"><p>人口总数:</p><p>4300</p></div>
-        <div class="box-content-card"><p>人口总数:</p><p>4300</p></div>
-        <div class="box-content-card"><p>人口总数:</p><p>4300</p></div>
-        <div id="pay"></div>
+        <div class="box-content-card"><p>人口总数</p><p class="card-big">4300</p></div>
+        <div class="box-content-card"><p>人口总数</p><p class="card-big">4300</p></div>
+        <div class="box-content-card"><p>人口总数</p><p class="card-big">4300</p></div>
+        <div class="box-content-card"><p>人口总数</p><p class="card-big">4300</p></div>
+
       </div>
     </div>
-    <div id="house-log">
-      <p>日志事件</p>
+    <div id="pay-box">
+      <p>小区户型占比情况</p>
+      <div class="pay-icon"></div>
+      <div id="pay"></div>
+    </div>
+    <div id="house-log" class="table-box">
+      <div class="title-dv">日志管理</div>
       <div class="nav" id="nav">
         <div class="advise">建议投诉</div>
         <div class="active">大联动</div>
@@ -131,12 +142,7 @@
       </div>
       <div id="log-list"></div>
     </div>
-    <div id="house-car">
-      <p>车位管理</p>
-      <div class="box-content-card car-node"><p>车位总数:</p><p>1880</p></div>
-      <div class="box-content-card car-node"><p>车位剩余:</p><p>800</p></div>
-    </div>
-    <div id="models">
+<!--    <div id="models">
       <p>切换模式</p>
       <form id="model-form">
         <input type="radio" name="ml" id="normal" checked/>
@@ -149,19 +155,19 @@
         <label for="night"></label>
         <span>黑夜</span>
       </form>
-    </div>
+    </div>-->
   </div>
   <div class="hide" id="house-right">
     <div id="house-weather">
-      <p class="weather-title" >天气预报 <span class="more-weather" id="more-weather">更多</span></p>
+      <p class="weather-title">天气预报</p>
       <div id="future-weather"></div>
     </div>
-    <div id="house-message">
-      <p>房屋信息</p>
+    <div id="house-message" class="table-box">
+      <div class="title-dvl">房屋信息</div>
       <div id="house-message-chart"></div>
     </div>
-    <div id="house-equipment">
-      <p>设备运行情况</p>
+    <div id="house-equipment" class="table-box">
+      <div class="title-dvl">设备运行情况</div>
       <div id="house-equipment-chart"></div>
     </div>
   </div>
@@ -183,6 +189,8 @@
       <span>场景三</span>
     </div>
   </div>
+  <!-- 模式切换 -->
+  <canvas id="circle" width="200" height="100"></canvas>
   <!-- 监控视频 -->
   <div id="full-scene">
     <div class="video-contain">
