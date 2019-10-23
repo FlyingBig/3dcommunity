@@ -365,8 +365,8 @@ class RenderCanvas {
     let param = [{
       mtlUrl: `${BASEPATH.basePth}/models/redCar/file.mtl`,
       objUrl: `${BASEPATH.basePth}/models/redCar/file.obj`,
-      deg: -Math.PI/2,
-      scale: 0.001,
+      deg: 0,
+      scale: 3,
       position: this.computedRoal([-550, 2, -280])
     },{
       mtlUrl: `${BASEPATH.basePth}/models/scar/file.mtl`,

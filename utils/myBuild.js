@@ -1,3 +1,4 @@
+import parteree from './parteree';
 class MyBuild {
   constructor(){
     // 椭圆的pointer
@@ -16,8 +17,8 @@ class MyBuild {
     }
     const extrudeSettings = { depth: 80, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
     const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 4, ry: 1/10 });
-    const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3", map: texture}));
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 3, ry: 1/7 });
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#C9C9D3", map: texture}));
     mesh.rotateX(Math.PI * 0.5);
     // 房屋顶上
     const top = this.ellipseTop();
@@ -63,10 +64,11 @@ class MyBuild {
     for(let i=1; i<points.length; i++ ) {
       shape.lineTo(points[i][0], points[i][1]);
     }
-    const extrudeSettings = { depth: 10, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
-    const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 4, ry: 1/10 });
-    const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ map: texture}));
+    const extrudeSettings = { amount: 10, bevelEnabled: false, bevelThickness: 1};
+    const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+    parteree.reMapUv(geometry);
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/3, ry: 1/3 });
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture}));
     // 贴纸
     const foot = new THREE.ShapeBufferGeometry(shape);
     const texture1 = this.getTexture(`${BASEPATH.basePth}/assets/image/17.png`,{ rx: 1/ 4, ry: 1/10 });
@@ -99,9 +101,10 @@ class MyBuild {
     shape.lineTo(70,65);
     shape.bezierCurveTo(30,32,30,-10,0,-10);
     const extrudeSettings = { depth: 20, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
-    const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 4, ry: 1/10 });
-    const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ map: texture}));
+    const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+    parteree.reMapUv(geometry);
+    const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 3, ry: 1/5 });
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture}));
     mesh.rotateX(Math.PI * -0.5);
     // 顶上贴纸
     const foot = new THREE.ShapeBufferGeometry(shape);
