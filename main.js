@@ -24,16 +24,21 @@ import doorModel from './utils/door';
 import line from './utils/addline';
 import monitor from './utils/monitorObj';
 import  houseManege from './utils/houseManagement';
-import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene } from './utils/event';
+import  parterre from './utils/parteree';
+import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene, removeLoading } from './utils/event';
+import { computRem } from './utils/util';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
+
+import outWall from './utils/floor/outwall';
+import buildingEvent from "./utils/floor/buildingEvent";
 // 渲染房屋
 class RenderCanvas {
   constructor(){
     //创建场景.
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog('#BCC1BB', 300, 1000);
+    //this.scene.fog = new THREE.Fog('#BCC1BB', 900, 1000);
     //相机
     this.camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 10000);
     // 渲染器
@@ -42,6 +47,7 @@ class RenderCanvas {
 		this.controls.maxPolarAngle = Math.PI * 0.45;
 		this.controls.minDistance = 20;
 		this.controls.maxDistance = 800;
+
     // 房屋建筑信息
     this.positions = {
       mybuild: { position:[[-355, 82 , -205]], rotation: [Math.PI*1.5] }, // 明宇
@@ -67,13 +73,13 @@ class RenderCanvas {
       nums: {
         position:[
           [310, 3 , -180],
-          [330, 3 , -130],
+          [325, 3 , -130],
           [320, 3 , -70],
           [295, 3 , -50],
           [235, 3 , -50],
           [225, 3 , -100],
           [215, 3 , -160],
-          [275, 3 , -170],
+          [265, 3 , -183],
           [-45, 3 , -100],
           [-35, 3 , -170],
           [-15, 3 , -190],
@@ -82,7 +88,7 @@ class RenderCanvas {
           [-240, 3 , -125],
           [-230, 3 , -185],
         ],
-        rotation: [-Math.PI/3, -Math.PI/2, -Math.PI*0.6, -Math.PI*1.2, -Math.PI*1.2, -Math.PI*1.5, -Math.PI*1.8, -Math.PI*1.8, -Math.PI*1.5, -Math.PI*1.7, -Math.PI*1.8, -Math.PI/6, -Math.PI/3, Math.PI/2, Math.PI*0.2]
+        rotation: [-Math.PI/3, -Math.PI/2, -Math.PI*0.6, -Math.PI*1.2, -Math.PI*1.2, -Math.PI*1.5, -Math.PI*1.8, -Math.PI*2, -Math.PI*1.5, -Math.PI*1.7, -Math.PI*1.8, -Math.PI/6, -Math.PI/3, Math.PI/2, Math.PI*0.2]
       }, // 住宅2
     };
     // 草坪位置
@@ -131,6 +137,10 @@ class RenderCanvas {
     this.diffModel = {};
     // 透明模式
     this.opacity = false;
+    // 模式状态（1->收缩 2->展开）
+    this.modelType = 1;
+    // 已选择模式
+    this.activeModel = 1;
   }
   // 启动函数
   init() {
@@ -163,7 +173,8 @@ class RenderCanvas {
     this.stats = new Stats();
     this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild( this.stats.dom );
-		this.stats.dom.style.left = '20%';
+		this.stats.dom.style.left = '21.4rem';
+		this.stats.dom.style.top = '-60px';
 		this.scene.background = this.sceneTexture.sceneDay
     // 设置相机位置
     this.camera.position.set(100, 100, 100);
@@ -175,10 +186,9 @@ class RenderCanvas {
     this.positionBuild();
     this.getOpacity();
     this.foot();
-    this.axesHelper();
+    // this.axesHelper();
     this.initControl();
     // this.loadWater();
-    this.animate();
     this.redCar();
     this.loadGarbages();
     this.loadLamps();
@@ -192,7 +202,13 @@ class RenderCanvas {
     this.loadDoor();
     houseManege.init(); // 物业管理模块
     this.eventClick();
-		monitor.init(this.scene,this.camera,this.controls);
+    this.loadParterre();
+    this.animate();
+		monitor.init(this.scene,this.camera,this.controls,this.renderer);
+		//myGround.addFire(this.scene)
+		outWall.addTestBuild(this.scene)
+		buildingEvent.init(this.scene,this.camera,this.controls,this.opacity);
+		removeLoading()//去除加载loading
 
   }
   // 添加缩放拖拽控制器
@@ -202,6 +218,9 @@ class RenderCanvas {
     this.controls.panSpeed = .5;
     this.controls.dampingFactor = 0.25
     this.controls.rotateSpeed = 0.35
+    // this.controls.maxPolarAngle = Math.PI * 0.45;
+    // this.controls.minDistance = 20;
+    // this.controls.maxDistance = 800;
   }
   // 房屋数量，位置，旋转角度信息
   positionBuild() {
@@ -355,23 +374,17 @@ class RenderCanvas {
   // 添加obj模型
   async redCar() {
     let param = [{
-      mtlUrl: '/models/redCar/file.mtl',
-      objUrl: '/models/redCar/file.obj',
-      deg: -Math.PI/2,
-      scale: 0.001,
+      mtlUrl: `${BASEPATH.basePth}/models/redCar/file.mtl`,
+      objUrl: `${BASEPATH.basePth}/models/redCar/file.obj`,
+      deg: 0,
+      scale: 3,
       position: this.computedRoal([-550, 2, -280])
     },{
-      mtlUrl: '/models/scar/file.mtl',
-      objUrl: '/models/scar/file.obj',
+      mtlUrl: `${BASEPATH.basePth}/models/scar/file.mtl`,
+      objUrl: `${BASEPATH.basePth}/models/scar/file.obj`,
       deg: 0,
       scale: 0.003,
       position: this.computedRoal([-100, 2, -315])
-    },{
-      mtlUrl: '/models/fountain/file.mtl',
-      objUrl: '/models/fountain/file.obj',
-      scale: 6,
-      position: [-138, 0, -120],
-      noLight: true
     }]
     let car = await Promise.all(objModel(param));
     this.cars.smallCar = car[0];
@@ -405,8 +418,8 @@ class RenderCanvas {
   async loadHydrant() {
     let position = [[20, 1, -3], [-20, 1, 7], [-70, 1, 7],  [-220, 1, 20], [-16, 1, -100], [100, 1, -70]];
     let param = [{
-      mtlUrl: '/models/hydrant/file.mtl',
-      objUrl: '/models/hydrant/file.obj',
+      mtlUrl: `${BASEPATH.basePth}/models/hydrant/file.mtl`,
+      objUrl: `${BASEPATH.basePth}/models/hydrant/file.obj`,
       //deg: -Math.PI/2,
       //scale: 0.001,
       noLight: true,
@@ -519,7 +532,10 @@ class RenderCanvas {
 		window.addEventListener('resize',function(){
 			that.camera.aspect = window.innerWidth/window.innerHeight;
 			that.camera.updateProjectionMatrix();
-			that.renderer.setSize(window.innerWidth,window.innerHeight)
+			that.renderer.setSize(window.innerWidth,window.innerHeight);
+			if(monitor.echarts){
+				monitor.echarts.resize();
+			}
 		})
 
     let btn = document.getElementById('opc');
@@ -603,6 +619,13 @@ class RenderCanvas {
     groundPark.position.set(-170,2,52);
     this.scene.add(groundPark);
   }
+  // 花坛
+  loadParterre() {
+    let n = parterre.init();
+    n.position.set(-134, 1, -120);
+    n.scale.set(2,2,2);
+    this.scene.add(n);
+  }
   // 消息提示框
   messageBox( str, position ) {
     str = str || [{title: "房屋类型", content: '商业住宅房子'},{title: '楼牌号', content: "7幢1单元"},{title: '楼层数', content: '22层'},{title: '户型', content: '两梯四户'}];
@@ -613,98 +636,205 @@ class RenderCanvas {
   }
   // 雨滴效果
   mouseEvent(){
-    let that = this;
-    //鼠标双击进入观察状态
-    document.addEventListener("dblclick",function(event){
-      let mouse = {x:'',y:''}
-      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-      mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-      let raycaster = new THREE.Raycaster();
-      // 通过鼠标点的位置和当前相机的矩阵计算出raycaster
-      raycaster.setFromCamera( mouse, that.camera );
-      // 获取raycaster直线和所有模型相交的数组集合
-      var intersects = raycaster.intersectObjects(that.scene.children,true);
-      // 选中物体的第一个
-      let obj = intersects[0].object;
-      if( intersects.length ){
-        // 点击摄像机移动视角并播放视
-        if ( obj.name === 'camera'||obj.name=="event") {
-          let position = intersects[0].point;
-          let cameraPosition = that.camera.position;
-          that.camera.lookAt(position.x,position.y,position.z)
-          that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
-          let tween = new TWEEN.Tween(cameraPosition).to(
-            {
-              x:position.x+10,
-              y:position.y+10,
-              z:position.z+10
-            },1200
-          ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
-            that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
-            that.camera.lookAt(position.x,position.y,position.z)
-          }).onComplete(function () {
-            if(obj.name==="camera"){
-              document.getElementById("full-scene").style.height = '100%';
-              document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
+		let that = this;
+		//鼠标双击进入观察状态
+		document.addEventListener("click",function(event){
+			let mouse = {x:'',y:''}
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			let raycaster = new THREE.Raycaster();
+			// 通过鼠标点的位置和当前相机的矩阵计算出raycaster
+			raycaster.setFromCamera( mouse, that.camera );
+			// 获取raycaster直线和所有模型相交的数组集合
+			var intersects = raycaster.intersectObjects(that.scene.children,true);
+			// 选中物体的第一个
+			let obj = intersects[0].object;
+			if( intersects.length ){
+				// 点击摄像机移动视角并播放视
+				if(obj.name === 'camera'||obj.name=="eventObj"){
+					let position = intersects[0].point;
+					let cameraPosition = that.camera.position;
+					that.camera.lookAt(position.x,position.y,position.z)
+					that.controls.target = new THREE.Vector3(position.x,position.y,position.z);
+					let tween = new TWEEN.Tween(cameraPosition).to(
+							{
+								x:position.x+10,
+								y:position.y+10,
+								z:position.z+10
+							},1200
+					).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(){
+						that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
+						that.camera.lookAt(position.x,position.y,position.z)
+					}).onComplete(function () {
+						if(obj.name==="camera"){
+							document.getElementById("full-scene").style.height = '100%';
+							document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
 						}else{
 							monitor.showEventDesc(intersects[0].object.attributes)
-            }
+						}
 						tween = null;
 
 					}).start()
-        }
-        // 删除消息盒子
-        if ( obj.parent.name === 'messageBox') {
-          let t = new TWEEN.Tween({x: .5, y: .5, z: .5})
-            .to({x: 0, y: 0, z: 0}, 800)
-            .easing(TWEEN.Easing.Quadratic.Out)
-            .onUpdate(function (res) {
-              obj.parent.scale.set(res.x, res.y, res.z);
-            })
-            .onComplete(function () {
-              // 删除掉所有的模型组内的mesh
-              obj.parent.traverse(function (item) {
-                if (item instanceof THREE.Mesh) {
-                  item.geometry.dispose(); // 删除几何体
-                  item.material.dispose(); // 删除材质
-                }
-              });
-              that.scene.remove(obj.parent);
-              t = null;
-            }).start();
-        }
-      };
+				}
+				// 删除消息盒子
+				if ( obj.parent.name === 'messageBox') {
+					let t = new TWEEN.Tween({x: .5, y: .5, z: .5})
+							.to({x: 0, y: 0, z: 0}, 800)
+							.easing(TWEEN.Easing.Quadratic.Out)
+							.onUpdate(function (res) {
+								obj.parent.scale.set(res.x, res.y, res.z);
+							})
+							.onComplete(function () {
+								// 删除掉所有的模型组内的mesh
+								obj.parent.traverse(function (item) {
+									if (item instanceof THREE.Mesh) {
+										item.geometry.dispose(); // 删除几何体
+										item.material.dispose(); // 删除材质
+									}
+								});
+								that.scene.remove(obj.parent);
+								t = null;
+							}).start();
+				}
 
-      // 透明建筑射线碰撞
-      let opacityRay = new THREE.Raycaster();
-      opacityRay.setFromCamera( mouse, that.camera );
-      let targetMesh = null; //  碰撞对象
-      for(let i=0; i<that.scene.children.length; i++) {
-        if(that.scene.children[i].name === 'opacityBox') {
-          targetMesh = that.scene.children[i];
-          break;
-        }
-      }
-      let objs = raycaster.intersectObject(targetMesh, true);
-      if( objs.length ) {
-        let findParent = function( child ) {
-          if( child.parent.name !==  'opacityBuild' ) {
-            child = child.parent;
-            return findParent(child);
-          } else {
-            return child.parent;
-          }
-        }
-        let parent = findParent(objs[0].object);
-        let position = parent.position;
-        position.y = parent.userData.y;
-        let data = demoData[parent.userData.id];
-        that.messageBox( data, position );
-      }
-    })
-    document.addEventListener("contextmenu",function(event){
-      that.outlook()
-    })
+			};
+
+			// 透明建筑射线碰撞
+			let opacityRay = new THREE.Raycaster();
+			opacityRay.setFromCamera( mouse, that.camera );
+			let targetMesh = null; //  碰撞对象
+			for(let i=0; i<that.scene.children.length; i++) {
+				if(that.scene.children[i].name === 'opacityBox') {
+					targetMesh = that.scene.children[i];
+					break;
+				}
+			}
+			let objs = raycaster.intersectObject(targetMesh, true);
+			if( objs.length ) {
+				let findParent = function( child ) {
+					if( child.parent.name !==  'opacityBuild' ) {
+						child = child.parent;
+						return findParent(child);
+					} else {
+						return child.parent;
+					}
+				}
+				let parent = findParent(objs[0].object);
+				let position = parent.position;
+				position.y = parent.userData.y;
+				let data = demoData[parent.userData.id];
+				that.messageBox( data, position );
+			}
+		})
+		document.addEventListener("contextmenu",function(event){
+			if(buildingEvent.type=="building"){
+				//退出到正常模式
+				buildingEvent.backModule();
+				myGround.cloud.visible = false;
+			}else if(buildingEvent.type=="floor1"){
+				//退出到建筑物模式
+				buildingEvent.backModule();
+			}else if(buildingEvent.type=="floor2"){
+				//退出到建筑物模式
+				buildingEvent.backModule();
+			}else{
+				//调整视角模式
+				that.outlook()
+			}
+		})
+		document.addEventListener("dblclick",function(event){
+			let mouse = {x:'',y:''}
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			let raycaster = new THREE.Raycaster();
+			// 通过鼠标点的位置和当前相机的矩阵计算出raycaster
+			raycaster.setFromCamera( mouse, that.camera );
+			// 获取raycaster直线和所有模型相交的数组集合
+			let intersects = raycaster.intersectObjects(that.scene.children,true);
+			// 选中物体的第一个
+			let obj = intersects[0].object;
+			if( intersects.length ){
+				// 点击摄像机移动视角并播放视
+				let type = "building";
+				if(buildingEvent.type=="floor1"){
+					type="floor"
+				}else if(buildingEvent.type=="normal"||buildingEvent.type=="building"){
+					type="building";
+				}else {
+					return
+				}
+				while (true){
+					if(obj.name.indexOf(type)>-1){
+						buildingEvent.changeSceneModule(obj);
+						break
+					}else if(obj.type=="Scene"){
+						break
+					}else {
+						obj = obj.parent
+					}
+				}
+			};
+
+			// 透明建筑射线碰撞
+			let opacityRay = new THREE.Raycaster();
+			opacityRay.setFromCamera( mouse, that.camera );
+			let targetMesh = null; //  碰撞对象
+			for(let i=0; i<that.scene.children.length; i++) {
+				if(that.scene.children[i].name === 'opacityBox') {
+					targetMesh = that.scene.children[i];
+					break;
+				}
+			}
+			let objs = raycaster.intersectObject(targetMesh, true);
+			if( objs.length ) {
+				let findParent = function( child ) {
+					if( child.parent.name !==  'opacityBuild' ) {
+						child = child.parent;
+						return findParent(child);
+					} else {
+						return child.parent;
+					}
+				}
+				let parent = findParent(objs[0].object);
+				let position = parent.position;
+				position.y = parent.userData.y;
+				let data = demoData[parent.userData.id];
+				that.messageBox( data, position );
+			}
+		})
+		//鼠标悬浮状态
+		document.addEventListener("mousemove",function(event){
+			event.preventDefault();
+			let mouse = {};
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			// 通过鼠标点的位置和当前相机的矩阵计算出raycaster
+			let raycaster = new THREE.Raycaster();
+			raycaster.setFromCamera( mouse, that.camera );
+			// 获取raycaster直线和所有模型相交的数组集合
+			var intersects = raycaster.intersectObjects(that.scene.children,true);
+			if(intersects.length>0){
+				let obj = intersects[0].object;
+				while (true) {
+					let floorDom = document.getElementById("floor");
+
+					if(obj.name.indexOf("floor")>-1){
+						floorDom.style.display = "block";
+						floorDom.innerText  = "第"+obj.name.split("_")[1]+"层";
+						floorDom.style.top = (event.clientY-100)+"px";
+						floorDom.style.left = (event.clientX-30)+"px"
+						break
+					}else if(obj.type=="Scene"){
+						floorDom.style.display = "none";
+						break
+					}else {
+						obj = obj.parent;
+					}
+				}
+
+
+			}
+		})
   }
   outlook(){
     let that = this;
@@ -778,4 +908,7 @@ class RenderCanvas {
     changeModel.bind(this)();
   }
 }
-new RenderCanvas().init();
+computRem(document, window);
+window.onload = function () {
+  new RenderCanvas().init();
+}
