@@ -1802,7 +1802,7 @@ class MyGround {
 	 * 雨滴
 	 */
 	createRain(){
-		let texture = new THREE.TextureLoader().load("../assets/image/rain.png")
+		let texture = new THREE.TextureLoader().load("../assets/image/rain1.png")
 		let geom = new THREE.Geometry();
 		let material = new THREE.PointsMaterial({
 			size:2,

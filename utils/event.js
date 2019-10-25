@@ -139,7 +139,7 @@ function changeScene() {
   }
   // 加载天气
   function loadWeathers() {
-    let list = monitor.weatherInfo;
+    /*let list = monitor.weatherInfo;
     monitor.createWeather([list[0]],"#future-weather");
     document.getElementById('more-weather').onclick = function() {
       let flag = this.innerText;
@@ -151,7 +151,16 @@ function changeScene() {
         monitor.createWeather(list, "#future-weather");
       }
     }
-    loadWeathers = null;
+    loadWeathers = null;*/
+
+    if(document.getElementsByClassName("weather-box").length>1){
+      return;
+    }else {
+      let weatherBox =document.getElementsByClassName("weather-box")[0]
+      let myWeatherBox = weatherBox.cloneNode(true);//克隆节点，深度克隆，克隆节点以及节点下面的子内容。
+			document.getElementById("house-weather").appendChild(myWeatherBox)
+    }
+
   }
 }
 // 关闭大屏video
@@ -161,4 +170,9 @@ function closeBigScene() {
     document.getElementById('full-scene').style.height = '0';
   }
 }
-export { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene };
+
+//去除加载gif图标显示
+function removeLoading(){
+	document.getElementById("loading").style.display = "none";
+}
+export { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene,removeLoading};
