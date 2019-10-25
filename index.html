@@ -5,103 +5,112 @@
   <title>3dCommunity</title>
 </head>
 <body>
+  <!--楼层提示框-->
+  <div id="floor"></div>
+  <div class="page-title">
+    <img src="./assets/image/monitor/top@2x.png" alt="">
+    <div class="page-title-text">智慧小区3D地图演示系统</div>
+  </div>
   <div id="app"></div>
   <button id="opc">转换</button>
   <button id="up">up</button>
   <button id="carFlow">车流量</button>
+  <div id="loading" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 9999; background: white;">
+    <div class="loading-content" style="position: absolute;width: 4rem;height: 4rem;left: 50%;top: 50%;">
+      <img class="loading-icon" src="./assets/image/loading.gif" alt="" style="position: relative;width: 100%;height: 100%;left: -50%;right: -50%;">
+    </div>
+  </div>
   <!--监控预警左侧面板-->
   <div class="show" id="monitor-left-panel">
     <div class="monitor-left-panel">
-    <!--最新推送消息-->
-    <div class="new-events">
-      <div class="lastest-event">
-        <div class="new-event">
-          <img src="./assets/image/newEvent.gif" alt="">
-          <div class="new-event-text">2单元3栋503发生火灾预警</div>
-          <span class="moreEvent" style="float: right;margin-right: 14px;font-size: 13px;margin-top: 2px;color:#fff;cursor: pointer;">更多</span>
-        </div>
-      </div>
-      <div class="new-event-list" style="display: none;">
-        <div class="new-event">
-          <img src="./assets/image/newEvent.gif" alt="">
-          <div class="new-event-text">2单元3栋503发生火灾预警</div>
-        </div>
-        <div class="new-event">
-          <img src="./assets/image/newEvent.gif" alt="">
-          <div class="new-event-text">2单元3栋503发生火灾预警</div>
-        </div>
-        <div class="new-event">
-          <img src="./assets/image/newEvent.gif" alt="">
-          <div class="new-event-text">2单元3栋503发生火灾预警</div>
-        </div>
-        <div class="new-event">
-          <img src="./assets/image/newEvent.gif" alt="">
-          <div class="new-event-text">2单元3栋503发生火灾预警</div>
-        </div>
-      </div>
-    </div>
-    <!--推送事件统计-->
-    <div class="event-count">
-      <div class="event-count-title">事件管理</div>
-      <div id="event-pie">
+      <!--最新推送消息-->
+      <div class="new-events">
+        <div class="count-title"><span class="title-text">最新发生事件</span><img class="title-img" src="./assets/image/monitor/Lightbar@1x.png" alt=""></div>
+        <div class="new-event-content">
+          <div class="count-box">
+            <div class="count-list">
+              <img class="box-top-img" src="./assets/image/monitor/light@1x.png" alt="">
+              <img class="box-bottom-img" src="./assets/image/monitor/light@1x.png" alt="">
+              <div class="new-event-list">
 
-      </div>
-
-      <div class="event-count-list">
-        <div class="count-list-title">
-          <div class="event-count-list-item">
-            <div class="event-name">事件名称</div>
-            <div class="event-time">时间</div>
-            <div class="event-desc">概述</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="count-list-content">
+      </div>
+      <!--推送事件统计-->
+      <div class="event-count">
+        <div class="count-title"><span class="title-text">事件管理</span><img class="title-img" src="./assets/image/monitor/Lightbar@1x.png" alt=""></div>
+        <div id="event-pie">
 
         </div>
 
+        <div class="event-count-list">
+          <div class="count-box">
+            <div class="count-list">
+              <img class="box-top-img" src="./assets/image/monitor/light@1x.png" alt="">
+              <img class="box-bottom-img" src="./assets/image/monitor/light@1x.png" alt="">
+              <div style="width: 100%;height: 2.08rem;font-size: 1.04rem;color: #fff;line-height: 40px;padding-left:10px">其他</div>
+              <div class="count-list-title">
+                <div class="event-count-list-item">
+                  <div class="event-name">事件名称</div>
+                  <div class="event-time">时间</div>
+                  <div class="event-desc">概述</div>
+                </div>
+              </div>
+              <div class="count-list-content">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   </div>
   <!--监控预警右侧面板-->
   <div class="show" id="monitor-right-panel">
     <div class="monitor-right-panel">
-    <div class="weather-box">
-      <div class="weather-title" style="padding-left:40px">天气预报 <span class="more-weather">更多</span></div>
-      <div class="weather-content"></div>
-    </div>
-    <!--监控画面-->
-    <div class="camera-view">
-      <div class="camera-monitor-title">监控管理</div>
-      <div class="videoPanel" style="overflow: hidden;width: 100%;height:120px">
-        <!--<div class="closeVideo">X</div>-->
-        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      <div class="weather-box">
+        <div class="count-title"><span class="title-text">天气预报</span><img class="title-img" src="./assets/image/monitor/Lightbar@1x.png" alt=""></div>
+        <div class="weather-content"></div>
       </div>
-      <div class="videoPanel" style="overflow: hidden;margin-right: 2%;">
-        <!--<div class="closeVideo">X</div>-->
-        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+      <!--监控画面-->
+      <div class="camera-view">
+        <div class="count-title"><span class="title-text">监控管理</span><img class="title-img" src="./assets/image/monitor/Lightbar@1x.png" alt=""></div>
+        <div class="videoPanel" style="background:url('./assets/image/monitor/Monitor border 01@1x.png');background-size:100% 100%;overflow: hidden;margin-right: 2%;">
+          <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+        </div>
+        <div class="videoPanel" style="background:url('./assets/image/monitor/Monitor border 01@1x.png');background-size:100% 100%;overflow: hidden;">
+          <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+        </div>
+        <div class="videoPanel" style="background:url('./assets/image/monitor/Monitor border 01@1x.png');background-size:100% 100%;overflow: hidden;margin-right: 2%;">
+          <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+        </div>
+        <div class="videoPanel" style="background:url('./assets/image/monitor/Monitor border 01@1x.png');background-size:100% 100%;overflow: hidden;">
+          <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
+        </div>
       </div>
-      <div class="videoPanel" style="overflow: hidden;">
-        <!--<div class="closeVideo">X</div>-->
-        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
-      </div>
-      <div class="videoPanel" style="overflow: hidden;margin-right: 2%;">
-        <!--<div class="closeVideo">X</div>-->
-        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
-      </div>
-      <div class="videoPanel" style="overflow: hidden;">
-        <!--<div class="closeVideo">X</div>-->
-        <video controls autoplay="autoplay" muted="true" loop="loop" src="./assets/image/test.mp4" style="display: block;"></video>
-      </div>
-    </div>
-    <!--监控列表-->
-    <div class="camera-list">
-      <div class="camera-list-title">列表摄像头</div>
-      <div class="camera-list-content">
+      <!--监控列表-->
+      <div class="camera-list">
+        <div class="count-box">
+          <div class="count-list">
+            <img class="box-top-img" src="./assets/image/monitor/light@1x.png" alt="">
+            <img class="box-bottom-img" src="./assets/image/monitor/light@1x.png" alt="">
+            <div style="width: 100%;height: 2.08rem;font-size: 1.04rem;color: #fff;line-height:2.08rem;padding-left:10px">列表摄像头</div>
+            <div class="count-list-title">
+              <div class="event-count-list-item">
+                <div class="event-name">设备名称</div>
+                <div class="event-time">状态</div>
+                <div class="event-desc">操作</div>
+              </div>
+            </div>
+            <div class="camera-list-content">
+
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
-  </div>
   </div>
   <div class="event-detail">
     <div class="event-title">事件标题</div>
@@ -142,25 +151,10 @@
       </div>
       <div id="log-list"></div>
     </div>
-<!--    <div id="models">
-      <p>切换模式</p>
-      <form id="model-form">
-        <input type="radio" name="ml" id="normal" checked/>
-        <label for="normal"></label>
-        <span>晴天</span>
-        <input type="radio" name="ml" id="rains"/>
-        <label for="rains"></label>
-        <span>雨天</span>
-        <input type="radio" name="ml" id="night"/>
-        <label for="night"></label>
-        <span>黑夜</span>
-      </form>
-    </div>-->
   </div>
   <div class="hide" id="house-right">
     <div id="house-weather">
-      <p class="weather-title">天气预报</p>
-      <div id="future-weather"></div>
+
     </div>
     <div id="house-message" class="table-box">
       <div class="title-dvl">房屋信息</div>
@@ -172,21 +166,22 @@
     </div>
   </div>
   <!-- 导航栏 -->
-  <div id="pro-nav">
-    <div class="pro-nav-constrain">
+  <!-- 导航栏 -->
+  <div id="pro-nav" style="background-image: url('./assets/image/monitor/bottom@1x.png');background-size:100% 100%">
+    <div class="pro-nav-constrain" style="text-align:right;width:45%;">
       <input type="radio" id="scene-one" name="nav">
       <label for="scene-one"></label>
-      <span>物业管理</span>
+      <span style="position: relative;top:1px">物业管理</span>
     </div>
-    <div class="pro-nav-constrain">
+    <div class="pro-nav-constrain" style="width:10%">
       <input type="radio" id="scene-two" name="nav" checked>
       <label for="scene-two"></label>
-      <span>监控预警</span>
+      <span style="position: relative;top:1px">监控预警</span>
     </div>
-    <div class="pro-nav-constrain">
+    <div class="pro-nav-constrain" style="text-align:left;width:45%">
       <input type="radio" id="scene-three" name="nav">
       <label for="scene-three"></label>
-      <span>场景三</span>
+      <span style="position: relative;top:1px">场景三</span>
     </div>
   </div>
   <!-- 模式切换 -->
@@ -200,4 +195,3 @@
   </div>
 </body>
 </html>
-
