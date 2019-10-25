@@ -22,7 +22,10 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
-    extensions: ['.js','.css']
+    extensions: ['.js','.css'],
+    alias: {
+      basePath: resolve('utils/util'),
+    }
   },
   devServer: {
     contentBase: false, //静态资源
@@ -42,17 +45,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        use: [ 'style-loader', 'css-loader' ],
+
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader'
+        loader: 'url-loader',
       }
     ]
   },
   plugins: [
     new webpack.ProvidePlugin({
       THREE:'three',
+      BASEPATH: 'basePath',
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',

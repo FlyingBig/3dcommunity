@@ -204,6 +204,7 @@ class RenderCanvas {
     this.eventClick();
     this.loadParterre();
     this.animate();
+
 		monitor.init(this.scene,this.camera,this.controls,this.renderer);
 		//myGround.addFire(this.scene)
 		outWall.addTestBuild(this.scene)

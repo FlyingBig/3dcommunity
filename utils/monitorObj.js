@@ -320,7 +320,7 @@ class Monitor {
 	}
 	loadEventEcharts(){
 		let that =this;
-		let myEcharts = echarts.init(document.getElementById("event-pie"))
+		let myEcharts = echarts.init(document.getElementById("event-pie"));
 		let option = {
 			tooltip: {
 				trigger: "item",

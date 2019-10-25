@@ -475,7 +475,7 @@ var myTrees= [
 	{
 		name:"tree6",
 		type:"tree",
-		point:[[366.35,0,-14.85],[378.26,0,-80.78],[426.58,0,-142.01],[381.05,0,-159.64],[369.25,0,-206.5]]
+		point:[[366.35,0,-14.85],[378.26,0,-80.78],[426.58,0,-142.01],[381.05,0,-159.64],[369.25,0,-206.5],[-134, 1, -120]]
 	}
 
 ];
@@ -1357,7 +1357,7 @@ class MyGround {
 				// 正常规则道路
 				this.driveway[key].map( ( val )=>{
 					let { width, height, position, rotation, wrap, textRotate } = val;
-					let texture = new THREE.TextureLoader().load('/assets/image/road1.jpg'); //公路统一贴图
+					let texture = new THREE.TextureLoader().load('./assets/image/road1.jpg'); //公路统一贴图
 					texture.rotation = textRotate || 0;
 					texture.wrapS = THREE.RepeatWrapping;
 					texture.wrapT = THREE.RepeatWrapping;

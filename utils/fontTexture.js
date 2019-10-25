@@ -11,7 +11,7 @@ class FontTexture {
      let box = new THREE.Object3D();
      // 消息提示框背景图片填充
      let plane = new THREE.PlaneBufferGeometry(136, 81);
-     let imgTexture = new THREE.TextureLoader().load('/assets/image/message.png');
+     let imgTexture = new THREE.TextureLoader().load(`${BASEPATH.basePth}/assets/image/message.png`);
      let back = new THREE.Mesh(plane, new THREE.MeshBasicMaterial({map: imgTexture, side: THREE.DoubleSide, transparent: true}));
      // 消息提示框文字填充(利用canvas)
      let heightRatio = 0.825 * 81; // 图片正文类容占比

@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const path = require('path');
 // 连接地址
@@ -19,10 +20,13 @@ module.exports = {
   output: {
     path: resolve('dist'),
     filename: '[name].js',
-    publicPath: './',
+    publicPath: '/3dCommunity/dist/',
   },
   resolve: {
-    extensions: ['.js','.css']
+    extensions: ['.js','.css'],
+    alias: {
+      basePath: resolve('utils/util'),
+    }
   },
   devServer: {
     contentBase: false, //静态资源
@@ -56,13 +60,15 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader'
+        loader: 'url-loader',
+
       }
     ]
   },
   plugins: [
     new webpack.ProvidePlugin({
-      THREE:'three',
+      THREE: 'three',
+      BASEPATH: 'basePath',
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -74,6 +80,11 @@ module.exports = {
       chunkFilename: '[id].css',
       ignoreOrder: false,
     }),
+    new CopyWebpackPlugin([
+      { from: join('assets/image'), to:  join('dist/assets/image/') },
+      { from: join('models'), to:  join('dist/models/') },
+      { from: join('json'), to:  join('dist/json/') }
+    ])
   ],
   optimization:{  //优化
     splitChunks:{
@@ -85,5 +96,5 @@ module.exports = {
         }
       }
     }
-  },
+  }
 }

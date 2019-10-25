@@ -62,36 +62,55 @@ function houseMessage() {
   }
 }
 
+//获取位置
+function getEventPosition(ev){
+  let x, y;
+  if (ev.layerX || ev.layerX == 0) {
+    x = ev.layerX;
+    y = ev.layerY;
+  } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+    x = ev.offsetX;
+    y = ev.offsetY;
+  }
+  return {x: x, y: y};
+}
+
 // 模式切换
 function changeModel() {
-  let formNode = document.getElementById('model-form');
+  let formNode = document.getElementById('circle');
   let that = this;
-  formNode.onchange = function (e) {
-    let node = e.target;
-    if(node.type === 'radio') {
-      let isnormal, rains, night;
-      isnormal = document.getElementById('normal').checked;
-      rains = document.getElementById('rains').checked;
-      night = document.getElementById('night').checked;
-      if(isnormal) {
-        that.scene.children[0].position.set( ...that.positionLight[0] );
-        that.scene.children[1].position.set( ...that.positionLight[1] );
-        that.scene.children[2].position.set( ...that.positionLight[2] );
-        that.scene.background = that.sceneTexture.sceneDay;
-        myGround.closeLampLight();
-      }
-      if(night) {
-        that.scene.children[0].position.set( ...that.positionLight[3] );
-        that.scene.children[1].position.set( ...that.positionLight[4] );
-        that.scene.children[2].position.set( ...that.positionLight[5] );
-        that.scene.background = that.sceneTexture.sceneNight;
-        myGround.openLampLight();
-      }
+  let model1 = house.createModel1.bind(that); // 切换模式1
+  let model2 = house.createModel2.bind(that); // 切换模式2
+  // 点击切换改变场景样式方法
+  function changeModel(flag) {
+    if(flag === 1) {
+      that.scene.children[0].position.set( ...that.positionLight[0] );
+      that.scene.children[1].position.set( ...that.positionLight[1] );
+      that.scene.children[2].position.set( ...that.positionLight[2] );
+      that.scene.background = that.sceneTexture.sceneDay;
+      myGround.closeLampLight();
+      myGround.cloud.visible = false;
+    } else if(flag === 2) {
+      that.scene.children[0].position.set( ...that.positionLight[3] );
+      that.scene.children[1].position.set( ...that.positionLight[4] );
+      that.scene.children[2].position.set( ...that.positionLight[5] );
+      that.scene.background = that.sceneTexture.sceneNight;
+      myGround.openLampLight();
+      myGround.cloud.visible = false;
+    } else {
       // 是否为下雨模式
-      myGround.cloud.visible = rains;
+      myGround.cloud.visible = true;
     }
   }
-}
+
+  formNode.addEventListener('click',function(e) {
+    let p = getEventPosition(e);
+    if (that.modelType == 1) {
+      model1(p, model2);
+    } else {
+      model2(p, -1, model1, changeModel);
+    }}
+  )}
 // 选择场景
 function changeScene() {
   let nav = document.getElementById('pro-nav');

@@ -5,7 +5,7 @@ newmtl 17basic
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/17FABRIC.jpg
+	map_Kd ./models/scar/17FABRIC.jpg
 
 newmtl 1740
 	Ns 10.0000
@@ -14,7 +14,7 @@ newmtl 1740
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1740.jpg
+	map_Kd ./models/scar/1740.jpg
 
 newmtl 1741
 	Ns 10.0000
@@ -23,7 +23,7 @@ newmtl 1741
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1741.jpg
+	map_Kd ./models/scar/1741.jpg
 
 newmtl 1732
 	Ns 10.0000
@@ -32,7 +32,7 @@ newmtl 1732
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1732.jpg
+	map_Kd ./models/scar/1732.jpg
 
 newmtl 1719
 	Ns 10.0000
@@ -41,7 +41,7 @@ newmtl 1719
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1719.jpg
+	map_Kd ./models/scar/1719.jpg
 
 newmtl 1739
 	Ns 10.0000
@@ -50,7 +50,7 @@ newmtl 1739
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1739.jpg
+	map_Kd ./models/scar/1739.jpg
 
 newmtl 1736
 	Ns 10.0000
@@ -59,7 +59,7 @@ newmtl 1736
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1736.jpg
+	map_Kd ./models/scar/1736.jpg
 
 newmtl 1720
 	Ns 10.0000
@@ -68,7 +68,7 @@ newmtl 1720
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1720.jpg
+	map_Kd ./models/scar/1720.jpg
 
 newmtl 1729
 	Ns 10.0000
@@ -77,7 +77,7 @@ newmtl 1729
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1729.jpg
+	map_Kd ./models/scar/1729.jpg
 
 newmtl 1721
 	Ns 10.0000
@@ -86,7 +86,7 @@ newmtl 1721
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1721.jpg
+	map_Kd ./models/scar/1721.jpg
 
 newmtl 1730
 	Ns 10.0000
@@ -95,7 +95,7 @@ newmtl 1730
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1730.jpg
+	map_Kd ./models/scar/1730.jpg
 
 newmtl 1731
 	Ns 10.0000
@@ -104,7 +104,7 @@ newmtl 1731
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1731.jpg
+	map_Kd ./models/scar/1731.jpg
 
 newmtl 1737
 	Ns 10.0000
@@ -113,7 +113,7 @@ newmtl 1737
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1737.jpg
+	map_Kd ./models/scar/1737.jpg
 
 newmtl 1728
 	Ns 10.0000
@@ -122,7 +122,7 @@ newmtl 1728
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1728.jpg
+	map_Kd ./models/scar/1728.jpg
 
 newmtl 1738
 	Ns 10.0000
@@ -131,7 +131,7 @@ newmtl 1738
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1738.jpg
+	map_Kd ./models/scar/1738.jpg
 
 
 newmtl 1726
@@ -141,7 +141,7 @@ newmtl 1726
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1726.jpg
+	map_Kd ./models/scar/1726.jpg
 
 newmtl 1717
 	Ns 10.0000
@@ -150,7 +150,7 @@ newmtl 1717
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1717.jpg
+	map_Kd ./models/scar/1717.jpg
 
 newmtl 1722
 	Ns 10.0000
@@ -159,7 +159,7 @@ newmtl 1722
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1722.jpg
+	map_Kd ./models/scar/1722.jpg
 
 newmtl 174
 	Ns 10.0000
@@ -168,7 +168,7 @@ newmtl 174
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/174.jpg
+	map_Kd ./models/scar/174.jpg
 
 newmtl 179
 	Ns 10.0000
@@ -177,7 +177,7 @@ newmtl 179
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/179.jpg
+	map_Kd ./models/scar/179.jpg
 
 newmtl 176
 	Ns 10.0000
@@ -186,7 +186,7 @@ newmtl 176
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/176.jpg
+	map_Kd ./models/scar/176.jpg
 
 newmtl 175
 	Ns 10.0000
@@ -195,7 +195,7 @@ newmtl 175
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/175.jpg
+	map_Kd ./models/scar/175.jpg
 
 newmtl 17132
 	Ns 10.0000
@@ -204,7 +204,7 @@ newmtl 17132
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/17132.jpg
+	map_Kd ./models/scar/17132.jpg
 
 newmtl 1716
 	Ns 10.0000
@@ -213,7 +213,7 @@ newmtl 1716
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1716.jpg
+	map_Kd ./models/scar/1716.jpg
 
 newmtl 1710
 	Ns 10.0000
@@ -222,7 +222,7 @@ newmtl 1710
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1710.jpg
+	map_Kd ./models/scar/1710.jpg
 
 newmtl 1715
 	Ns 10.0000
@@ -231,7 +231,7 @@ newmtl 1715
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1715.jpg
+	map_Kd ./models/scar/1715.jpg
 
 newmtl 173
 	Ns 10.0000
@@ -240,7 +240,7 @@ newmtl 173
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/173.jpg
+	map_Kd ./models/scar/173.jpg
 
 newmtl 1714
 	Ns 10.0000
@@ -249,7 +249,7 @@ newmtl 1714
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/1714.jpg
+	map_Kd ./models/scar/1714.jpg
 
 newmtl 17BASIC
 	Ns 10.0000
@@ -258,7 +258,6 @@ newmtl 17BASIC
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/17BASIC.jpg
 
 newmtl 17REK
 	Ns 25.0000
@@ -267,7 +266,7 @@ newmtl 17REK
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/17REK.jpg
+	map_Kd ./models/scar/17REK.jpg
 
 newmtl 17FABRIC
 	Ns 10.0000
@@ -276,7 +275,7 @@ newmtl 17FABRIC
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/17FABRIC.jpg
+	map_Kd ./models/scar/17FABRIC.jpg
 
 newmtl 17tyresf
 	Ns 10.0000
@@ -285,5 +284,5 @@ newmtl 17tyresf
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000
 	illum 2
-	map_Kd /models/scar/17tyresf.jpg
+	map_Kd ./models/scar/17tyresf.jpg
 

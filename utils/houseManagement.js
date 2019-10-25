@@ -11,16 +11,15 @@ require('echarts/lib/chart/pie');
 require('echarts/lib/chart/line');
 // 引入组件
 require('echarts/lib/component/tooltip');
-require('echarts/lib/component/title');
 require('echarts/lib/component/legend');
 require('echarts/lib/component/axis');
+require('echarts/lib/component/polar');
 
  class HouseManagement {
   constructor() {
     this.pieData = {
-      title: '2018小区收入情况',
-      xdata: ['18-23周岁', '23-30周岁', '30-45周岁', '45-60周岁'],
-      ydata: [3500, 5800, 7503, 4102]
+      xdata: ['76平方米', '92平方米', '107平方米', '129平方米'],
+      ydata: [500, 1201, 900, 699]
     };
     this.advise = {
       xdata: ['名称', '关系人', '时间'],
@@ -76,10 +75,11 @@ require('echarts/lib/component/axis');
   };
 
   init() {
-    this.createPie(this.pieData, "pay");
     this.createTable(this.advise, 'log-list');
     this.createTable(this.house, 'house-message-chart');
     this.createTable(this.equipment, 'house-equipment-chart');
+    this.createPie(this.pieData, "pay");
+    this.createModel1();
   }
 
   /**
@@ -121,18 +121,34 @@ require('echarts/lib/component/axis');
   createPie( data, el ) {
     let node = document.getElementById(el);
     let chart = echarts.init(node);
+    let color = [['#FFDF2D','#D76606'], ['#40C489','#40C489'], ['#1890ED','#47D4F6'], ['#46CF83','#CDEB2F']];
     let option = {
-      color: ['#00A5FF','#F0BD00', '#174076', '#E18001'],
-      title : {
-        text: data.title,
-        x:'center',
+      title: {
+        text: '总房数\n\r1000',
+        x: '21%',
+        y: '35%',
         textStyle: {
-          color: '#fff'
+          color: '#fff',
+          fontSize: (function () {
+            let rem = document.documentElement.style.fontSize;
+            return parseInt(rem)*0.94
+          })()
         }
       },
-      grid: {
-        top: 80,
-        left: '20%'
+      polar: {
+        center: ['30%', '50%'],
+        radius: '90%',
+      },
+      angleAxis: {
+        type: 'category',
+        startAngle: 0,
+        axisLine: {
+          lineStyle: {
+            color: '#fff'
+          }
+        }
+      },
+      radiusAxis: {
       },
       tooltip : {
         trigger: 'item',
@@ -141,23 +157,37 @@ require('echarts/lib/component/axis');
       },
       legend: {
         orient: 'vertical',
-        right: 10,
-        top: 50,
-        data: data.xdata,
+        right: 0,
+        top: 16,
+        itemGap: (function () {
+          let rem = document.documentElement.style.fontSize;
+          return parseInt(rem)*0.74
+        })(),
+        data: (function (x) {
+          let y = [];
+          x.map(function (v,i) {
+            let obj = {name: v, icon: `image://../assets/image/housemsg/icon${i+1}.png`};
+            y.push(obj);
+          })
+          return y;
+        })(data.xdata),
         textStyle: {
-          color: '#fff'
+          color: '#fff',
+          fontSize: (function () {
+            let rem = document.documentElement.style.fontSize;
+            return parseInt(rem)*0.94
+          })()
         }
       },
       series : [
         {
-          name: '每月收入总数',
+          name: '小区户型占比',
           type: 'pie',
-          radius : '55%',
+          radius: ['50%', '80%'],
           center: ['30%', '50%'],
           label: {
             normal: {
               show: false,
-              position: 'center'
             },
           },
           labelLine: {
@@ -168,7 +198,19 @@ require('echarts/lib/component/axis');
           data: (function () {
             let n = [];
             data.ydata.map((v,i)=>{
-              n.push({value: v, name: data.xdata[i]})
+              n.push({value: v, name: data.xdata[i],itemStyle:{color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: color[i][0] // 0% 处的颜色
+                }, {
+                  offset: 1, color: color[i][1] // 100% 处的颜色
+                }],
+                global: false
+              }}})
             })
             return n;
           })(),
@@ -176,14 +218,170 @@ require('echarts/lib/component/axis');
       ]
     };
     chart.setOption(option);
+    window.addEventListener('resize',function(){
+      chart.resize();
+    })
   }
-  /**
-   * 生成折现样式
-   * @param data 图标数据
-   * @param el 节点元素
-   */
-  createLine( data, el ) {
 
+  // 切换模式图形
+  tanslateCanvas(c){
+    c.translate(-100,-100);
+    this.tanslateCanvas = null;
   }
+  createModel1( pos, rb ) {
+    let node = document.getElementById('circle');
+    let ctx = node.getContext('2d');
+    ctx.beginPath();
+    pos ? ctx.clearRect(0,0,400,400) : null;
+    this.tanslateCanvas ? this.tanslateCanvas(ctx) : null;
+    ctx.strokeStyle = '#2DFAFF';
+    let gradient1 = ctx.createRadialGradient(200, 200, 1, 200, 200, 45.5);
+    gradient1.addColorStop(0,'rgba(41,143,247,0.78)');
+    gradient1.addColorStop(1,'rgba(41,143,247,0.28)');
+    ctx.fillStyle = gradient1;
+    ctx.moveTo(160, 200);
+    ctx.arc(200, 200, 42, -Math.PI, 0, false);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fill();
+    if(pos && ctx.isPointInPath(pos.x, pos.y)) {
+      this.modelType = 2;
+      ctx.clearRect(0,0,400,400);
+      rb(null, this.activeModel);
+      node.className = 'scale-box';
+      return;
+    }
+    ctx.beginPath();
+    ctx.strokeStyle = '#fff';
+    ctx.moveTo(195, 178);
+    ctx.lineTo(200, 173);
+    ctx.lineTo(205, 178);
+    ctx.moveTo(195, 175);
+    ctx.lineTo(200, 170);
+    ctx.lineTo(205, 175);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.fillStyle = '#fff';
+    ctx.font = '11px bold';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('切换模式', 200, 190);
+  }
+  createModel2( pos, oldIndex, render, rb ) {
+    let node = document.getElementById('circle');
+    let ctx = node.getContext('2d');
+    pos ? ctx.clearRect(0,0,400,400) : null;
+    let gradient = ctx.createRadialGradient(200, 200, 45.5, 200, 200, 89);
+    gradient.addColorStop(0,'rgba(41,143,247,0.78)');
+    gradient.addColorStop(1,'rgba(41,143,247,0.28)');
+    // 图片位置信息
+    let imgPos = [[130,155],[190,117],[252,155]];
+    // 激活样式
+    let activeIndex = 1;
+    let activeBack = 'rgba(41,143,247,0.28)';
+    let activeFont = '#2DFAFF';
+    let activeUrl = ['night', 'sunny', 'rain'];
+    let eleStyle = [];  // 图片,字体颜色等属性
+    ctx.translate(0,0);
+    for(let i=0; i<3; i++) {
+      let act = oldIndex == i ? {fontColor: activeFont, imgUrl: `./assets/image/monitor/${activeUrl[i]}1.png`} : {fontColor: '#fff', imgUrl: `./assets/image/monitor/${activeUrl[i]}.png`};
+      eleStyle.push(act);
+    }
+    // 切换模式
+    ctx.beginPath();
+    ctx.fillStyle = '#fff';
+    ctx.moveTo(155.5, 200);
+    ctx.arc(200, 200, 42, -Math.PI, 0, false);
+    ctx.stroke();
+    ctx.fillText('切换模式', 200, 190);
+    if(pos && ctx.isPointInPath(pos.x, pos.y)) {
+      this.modelType = 1;
+      ctx.clearRect(0,0,400,400);
+      render();
+      node.className = 'shake-box';
+      return;
+    }
+    // 环形
+    ctx.fillStyle = gradient;
+    ctx.strokeStyle = '#2DFAFF';
+    ctx.beginPath();
+    ctx.moveTo(110, 200)
+    ctx.arc(200, 200, 89, -Math.PI, -Math.PI/3*2, false);
+    ctx.arc(200, 200, 43, -Math.PI/3*2, -Math.PI, true);
+    ctx.closePath();
+    if(pos && ctx.isPointInPath(pos.x, pos.y)) {
+      ctx.fillStyle = 'rgba(41,143,247,0.58)';
+      eleStyle[0].fontColor = activeFont;
+      eleStyle[0].imgUrl = `./assets/image/monitor/${activeUrl[0]}1.png`;
+      this.activeModel = 0;
+      rb(2); // 场景变换
+    }
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = eleStyle[0].fontColor;
+    ctx.font = '12px normal';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('黑夜',136,185);
+
+    ctx.beginPath();
+    ctx.fillStyle = gradient;
+    ctx.strokeStyle = '#2DFAFF';
+    ctx.moveTo(200-Math.cos(Math.PI/3)*89, 200-Math.sin(Math.PI/3)*89);
+    ctx.arc(200, 200, 89, -Math.PI/3*2, -Math.PI/3, false);
+    ctx.arc(200, 200, 43, -Math.PI/3, -Math.PI/3*2, true);
+    ctx.lineTo(200-Math.cos(Math.PI/3)*89, 200-Math.sin(Math.PI/3)*89);
+    ctx.closePath();
+    if(pos && ctx.isPointInPath(pos.x, pos.y)) {
+      ctx.fillStyle = 'rgba(41,143,247,0.78)';
+      eleStyle[1].fontColor = activeFont;
+      eleStyle[1].imgUrl = `./assets/image/monitor/${activeUrl[1]}1.png`;
+      this.activeModel = 1;
+      rb(1); // 场景变换
+    }
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = eleStyle[1].fontColor;
+    ctx.font = '90px';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('晴天',200,145);
+
+    ctx.beginPath();
+    ctx.fillStyle = gradient;
+    ctx.strokeStyle = '#2DFAFF';
+    ctx.moveTo(200+Math.cos(Math.PI/3)*89, 200-Math.sin(Math.PI/3)*89);
+    ctx.arc(200, 200, 89, -Math.PI/3, 0, false);
+    ctx.arc(200, 200, 43, 0, -Math.PI/3, true);
+    ctx.closePath();
+    if(pos && ctx.isPointInPath(pos.x, pos.y)) {
+      ctx.fillStyle = 'rgba(41,143,247,0.78)';
+      eleStyle[2].fontColor = activeFont;
+      eleStyle[2].imgUrl = `./assets/image/monitor/${activeUrl[2]}1.png`;
+      this.activeModel = 2;
+      rb(3); // 场景变换
+    }
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fontSize = '90px Arial';
+    ctx.fillStyle = eleStyle[2].fontColor;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('雨天',264,185);
+    eleStyle.map(function(v,i){
+      let img = new Image();
+      img.src = v.imgUrl;
+      img.onload = function(){
+        ctx.drawImage(img, ...imgPos[i]);
+      }
+    })
+    return activeIndex;
+   }
 }
 export default new HouseManagement();

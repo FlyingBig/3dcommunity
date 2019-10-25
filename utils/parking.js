@@ -9,8 +9,8 @@
 class Parking {
   init() {
     let box = new THREE.Object3D();
-    let texture = this.getTexture('/assets/image/ground.jpg',{ rx: 10, ry: 10 });
-    let park = new THREE.Mesh(new THREE.PlaneBufferGeometry(100, 50), new THREE.MeshBasicMaterial({map: texture}));
+    let texture = this.getTexture(`${BASEPATH.basePth}/assets/image/ground.jpg`,{ rx: 10, ry: 10 });
+    let park = new THREE.Mesh(new THREE.PlaneBufferGeometry(100, 50), new THREE.MeshPhongMaterial({map: texture}));
     let line = this.drawParkLine(10);
     line.position.set(0, 8, 0);
     let line2 = line.clone();
@@ -23,8 +23,8 @@ class Parking {
   }
   drawParkLine( cars ) {
     let box = new THREE.Object3D();
-    let horizontalLine = new THREE.Mesh(new THREE.PlaneBufferGeometry(0.5, 17), new THREE.MeshBasicMaterial({color: '#BC9246'}));
-    let verticalLine = new THREE.Mesh(new THREE.PlaneBufferGeometry(95, 1), new THREE.MeshBasicMaterial({color: '#BC9246'}));
+    let horizontalLine = new THREE.Mesh(new THREE.PlaneBufferGeometry(0.5, 17), new THREE.MeshPhongMaterial({color: '#BC9246'}));
+    let verticalLine = new THREE.Mesh(new THREE.PlaneBufferGeometry(95, 1), new THREE.MeshPhongMaterial({color: '#BC9246'}));
     verticalLine.position.z = 0.4;
     verticalLine.position.y = 13.5;
     horizontalLine.position.y = 5.5;

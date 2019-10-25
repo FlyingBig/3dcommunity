@@ -31,8 +31,8 @@ class MainBuild {
 		}
 		const extrudeSettings = { depth: 40, bevelSegments: 1, steps: 0, bevelSize: 0, bevelThickness: 1 };
 		const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-		const texture = this.getTexture('/assets/image/build2.jpg',{rx: .05, ry: .03});
-		const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: "#C9C9D3", map: texture}));
+		const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/build2.jpg`,{rx: .05, ry: .03});
+		const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#C9C9D3", map: texture}));
 		geometry.computeBoundingBox();
 		// 顶上地面
 		const foot = this.getBuildTop();
@@ -61,7 +61,7 @@ class MainBuild {
 			geometry.lineTo(path[i][0], path[i][1]);
 		}
 		const shape = new THREE.ShapeBufferGeometry(geometry);
-		const texture = this.getTexture('/assets/image/15.png',{rx: 1/30, ry: 1/20});
+		const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/15.png`,{rx: 1/30, ry: 1/20});
 		const mesh = new THREE.Mesh(shape, new THREE.MeshBasicMaterial({map: texture}));
 		return mesh;
 	}
