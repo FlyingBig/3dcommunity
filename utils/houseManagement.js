@@ -24,14 +24,14 @@ require('echarts/lib/component/polar');
     this.advise = {
       xdata: ['名称', '关系人', '时间'],
       ydata: [
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'},
-        {event:'垃圾未处理', name: '张三', time: '2014/3/3'}
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'},
+        {type:'垃圾未处理', name: '张三', time: '2014/3/3'}
       ]
     };
     this.active = {
@@ -99,7 +99,7 @@ require('echarts/lib/component/polar');
         if(k=== 'eventType') continue;
         let v = data.ydata[i][k];
         let c = '';
-        if(k === 'event' || k ==='do' ) {
+        if(k === 'event' || k === 'do' ) {
           c = 'event-node';
         } else if (k === 'status') {
           c = v === 1 ? 'event-right' : 'event-error';

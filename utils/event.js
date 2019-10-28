@@ -8,7 +8,6 @@
 import house from './houseManagement';
 import TWEEN from '@tweenjs/tween.js';
 import myGround from './myGround';
-import monitor from './monitorObj';
 // 小区日志切换
 function logChange() {
  let logNav = document.getElementById('nav');
@@ -43,7 +42,7 @@ function equipmentRunning() {
       }).onComplete(function () {
         that.controls.target = new THREE.Vector3(p[0],p[1],p[2]);
         if(type!= 1) return
-        document.getElementById("full-scene").style.height = '100%';
+        document.getElementById("full-scene").style.zIndex = 3;
         if(status == 1) {
           document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
         }
@@ -55,10 +54,33 @@ function equipmentRunning() {
 // 房屋情况
 function houseMessage() {
   let houseNode = document.getElementById('house-message').children[1].children[0].children[1];
-  houseNode.onclick = function() {
-    let event = new Event('click');
-    let trigger = document.getElementById('opc');
-    trigger.dispatchEvent(event);
+  let that = this;
+  houseNode.onclick = function(e) {
+    let cameraPosition = that.camera.position;
+    let position = {x: -70, y: 4, z: -30};
+    let mesh = that.builds['cylinder'];
+    let data = [
+      {status: 0, isrun: false, height: -22},
+      {status: 0, isrun: false, height: -8},
+      {status: 1, isrun: true, height: 5}];
+    that.getOpacity( mesh, data );
+    let tween = new TWEEN.Tween(cameraPosition).to(
+      {
+        x: position.x+30,
+        y: position.y,
+        z: position.z+30
+      },1200
+    ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(val){
+      that.camera.position.set(val.x, val.y, val.z);
+      that.camera.lookAt(position.x,position.y,position.z);
+    }).onComplete(function () {
+      that.camera.position.set(100, 100, 100);
+      that.camera.lookAt(0,0,0);
+      that.scene.background = '#000';
+      that.camera.layers.mask = 2;
+      TWEEN.remove(tween);
+      console.log(TWEEN)
+    }).start();
   }
 }
 
@@ -82,7 +104,7 @@ function changeModel() {
   let model1 = house.createModel1.bind(that); // 切换模式1
   let model2 = house.createModel2.bind(that); // 切换模式2
   // 点击切换改变场景样式方法
-  function changeModel(flag) {
+  function changeModels(flag) {
     if(flag === 1) {
       that.scene.children[0].position.set( ...that.positionLight[0] );
       that.scene.children[1].position.set( ...that.positionLight[1] );
@@ -108,7 +130,7 @@ function changeModel() {
     if (that.modelType == 1) {
       model1(p, model2);
     } else {
-      model2(p, -1, model1, changeModel);
+      model2(p, -1, model1, changeModels);
     }}
   )}
 // 选择场景
@@ -139,26 +161,12 @@ function changeScene() {
   }
   // 加载天气
   function loadWeathers() {
-    /*let list = monitor.weatherInfo;
-    monitor.createWeather([list[0]],"#future-weather");
-    document.getElementById('more-weather').onclick = function() {
-      let flag = this.innerText;
-      if( flag === '收起' ) {
-        this.innerText = "更多";
-        monitor.createWeather([list[0]], "#future-weather");
-      } else {
-        this.innerText = "收起";
-        monitor.createWeather(list, "#future-weather");
-      }
-    }
-    loadWeathers = null;*/
-
     if(document.getElementsByClassName("weather-box").length>1){
       return;
     }else {
       let weatherBox =document.getElementsByClassName("weather-box")[0]
-      let myWeatherBox = weatherBox.cloneNode(true);//克隆节点，深度克隆，克隆节点以及节点下面的子内容。
-			document.getElementById("house-weather").appendChild(myWeatherBox)
+      let myWeatherBox = weatherBox.innerHTML;//克隆节点，深度克隆，克隆节点以及节点下面的子内容。
+			document.getElementById("house-weather").innerHTML = myWeatherBox;
     }
 
   }
@@ -167,7 +175,7 @@ function changeScene() {
 function closeBigScene() {
   document.getElementsByClassName('close-video')[0].onclick = function () {
     this.nextSibling.nextSibling.setAttribute('src',null);
-    document.getElementById('full-scene').style.height = '0';
+    document.getElementById('full-scene').style.zIndex = -1;
   }
 }
 

@@ -7,7 +7,7 @@
  */
 const basePath = process.env.NODE_ENV === 'development' ? './' : '/3dCommunity/dist';
 export const basePth = basePath;
-
+// rem转换
 export const computRem = (doc, win) => {
     let docEl = doc.documentElement,
       resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
@@ -19,4 +19,16 @@ export const computRem = (doc, win) => {
     if (!doc.addEventListener) return;
     win.addEventListener(resizeEvt, recalc, false);
     recalc();
+}
+
+// 消息提示
+export const dialogue = (position, data) => {
+  let dialogue = `<div class="dialogue-close">x</div><div class="dialogue-title">${data}</div>`;
+  let b = document.createElement('div');
+  b.className = 'dialogue';
+  b.style.top = position.y+'px';
+  b.style.left = position.x+'px';
+  b.innerHTML = dialogue;
+  document.body.appendChild(b);
+  console.log(1)
 }

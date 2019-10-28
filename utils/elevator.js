@@ -6,59 +6,101 @@
  * @modifiedTime: 2019/9/24
  */
 import TWEEN from '@tweenjs/tween';
+import fontTexture from './fontTexture';
 class Elevator {
-  constructor( height = 40 ) {
+  constructor( height = 40, data ) {
     this.height = height;
-  }
-  init() {
-    let b = this.createModel();
-    return b;
+    this.data = data;
+    this.animationRight = null;
+    this.animationError = null;
   }
   createModel() {
-    let box = new THREE.Object3D()
-    let geo = new THREE.BoxBufferGeometry(3, 5, 3);
-    let material = new THREE.MeshPhongMaterial({color: '#0E66DC'});
-    let elevatorRunning = new THREE.Mesh(geo, material); // 正在运行的电梯
-    elevatorRunning.position.set(-3, 0, 0);
-    elevatorRunning.name = 'runElevator';
-    let elevatorNormal = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color: 0xff0000}));
-    elevatorNormal.material.color = new THREE.Color( 0xff0000 ); //cacheArcLengths 没工作的电梯
-    elevatorNormal.position.set(3, 0, 0);
-    let line = new THREE.Geometry();
-    line.vertices.push(
-      new THREE.Vector3( 0, 0, 0 ),
-      new THREE.Vector3( 0, 40, 0 )
-    );
-    let mater = new THREE.LineBasicMaterial( { color: '#7F8590'} );
-    let mesh = new THREE.Line( line, mater );
-    mesh.position.set(3, 0, 0);
-    let mesh2 = mesh.clone();
-    mesh2.position.set(-3, 0, 0);
-    // 放入第二视角
-    elevatorRunning.layers.mask = 2;
-    elevatorNormal.layers.mask = 2;
-    mesh.layers.mask = 2;
-    mesh2.layers.mask = 2;
-    box.add( elevatorRunning, elevatorNormal, mesh, mesh2);
-    box.name = 'elevator';
+    let elevators = new THREE.Object3D();
+    // 电梯楼层轮廓
+    let elevatorBox = new THREE.BoxBufferGeometry( 20, this.height, 10 );
+    let elevatorm = new THREE.MeshBasicMaterial({transparent: true, opacity: .4, color: '#70DFE5'});
+    let elevator = new THREE.Mesh(elevatorBox, elevatorm);
+    elevator.layers.mask = 2;
+    let content = this.addElevator(this.height);
+    content.position.x = -5;
+    content.layers.mask = 2;
+    elevators.add(elevator, content);
+    elevators.name = 'elevator';
+    elevators.layers.mask = 2;
+    return elevators;
+  }
+
+  /**
+   * 构建电梯数量，状态, 线
+   * @param height 电梯牵引线的长度
+   * @param data   电梯的具体数据
+   * @returns 电梯详细结构
+   */
+   addElevator( height ) {
+    let box = new THREE.Object3D();
+    this.data.map(function(v,i){
+      // 不同状态的电梯对应不同颜色的标志
+      let lineColor = v.status == 0 ? '#DEA2DF' : '#7BCACE';
+      let boxColor = v.status == 0 ? 'red' : '#53E810';
+      let line = new THREE.Mesh(new THREE.BoxBufferGeometry(.2,height,.2), new THREE.MeshBasicMaterial({color: lineColor}));
+      line.position.x = i*5;
+      let rac = new THREE.BoxBufferGeometry( 1.5, 3, 1.5 );
+      let m = new THREE.MeshBasicMaterial( { color: boxColor} );
+      let cube = new THREE.Mesh( rac, m );
+      cube.userData = v;
+      cube.position.x = i*5;
+      cube.position.y = v.height;
+      line.layers.mask = 2;
+      cube.layers.mask = 2;
+      if(v.status == 0) {
+        // 错误信息
+        let message = fontTexture.init(v.title);
+        message.position.set(-20,-10,0);
+        box.add(message);
+      }
+      box.add(line, cube);
+    });
     return box;
   }
+  // 为电梯添加动画效果
   runningElevator(box) {
-    if( box.children[0].name === 'runElevator' ) {
-      let g = box.children[0];
-      let h = 40;
-      let t = new TWEEN.Tween({y: 0})
-        .to({y: h}, 4800)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(prop => {
-          g.position.y = prop.y;
+   let p = box.children[1].children;
+   let error = []; // 错误物体集
+   let run = [];  // 运动物体集
+    p.map(function (v) {
+      if(v.userData.status == 0){
+        error.push(v);
+       // fontext([v.userData.title);
+      } else if(v.userData.isrun == 1) {
+        run.push(v);
+      }
+    });
+    let startAttr = {scale: 1.5};
+    let endAttr = {scale: 0.8};
+    for(let i=0; i<run.length;i++){
+      startAttr[`y${i}`] = this.height / 2 - run[i].userData.height;
+      endAttr[`y${i}`] = -this.height / 2 - run[i].userData.height;
+    };
+     this.animationRight = new TWEEN.Tween(startAttr)
+      .to(endAttr, 40000)
+      .easing(TWEEN.Easing.Linear.None)
+      .onUpdate(prop => {
+        run.map((v,i)=>{
+          v.position.y = prop[`y${i}`]+7
         })
-        .repeat(1)
-        .yoyo(true)
-        .onComplete(()=>{
-          t = null;
-        }).start();
-    }
+      })
+      .start();
+    this.animationError = new TWEEN.Tween(startAttr)
+      .to(endAttr, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(prop => {
+        error.map((v)=>{
+          v.scale.set(prop.scale,prop.scale,prop.scale);
+        })
+      })
+      .repeat(Infinity)
+      .yoyo(true)
+      .start();
   }
 }
-export  default new Elevator();
+export default Elevator;

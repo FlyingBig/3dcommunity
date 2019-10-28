@@ -18,7 +18,7 @@ class MyBuild {
     const extrudeSettings = { depth: 80, bevelSegments: 1, steps: 1, bevelSize: 1, bevelThickness: 1 };
     const geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
     const texture = this.getTexture(`${BASEPATH.basePth}/assets/image/16.png`,{ rx: 1/ 3, ry: 1/7 });
-    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#C9C9D3", map: texture}));
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture}));
     mesh.rotateX(Math.PI * 0.5);
     // 房屋顶上
     const top = this.ellipseTop();

@@ -11,14 +11,13 @@ import TWEEN from '@tweenjs/tween.js';
 import Stats from 'stats-js';
 import CylinderBuild from './utils/cylinderBuilding';
 import PolygonBuild from './utils/polygonBuild';
-import { getTransparent, changeModelIndex } from './utils/bspComputed';
+import { getTransparent, clearMemoty } from './utils/bspComputed';
 import mainBuild from './utils/mainBuild';
 import myBuild from './utils/myBuild';
 import numBuild from './utils/numBuild';
 import myGround from './utils/myGround';
 import grassarea from './utils/grassArea';
 import parking from './utils/parking';
-import fontTexture from './utils/fontTexture';
 import elevator from './utils/elevator';
 import doorModel from './utils/door';
 import line from './utils/addline';
@@ -123,8 +122,8 @@ class RenderCanvas {
 			'negx.jpg', 'posx.jpg'
 		] );
 		this.sceneTexture = {
-			sceneNight:nightCubeTexture,
-			sceneDay:dayCubeTexture,
+			sceneNight: nightCubeTexture,
+			sceneDay: dayCubeTexture,
 		};
     // 车辆模型集合
     this.cars = {};
@@ -141,6 +140,8 @@ class RenderCanvas {
     this.modelType = 1;
     // 已选择模式
     this.activeModel = 1;
+    // 右键状态
+    this.contextmenuStatus = ''; // detail -> 组成模型  transparent -> 透明模式
   }
   // 启动函数
   init() {
@@ -174,17 +175,16 @@ class RenderCanvas {
     this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild( this.stats.dom );
 		this.stats.dom.style.left = '21.4rem';
-		this.stats.dom.style.top = '-60px';
+		this.stats.dom.style.top = '10px';
 		this.scene.background = this.sceneTexture.sceneDay
     // 设置相机位置
     this.camera.position.set(100, 100, 100);
     this.camera.lookAt(0, 0, 0);
-    this.eventBtn();
+    // this.eventBtn();
     this.roadGrass();
     this.diffModel.grass = grassarea.getArea();
     this.scene.add(this.diffModel.grass);
     this.positionBuild();
-    this.getOpacity();
     this.foot();
     // this.axesHelper();
     this.initControl();
@@ -197,7 +197,6 @@ class RenderCanvas {
     this.mouseEvent();
     this.addRain();
     this.loadHydrant();
-    this.addElevator();
     this.loadWall();
     this.loadDoor();
     houseManege.init(); // 物业管理模块
@@ -255,6 +254,7 @@ class RenderCanvas {
           build.position.set(...re);
           key === 'main' ? build.rotateZ(rotation[index]) : build.rotateY(rotation[index]);
           build.name = 'entitiesBuild';
+          build.userData.type = key;
           build.matrixAutoUpdate = false;
           build.updateMatrix();
           entitiesBox.add(build);
@@ -468,64 +468,25 @@ class RenderCanvas {
     return [x, y, z1]
   }
   // 透明建筑物
-  getOpacity() {
-    let builds = {}, that = this;
-    for( let key in this.builds ) {
-      let opc = getTransparent(this.builds[key]);
-      builds[key] = opc;
-      let error = getTransparent(this.builds[key], "#FA4233");
-      builds[key+'error'] = error;
-    }
-    let positions = this.positions;
-    let opacityBox = new THREE.Object3D();
-    opacityBox.name = 'opacityBox';
+  getOpacity(mesh, data) {
+    let builds = getTransparent( mesh );
+    let obj = new THREE.Object3D();
+    obj.name = 'opacityBuild';
     //opacityBox.visible = this.opacity;
     // 图层显示
-    opacityBox.layers.mask = 2;
-    for(let key in positions) {
-      if( positions[key].position.length ) {
-        let { position, rotation } = positions[key];
-        position.map((re, index)=>{
-          let build = null; // 建筑模型
-          build = (index == 8 || index == 9) ? builds[key+'error'].clone() : builds[key].clone();
-          build.position.set(...re);
-          key === 'main' ? build.rotateZ(rotation[index]) : build.rotateY(rotation[index]);
-          build.name = 'opacityBuild';
-          build.userData.id = `${key}${index}`;
-          build.matrixAutoUpdate = false;
-          build.updateMatrix();
-          opacityBox.add(build);
-        })
-      }
-    };
-    this.scene.add(opacityBox);
-  }
-  // 物体层级改变
-  changeBuildIndex() {
-    let cameraIndex = this.opacity ? 2 : 1;
-    // 草坪层级
-    this.diffModel.grass.layers.mask = cameraIndex;
-    for(let i=0; i<this.diffModel.grass.children.length; i++) {
-      this.diffModel.grass.children[i].layers.mask = cameraIndex;
-    }
-    // 周围随机建筑
-    this.diffModel.random.layers.mask = cameraIndex;
-  }
-  // 过度动画
-  transfrom(prop, time, cameraIndex ) {
-    let that = this;
-    let tween = new TWEEN.Tween({y: 1})
-      .to({y: 0}, time)
-      .easing(TWEEN.Easing.Quadratic.Out)
-      .onUpdate(function( p ) {
-        prop.scale.y = p.y;
-      })
-      .onComplete(function () {
-        that.camera.layers.mask = cameraIndex;
-        that.changeBuildIndex();
-        prop.scale.y = 1;
-        tween = that = null;
-      }).start();
+    builds.layers.mask = 2;
+    builds.position.set(0,0,0);
+    // 电梯详情
+    let elevators = new elevator(48, data);
+    let ele = elevators.createModel();
+    ele.position.y = 23;
+    builds.position.y = 2;
+
+    // let detail = new CylinderBuild().getFloor();
+    obj.add(builds, ele);
+    obj.position.set(0,0,0);
+    this.scene.add(obj);
+    elevators.runningElevator(ele); // 为电梯添加运动状态
   }
   // node事件
   eventBtn() {
@@ -537,51 +498,7 @@ class RenderCanvas {
 			if(monitor.echarts){
 				monitor.echarts.resize();
 			}
-		})
-
-    let btn = document.getElementById('opc');
-    // 切换模式
-    btn.addEventListener('click', function () {
-      that.opacity = !that.opacity;
-      let childrens = that.scene.children;
-      let cameraIndex = that.opacity ? 2 : 1;
-      for(let i=0, j=childrens.length; i<j; i++) {
-        if( childrens[i].name === 'entitiesBox' && that.opacity) {
-          that.transfrom(childrens[i], 600, cameraIndex);
-        }
-        if( childrens[i].name === 'opacityBox' && !that.opacity){
-          that.transfrom(childrens[i], 600, cameraIndex);
-        }
-        if( childrens[i].name === 'outWall' ){
-          changeModelIndex(childrens[i],cameraIndex);
-        }
-        if( childrens[i].name === 'grassArea' ){
-          that.diffModel.grass.layers.mask = cameraIndex;
-        }
-        if( childrens[i].name === 'outdoor' ) {
-          changeModelIndex(childrens[i],cameraIndex);
-        }
-      }
-    }, false)
-    // 关闭video
-   /* let closeVideo = document.getElementById('closeVideo')
-    closeVideo.addEventListener('click',function(){
-      document.getElementsByTagName('video')[0].setAttribute('src','')
-      document.getElementById('videoPanel').style.display = 'none'
-    },false)*/
-    // 电梯上升
-    let up = document.getElementById('up');
-    up.addEventListener('click',function(){
-      let childrens = that.scene.children;
-      let g = null;
-      for(let i=0, j=childrens.length; i<j; i++) {
-        if( childrens[i].name === 'elevator' ) {
-          g = childrens[i];
-          break;
-        }
-      }
-      elevator.runningElevator(g);
-    })
+		});
     // 车流量
     let carFlow = document.getElementById("carFlow");
     carFlow.addEventListener('click',function(){
@@ -627,15 +544,7 @@ class RenderCanvas {
     n.scale.set(2,2,2);
     this.scene.add(n);
   }
-  // 消息提示框
-  messageBox( str, position ) {
-    str = str || [{title: "房屋类型", content: '商业住宅房子'},{title: '楼牌号', content: "7幢1单元"},{title: '楼层数', content: '22层'},{title: '户型', content: '两梯四户'}];
-    let message = fontTexture.init(str);
-    message.scale.set(.5,.5,.5);
-    message.position.set(position.x+60, position.y+30, position.z);
-    this.scene.add(message);
-  }
-  // 雨滴效果
+  //鼠标双击单击
   mouseEvent(){
 		let that = this;
 		//鼠标双击进入观察状态
@@ -652,7 +561,7 @@ class RenderCanvas {
 			let obj = intersects[0].object;
 			if( intersects.length ){
 				// 点击摄像机移动视角并播放视
-				if(obj.name === 'camera'||obj.name=="eventObj"){
+				if(obj.name === 'camera' || obj.name=="eventObj"){
 					let position = intersects[0].point;
 					let cameraPosition = that.camera.position;
 					that.camera.lookAt(position.x,position.y,position.z)
@@ -677,76 +586,54 @@ class RenderCanvas {
 
 					}).start()
 				}
-				// 删除消息盒子
-				if ( obj.parent.name === 'messageBox') {
-					let t = new TWEEN.Tween({x: .5, y: .5, z: .5})
-							.to({x: 0, y: 0, z: 0}, 800)
-							.easing(TWEEN.Easing.Quadratic.Out)
-							.onUpdate(function (res) {
-								obj.parent.scale.set(res.x, res.y, res.z);
-							})
-							.onComplete(function () {
-								// 删除掉所有的模型组内的mesh
-								obj.parent.traverse(function (item) {
-									if (item instanceof THREE.Mesh) {
-										item.geometry.dispose(); // 删除几何体
-										item.material.dispose(); // 删除材质
-									}
-								});
-								that.scene.remove(obj.parent);
-								t = null;
-							}).start();
-				}
-
 			};
-
-			// 透明建筑射线碰撞
-			let opacityRay = new THREE.Raycaster();
-			opacityRay.setFromCamera( mouse, that.camera );
-			let targetMesh = null; //  碰撞对象
-			for(let i=0; i<that.scene.children.length; i++) {
-				if(that.scene.children[i].name === 'opacityBox') {
-					targetMesh = that.scene.children[i];
-					break;
-				}
-			}
-			let objs = raycaster.intersectObject(targetMesh, true);
-			if( objs.length ) {
-				let findParent = function( child ) {
-					if( child.parent.name !==  'opacityBuild' ) {
-						child = child.parent;
-						return findParent(child);
-					} else {
-						return child.parent;
-					}
-				}
-				let parent = findParent(objs[0].object);
-				let position = parent.position;
-				position.y = parent.userData.y;
-				let data = demoData[parent.userData.id];
-				that.messageBox( data, position );
-			}
 		})
-		document.addEventListener("contextmenu",function(event){
-			if(buildingEvent.type=="building"){
-				//退出到正常模式
-				buildingEvent.backModule();
-				myGround.cloud.visible = false;
-			}else if(buildingEvent.type=="floor1"){
-				//退出到建筑物模式
-				buildingEvent.backModule();
-			}else if(buildingEvent.type=="floor2"){
-				//退出到建筑物模式
-				buildingEvent.backModule();
-			}else{
-				//调整视角模式
-				that.outlook()
-			}
+    // 鼠标右键返回场景
+    document.addEventListener("contextmenu",function(event){
+		  if(that.contextmenuStatus === 'detail') {
+        if(buildingEvent.type=="building"){
+          //退出到正常模式
+          buildingEvent.backModule();
+          myGround.cloud.visible = false;
+        }else if(buildingEvent.type=="floor1"){
+          //退出到建筑物模式
+          buildingEvent.backModule();
+        }else if(buildingEvent.type=="floor2"){
+          //退出到建筑物模式
+          buildingEvent.backModule();
+        }else{
+          //调整视角模式
+          that.outlook();
+          that.contextmenuStatus = '';
+        }
+      } else if(that.contextmenuStatus === 'transparent') {
+		    let targetBox = null; //  被删除的目标模型
+        let cameraPosition = that.camera.position;
+		    for(let i=that.scene.children.length-1; i>=0; i--) {
+          if(that.scene.children[i].name === 'opacityBuild'){
+            targetBox = that.scene.children[i];
+            break;
+          }
+        }
+		    clearMemoty(targetBox); // 从内存中删除物体缓存
+		    that.scene.remove(targetBox);
+        that.scene.background = that.sceneTexture.sceneDay; // 返回真是场景
+        that.camera.layers.mask = 1;
+        let t = new TWEEN.Tween(cameraPosition).to(
+          {x: 100, y: 100, z: 100}, 1200
+        ).easing(TWEEN.Easing.Quadratic.Out)
+          .onUpdate(val => {
+            that.camera.position.set(val.x, val.y, val.y);
+            that.camera.lookAt(0,0,0);
+          }).start();
+      }
 		})
-		document.addEventListener("dblclick",function(event){
+		// 鼠标双击点击模型
+    document.addEventListener("dblclick",function(event){
 			let mouse = {x:'',y:''}
 			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+      let cameraPosition = that.camera.position;
 			let raycaster = new THREE.Raycaster();
 			// 通过鼠标点的位置和当前相机的矩阵计算出raycaster
 			raycaster.setFromCamera( mouse, that.camera );
@@ -755,53 +642,58 @@ class RenderCanvas {
 			// 选中物体的第一个
 			let obj = intersects[0].object;
 			if( intersects.length ){
-				// 点击摄像机移动视角并播放视
-				let type = "building";
-				if(buildingEvent.type=="floor1"){
-					type="floor"
-				}else if(buildingEvent.type=="normal"||buildingEvent.type=="building"){
-					type="building";
-				}else {
-					return
+				let type = ''; // 双击类型
+				if( obj.parent.name == "entitiesBuild" ) {
+				  type = 'entitiesBuild';
+        }else if(buildingEvent.type === "floor1"){
+					type = "floor"
+				}else if(buildingEvent.type === "normal" || buildingEvent.type === "building"){
+					type = "building";
 				}
-				while (true){
-					if(obj.name.indexOf(type)>-1){
-						buildingEvent.changeSceneModule(obj);
-						break
-					}else if(obj.type=="Scene"){
-						break
-					}else {
-						obj = obj.parent
-					}
-				}
+				if( type === 'floor' ||  type === "building" ) {
+          that.contextmenuStatus = 'detail';  // 现在右键控制组成模型的逻辑
+          while (true){
+            if(obj.name.indexOf(type)>-1){
+              buildingEvent.changeSceneModule(obj);
+              break
+            }else if(obj.type === "Scene"){
+              break
+            }else {
+              obj = obj.parent
+            }
+          }
+        } else if ( type === 'entitiesBuild' ) {
+          that.contextmenuStatus = 'transparent';  // 现在右键控制透明模型的逻辑
+          let { type, y } = obj.parent.userData;
+          if(type !== 'cylinder'){
+            return
+          }
+          let position = obj.parent.position; // 相机视角
+          // 向场景二添加一个透明的建筑物
+          let objectMesh = that.builds[type];
+          let data = [
+            {status: 0, isrun: false, height: -22, title: "一幢一单元1号电梯停止运行"},
+            {status: 1, isrun: false, height: 0},
+            {status: 1, isrun: true, height: 5}];
+          that.getOpacity(objectMesh, data);
+          let tween = new TWEEN.Tween(cameraPosition).to(
+            {
+              x: position.x+30,
+              y: position.y,
+              z: position.z+30
+            },1200
+          ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(val){
+            that.camera.position.set(val.x, val.y, val.z)
+            that.camera.lookAt(position.x,position.y,position.z);
+          }).onComplete(function () {
+            that.camera.position.set(100, 100, 100);
+            that.camera.lookAt(0,0,0);
+            that.scene.background = '#000';
+            that.camera.layers.mask = 2;
+            tween = null;
+          }).start();
+        }
 			};
-
-			// 透明建筑射线碰撞
-			let opacityRay = new THREE.Raycaster();
-			opacityRay.setFromCamera( mouse, that.camera );
-			let targetMesh = null; //  碰撞对象
-			for(let i=0; i<that.scene.children.length; i++) {
-				if(that.scene.children[i].name === 'opacityBox') {
-					targetMesh = that.scene.children[i];
-					break;
-				}
-			}
-			let objs = raycaster.intersectObject(targetMesh, true);
-			if( objs.length ) {
-				let findParent = function( child ) {
-					if( child.parent.name !==  'opacityBuild' ) {
-						child = child.parent;
-						return findParent(child);
-					} else {
-						return child.parent;
-					}
-				}
-				let parent = findParent(objs[0].object);
-				let position = parent.position;
-				position.y = parent.userData.y;
-				let data = demoData[parent.userData.id];
-				that.messageBox( data, position );
-			}
 		})
 		//鼠标悬浮状态
 		document.addEventListener("mousemove",function(event){
@@ -868,12 +760,6 @@ class RenderCanvas {
   addRain(){
     let rain = myGround.createRain()
     this.scene.add(rain)
-  }
-  // 添加电梯模型
-  addElevator() {
-    let model = elevator.init();
-    model.position.set(-10, 4 , -30);
-    this.scene.add(model);
   }
   setView() {
     let that =this;

@@ -431,7 +431,7 @@ class Monitor {
 							that.camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
 							that.camera.lookAt(position.x,position.y,position.z)
 						}).onComplete(function () {
-              document.getElementById("full-scene").style.height = '100%';
+              document.getElementById("full-scene").style.zIndex = 3;
               document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
             }).start()
 					}

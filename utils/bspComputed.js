@@ -29,7 +29,7 @@ class ComputedBuild {
 };
 export default new ComputedBuild();
 
-/**
+/**f
  *  === 根据集合体生成透明模型
  * geometry  集合模型
  * color 模型颜色
@@ -63,7 +63,7 @@ export const getTransparent = ( geometry, color = '#19EAFD', opacity = 0.2) => {
 			color: color,    //设置颜色，默认 0xFFFFFF
 			size: 1
 		});
-		const point = new THREE.Points(geometry, material3);
+		//const point = new THREE.Points(geometry, material3);
 		// 纠正位置
 		box.position.set(position.x, position.y, position.z);
 		box.scale.set(scale.x, scale.y, scale.z);
@@ -72,10 +72,10 @@ export const getTransparent = ( geometry, color = '#19EAFD', opacity = 0.2) => {
 		box.rotateZ(rotation.z);
 		face.layers.mask = 2;
 		line.layers.mask = 2;
-		point.layers.mask = 2;
-		box.add(face);
+		//point.layers.mask = 2;
+		// box.add(face);
 		box.add(line);
-		box.add(point);
+		//box.add(point);
 		return box;
 	}
 }
@@ -93,4 +93,31 @@ export const changeModelIndex = ( geometry, index ) => {
 			changeModelIndex(child, index);
 		}
 	}
+}
+
+export const clearMemoty = (obj)=>{
+	if (!obj) return;
+	if( obj instanceof THREE.Mesh) {
+		obj.geometry.dispose();
+		obj.material.dispose();
+	} else {
+		obj.traverse((item)=>{
+			if(item instanceof THREE.Mesh) {
+				item.geometry.dispose();
+				item.material.dispose();
+			}
+		})
+	}
+};
+export const  createCanvasTexture = (color) => {
+	let canvas = document.createElement("canvas");
+	canvas.width = 100;
+	canvas.height = 100;
+	let context = canvas.getContext("2d");
+	var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+	gradient.addColorStop(0, 'rgba(' + color + ',1)');
+	gradient.addColorStop(1, 'rgba(0,0,0,0)');
+	context.fillStyle = gradient;
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	return canvas;
 }
