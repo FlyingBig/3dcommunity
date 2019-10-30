@@ -136,12 +136,14 @@ class RenderCanvas {
     this.diffModel = {};
     // 透明模式
     this.opacity = false;
-    // 模式状态（1->收缩 2->展开）
+    // 底角画布模式状态（1->收缩 2->展开）
     this.modelType = 1;
     // 已选择模式
     this.activeModel = 1;
     // 右键状态
     this.contextmenuStatus = ''; // detail -> 组成模型  transparent -> 透明模式
+    // 所有动画记录(针对TWEEN)
+    this.animates = {};
   }
   // 启动函数
   init() {
@@ -180,7 +182,7 @@ class RenderCanvas {
     // 设置相机位置
     this.camera.position.set(100, 100, 100);
     this.camera.lookAt(0, 0, 0);
-    // this.eventBtn();
+    this.eventBtn();
     this.roadGrass();
     this.diffModel.grass = grassarea.getArea();
     this.scene.add(this.diffModel.grass);
@@ -467,26 +469,41 @@ class RenderCanvas {
     let z1 = z + this.roadDeflection * Math.abs(-550 - x) / 2;
     return [x, y, z1]
   }
-  // 透明建筑物
-  getOpacity(mesh, data) {
+
+  /**
+   *
+   * @param mesh
+   * @param data 电梯数据
+   * @param aralm 类型是否为报警
+   */
+  getOpacity(mesh, aralm, data) {
     let builds = getTransparent( mesh );
     let obj = new THREE.Object3D();
     obj.name = 'opacityBuild';
     //opacityBox.visible = this.opacity;
     // 图层显示
     builds.layers.mask = 2;
-    builds.position.set(0,0,0);
-    // 电梯详情
-    let elevators = new elevator(48, data);
-    let ele = elevators.createModel();
-    ele.position.y = 23;
+    builds.position.set(0, 0, 0);
     builds.position.y = 2;
-
-    // let detail = new CylinderBuild().getFloor();
-    obj.add(builds, ele);
+    if(aralm) {
+      let cy = new CylinderBuild();
+      let detail = cy.getFloor(data);
+      detail.position.y = 20;
+      // 保存tween动画运动key值,退出该模式清除运动状态
+      Object.assign(this.animates, cy.animation);
+      obj.add(detail);
+    } else {
+      let elevators = new elevator(48, data);
+      let ele = elevators.createModel();
+      ele.position.y = 23;
+      elevators.runningElevator(ele); // 为电梯添加运动状态
+      // 保存tween动画运动key值,退出该模式清除运动状态
+      Object.assign(this.animates, elevators.animation);
+      obj.add(ele);
+    }
+    obj.add(builds);
     obj.position.set(0,0,0);
     this.scene.add(obj);
-    elevators.runningElevator(ele); // 为电梯添加运动状态
   }
   // node事件
   eventBtn() {
@@ -615,7 +632,12 @@ class RenderCanvas {
             break;
           }
         }
-		    clearMemoty(targetBox); // 从内存中删除物体缓存
+        // 从内存中删除three物体缓存
+		    clearMemoty(targetBox);
+        for(let key in that.animates) {
+          TWEEN.remove(that.animates[key]);
+        }
+        // 删除tween运动动画
 		    that.scene.remove(targetBox);
         that.scene.background = that.sceneTexture.sceneDay; // 返回真是场景
         that.camera.layers.mask = 1;
@@ -675,7 +697,7 @@ class RenderCanvas {
             {status: 0, isrun: false, height: -22, title: "一幢一单元1号电梯停止运行"},
             {status: 1, isrun: false, height: 0},
             {status: 1, isrun: true, height: 5}];
-          that.getOpacity(objectMesh, data);
+          that.getOpacity(objectMesh, false, data);
           let tween = new TWEEN.Tween(cameraPosition).to(
             {
               x: position.x+30,

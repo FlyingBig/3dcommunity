@@ -1,5 +1,6 @@
-import computed,{ createCanvasTexture } from "./bspComputed";
-
+import computed,{ createCanvasTexture, getFlowers, reMapUv } from "./bspComputed";
+import TWEEN from '@tweenjs/tween.js';
+import fontTexture from './fontTexture';
 /**
  * 小区建筑 ---- 圆柱体建筑
  *
@@ -11,6 +12,7 @@ export default class CylinderBuild {
 		this.radiusTop = radiusTop || 15;
 		this.radiusBottom = radiusBottom || 15;
 		this.height = height || 47;
+		this.animation = {};
 	};
 	init() {
 		const box = new THREE.Object3D();
@@ -51,6 +53,7 @@ export default class CylinderBuild {
 	 * @returns {THREE.Object3D}
 	 */
 	getFloor(data) {
+		data = data[0];
 		let box = new THREE.Object3D();
 		let centerWidth = 5; // 中心物体的边长
 		var circle = new THREE.CircleBufferGeometry( 20, 32 );
@@ -90,17 +93,54 @@ export default class CylinderBuild {
 		roundcell_3.position.z = -(roundWidth/2+centerWidth/2+.5);
 		box.add(cell,cell1,cell2,cell3,roundcell, roundcell_1, roundcell_2, roundcell_3);
 		// 闪烁点
-		let texture = new THREE.CanvasTexture(createCanvasTexture('250,245,163'));
+		let texture = new THREE.CanvasTexture(createCanvasTexture('249,73,69,1', true, 1));
 		let randomM = new THREE.SpriteMaterial({map: texture});
 		var centerR = new THREE.Sprite(randomM);
-		centerR.scale.set(5,5,5);
+		centerR.scale.set(5, 5, 5);
 		centerR.layers.mask = 2;
-		// data.map((v)=>{
-		// 	let k = centerR.clone();
-		// 	k.position.set(...v.position);
-		// 	box.add(k);
-		// })
-		box.add(centerR);
+		centerR.position.set(...data.position);
+		// 添加出错信息
+		let message = fontTexture.init(data.message);
+		message.position.set(data.position[0]+15,data.position[1],data.position[2]-2);
+		box.add(message);
+		// 围墙
+		let wall = getFlowers(360,32,15,.1,3);
+		let wallMaterial = new THREE.MeshBasicMaterial({transparent: true, opacity: .4, color: '#70DFE5'});
+		let wallMesh = new THREE.Mesh(wall, wallMaterial);
+		wallMesh.layers.mask = 2;
+		wallMesh.position.y = 2.5;
+		wallMesh.rotateX(Math.PI/2);
+		box.add(wallMesh);
+		// 地板
+		let floorWave = new THREE.CanvasTexture(createCanvasTexture('78,224,229,.6', true, 1));
+		let floorMaterial = new THREE.MeshBasicMaterial({map: floorWave, side: THREE.DoubleSide});
+		let floorLine = new THREE.CircleBufferGeometry(15, 32);
+		let floorMesh = new THREE.Mesh(floorLine, floorMaterial);
+		floorMesh.layers.mask = 2;
+		floorMesh.rotateX(Math.PI/2);
+		floorMesh.position.y = -.7;
+		// 波浪线
+		let textureWave = new THREE.CanvasTexture(createCanvasTexture('224,42,39,1', false, .7));
+		let materialWave = new THREE.MeshBasicMaterial({map: textureWave, side: THREE.DoubleSide});
+		let waveLine = new THREE.CircleBufferGeometry(4, 32);
+		let waveMesh = new THREE.Mesh(waveLine, materialWave);
+		waveMesh.layers.mask = 2;
+		waveMesh.rotateX(Math.PI/2);
+		waveMesh.position.set(...data.position);
+		waveMesh.position.y = -.5;
+		box.add(centerR, waveMesh, floorMesh);
+		// 波浪动画
+		let animation = new TWEEN.Tween({size: .7})
+			.to({size: 1.2},1000)
+			.easing(TWEEN.Easing.Quadratic.Out)
+			.onUpdate((v)=>{
+				waveMesh.scale.set(v.size, v.size, v.size);
+			}).repeat(Infinity).start();
+		// 储存当前运动状态
+
+		this.animation.wave = animation;
+		box.name = 'policeAddress';
 		return box;
 	}
+
 }

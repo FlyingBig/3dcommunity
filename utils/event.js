@@ -56,14 +56,12 @@ function houseMessage() {
   let houseNode = document.getElementById('house-message').children[1].children[0].children[1];
   let that = this;
   houseNode.onclick = function(e) {
+    that.contextmenuStatus = 'transparent';
     let cameraPosition = that.camera.position;
     let position = {x: -70, y: 4, z: -30};
     let mesh = that.builds['cylinder'];
-    let data = [
-      {status: 0, isrun: false, height: -22},
-      {status: 0, isrun: false, height: -8},
-      {status: 1, isrun: true, height: 5}];
-    that.getOpacity( mesh, data );
+    let data = [{position: [5,0,5], message: '804用户,家里水管破裂，积水过多。'}];
+    that.getOpacity( mesh, true, data );
     let tween = new TWEEN.Tween(cameraPosition).to(
       {
         x: position.x+30,
@@ -79,7 +77,6 @@ function houseMessage() {
       that.scene.background = '#000';
       that.camera.layers.mask = 2;
       TWEEN.remove(tween);
-      console.log(TWEEN)
     }).start();
   }
 }

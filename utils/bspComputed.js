@@ -109,15 +109,117 @@ export const clearMemoty = (obj)=>{
 		})
 	}
 };
-export const  createCanvasTexture = (color) => {
+/**
+ * 添加画布渐变贴图
+ * @param 颜色(格式为 rgba)
+ * @param 方向(格式为 boolean)
+ * @param 范围(格式为 0-1)
+ * @returns {HTMLElement}
+ */
+export const  createCanvasTexture = (color, direct, range) => {
 	let canvas = document.createElement("canvas");
 	canvas.width = 100;
 	canvas.height = 100;
 	let context = canvas.getContext("2d");
 	var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
-	gradient.addColorStop(0, 'rgba(' + color + ',1)');
-	gradient.addColorStop(1, 'rgba(0,0,0,0)');
+	if(direct) {
+		gradient.addColorStop(0, 'rgba(' + color + ')');
+		gradient.addColorStop(range, 'rgba(0,0,0,0)');
+		gradient.addColorStop(1, 'rgba(0,0,0,0)');
+	} else {
+		gradient.addColorStop(1, 'rgba(' + color + ')');
+		gradient.addColorStop(.7, 'rgba(0,0,0,0)');
+		gradient.addColorStop(0, 'rgba(0,0,0,0)');
+	}
 	context.fillStyle = gradient;
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	return canvas;
+}
+/**
+ * 自定义弧形
+ * @param deg  扇形角度
+ * @param splitNum 切割数
+ * @param length 弧的距离
+ * @param interval 两个弧之间的距离
+ * @param amount 拉伸厚度
+ * @returns {THREE.ExtrudeGeometry}
+ */
+export const getFlowers = (deg, splitNum, length, interval=1.6, amount=.1)=>{
+	let path = [], path1 = [], path2 = [];
+	let baseDeg = Math.PI/180*deg/splitNum;
+	let space = length-interval;
+	for(let i=0; i<=splitNum; i++) {
+		path1.push([Math.sin(baseDeg*i)*length,Math.cos(baseDeg*i)*length]);
+		path2.push([Math.sin(baseDeg*i)*space,Math.cos(baseDeg*i)*space]);
+	};
+	path2.reverse();
+	path = [...path1, ...path2];
+	let shape = new THREE.Shape();
+	shape.moveTo(path[0][0], path[0][1]);
+	for(let i=1; i<path.length; i++) {
+		shape.lineTo(path[i][0], path[i][1]);
+	};
+	let obj = {amount: amount, bevelEnabled: false, bevelThickness: 1};
+	let geo = new THREE.ExtrudeGeometry(shape, obj);
+	return geo;
+}
+/**
+ * 修改uv坐标
+ * @param geometry
+ */
+export const reMapUv = (geometry) => {
+	var faces = geometry.faces;
+	geometry.faceVertexUvs[0] = [];
+	geometry.faces.forEach(function(face, index) {
+		var components = ['x', 'y', 'z']
+		var v1 = geometry.vertices[face.a];
+		var v2 = geometry.vertices[face.b];
+		var v3 = geometry.vertices[face.c];
+		let distanceZ = 0;
+		if(v1.z == v2.z && v1.z == v3.z) {
+			distanceZ = 0;
+		} else {
+			distanceZ = v1.z || v2.z || v3.z;
+		}
+		let g = [];
+		// 判断是否为二维图形
+		if( !distanceZ) {
+			// 若为二维图形, 直接使用各个顶点的坐标
+			g.push(
+				new THREE.Vector2(v1.x, v1.y),
+				new THREE.Vector2(v2.x, v2.y),
+				new THREE.Vector2(v3.x, v3.y)
+			)
+		} else {
+			// 若为三维图形, 则使用同一平面的点的距离作为uv的x轴,异面点的距离作为y轴;
+			let distanceX = 0; // x轴
+			let distanceY = 0; // y轴
+			// 找出二维坐标
+			if(v1.z === v2.z ) {
+				distanceX = Math.sqrt(Math.pow((v1.x-v2.x),2)+Math.pow((v1.y-v2.y),2));
+				distanceY = Math.abs(v3.z - v1.z);
+			} else if(v1.z === v3.z) {
+				distanceX = Math.sqrt(Math.pow((v1.x-v3.x),2)+Math.pow((v1.y-v3.y),2));
+				distanceY = Math.abs(v2.z - v1.z);
+			} else {
+				distanceX = Math.sqrt(Math.pow((v3.x-v2.x),2)+Math.pow((v3.y-v2.y),2));
+				distanceY = Math.abs(v1.z - v2.z);
+			}
+
+			if(index % 2 === 0){
+				g.push(
+					new THREE.Vector2(0, 0),
+					new THREE.Vector2(distanceX, 0),
+					new THREE.Vector2(0, distanceY)
+				)
+			} else {
+				g.push(
+					new THREE.Vector2(distanceX, 0),
+					new THREE.Vector2(distanceX, distanceY),
+					new THREE.Vector2(0, distanceY)
+				)
+			}
+		}
+		geometry.faceVertexUvs[0].push(g);
+	});
 }

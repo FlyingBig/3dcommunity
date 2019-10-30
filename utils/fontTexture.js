@@ -73,7 +73,6 @@ class FontTexture {
       // 每行能显示多少个字
       let interval = ~~((width-this.margin.left*2) / fontSize);
       for(let i=0; i<str.length; i+=interval) {
-        console.log(i, i+interval)
         strs.push(str.substring(i,i+interval));
       }
       strs.map((v,i)=>{

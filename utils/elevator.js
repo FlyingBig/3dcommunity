@@ -11,8 +11,7 @@ class Elevator {
   constructor( height = 40, data ) {
     this.height = height;
     this.data = data;
-    this.animationRight = null;
-    this.animationError = null;
+    this.animation = {};
   }
   createModel() {
     let elevators = new THREE.Object3D();
@@ -81,7 +80,7 @@ class Elevator {
       startAttr[`y${i}`] = this.height / 2 - run[i].userData.height;
       endAttr[`y${i}`] = -this.height / 2 - run[i].userData.height;
     };
-     this.animationRight = new TWEEN.Tween(startAttr)
+     this.animation.elevatorRright = new TWEEN.Tween(startAttr)
       .to(endAttr, 40000)
       .easing(TWEEN.Easing.Linear.None)
       .onUpdate(prop => {
@@ -90,7 +89,7 @@ class Elevator {
         })
       })
       .start();
-    this.animationError = new TWEEN.Tween(startAttr)
+    this.animation.elevatorError = new TWEEN.Tween(startAttr)
       .to(endAttr, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(prop => {
