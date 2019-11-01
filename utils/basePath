@@ -1,0 +1,13 @@
+/**
+ * @name:
+ * @description: 项目中的配置
+ * @author: chenqy
+ * @modifiedBy: chenqy
+ * @modifiedTime: 2019/11/1
+ */
+// /3dCommunity/dist/     /community/
+const basePath = process.env.NODE_ENV === 'development' ? './' : '/community/';
+
+module.exports = {
+  basePath: basePath
+}

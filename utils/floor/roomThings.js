@@ -32,7 +32,7 @@ class roomThing {
 
 		plant.add(cylinder);
 
-		let leafTure = new THREE.TextureLoader().load('../../assets/image/plant.png');
+		let leafTure = new THREE.TextureLoader().load('./assets/image/plant.png');
 
 		let geometry1 = new THREE.PlaneGeometry(20,60);
 		let leafMaterial = new THREE.MeshBasicMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true});
@@ -77,16 +77,16 @@ class roomThing {
 			let mtlLoader = new THREE.MTLLoader();
 			let objLoader = new THREE.OBJLoader();
 			let person = new THREE.Object3D();
-			mtlLoader.load('../../models/person/worker.mtl',function(materials){
+			mtlLoader.load('./models/person/worker.mtl',function(materials){
 				materials.preload();
 				materials.alphaTest = 0;
 				materials.blendDstAlpha = 0;
 				objLoader.setMaterials(materials);
-				objLoader.load('../../models/person/worker.obj',function(geometry){
+				objLoader.load('./models/person/worker.obj',function(geometry){
 					let material = new THREE.MeshBasicMaterial({color: 0x5C3A21});
 					geometry.traverse( function (child) {
 						if ( child instanceof THREE.Mesh ) {
-							child.material.map = new THREE.TextureLoader().load( '../../models/person/worker.png');
+							child.material.map = new THREE.TextureLoader().load( './models/person/worker.png');
 							child.material.needsUpdate = true;
 						}
 					});

@@ -18,14 +18,14 @@ class Parteree {
     for(let i=1; i<shape.length; i++) {
       s.lineTo(shape[i].x, shape[i].y);
     };
-    let t = this.texture('../assets/image/parterre/parterre-f.jpg',{rx: 1.5, ry: 1.2});
+    let t = this.texture('./assets/image/parterre/parterre-f.jpg',{rx: 1.5, ry: 1.2});
     let parterreShape = new THREE.ExtrudeGeometry(s, {amount: .3, bevelEnabled: false, bevelThickness: 1});
     // 重新设定uv
     this.reMapUv(parterreShape);
     let mesh = new THREE.Mesh(parterreShape, new THREE.MeshBasicMaterial({map: t}));
     // 内部地板
     let parterreInside = new THREE.CylinderBufferGeometry( 7.8, 7.8, .3, 16 );
-    let t1 = this.texture('../assets/image/parterre/parterre.jpg',{rx: 15, ry: 15});
+    let t1 = this.texture('./assets/image/parterre/parterre.jpg',{rx: 15, ry: 15});
     let parterreMa = new THREE.MeshBasicMaterial( {map: t1} );
     let mesh1 = new THREE.Mesh( parterreInside, parterreMa );
     mesh.rotateX(Math.PI/2);
@@ -33,11 +33,11 @@ class Parteree {
     // 花坛石盒
     let flowerBox = new THREE.Object3D();
     let flowerGeo = this.getFlowers(100, 16, 4.5);
-    let t2 = this.texture('../assets/image/parterre/parterre-f.jpg',{rx: 3, ry: 3});
+    let t2 = this.texture('./assets/image/parterre/parterre-f.jpg',{rx: 3, ry: 3});
     let flowermesh = new THREE.Mesh(flowerGeo, new THREE.MeshBasicMaterial({map: t2}));
     flowermesh.position.y = 1;
     let flower = this.getFlowers(97, 16, 4.2, 1.2);
-    let t3 = this.texture('../assets/image/parterre/flower.jpg',{rx: 1, ry: 1});
+    let t3 = this.texture('./assets/image/parterre/flower.jpg',{rx: 1, ry: 1});
     let flowerSurfac = new THREE.Mesh(flower, new THREE.MeshBasicMaterial({map: t3}));
     flowerSurfac.position.set(0.1,1.1,.02);
     flowerSurfac.rotateZ(-Math.PI/180*1);
@@ -59,7 +59,7 @@ class Parteree {
     cylinder.scale.set(0.15,0.15,0.15);
     cylinder.position.y = 0.2;
     let kong = this.getFlowers(360,36,1.1,0.2,0.2);
-    let t5 = this.texture('../assets/image/parterre/grass-f.jpg',{rx: 3, ry: 3});
+    let t5 = this.texture('./assets/image/parterre/grass-f.jpg',{rx: 3, ry: 3});
     let k = new THREE.Mesh(kong, new THREE.MeshBasicMaterial({map: t5}));
     this.reMapUv(kong);
     k.rotateX(-Math.PI/2);
@@ -103,15 +103,20 @@ class Parteree {
     return t;
   }
   //转换uv坐标
+  /**
+   *
+   * @param geometry THREE.geometry
+   */
   reMapUv(geometry) {
-    var faces = geometry.faces;
-    geometry.faceVertexUvs[0] = [];
+    let faces = geometry.faces;
+    geometry.faceVertexUvs[0] = []; // 清空几何体uv映射
     geometry.faces.forEach(function(face, index) {
-      var components = ['x', 'y', 'z']
+      var components = ['x', 'y', 'z'];
       var v1 = geometry.vertices[face.a];
       var v2 = geometry.vertices[face.b];
       var v3 = geometry.vertices[face.c];
       let distanceZ = 0;
+      // 若三个点都在xy轴上，就把这个三个点构成的图形称为二维图形，否则为三维图形
       if(v1.z == v2.z && v1.z == v3.z) {
         distanceZ = 0;
       } else {

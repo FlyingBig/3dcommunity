@@ -73,6 +73,7 @@ function houseMessage() {
       that.camera.lookAt(position.x,position.y,position.z);
     }).onComplete(function () {
       that.camera.position.set(100, 100, 100);
+      that.controls.target = new THREE.Vector3(0,0,0);
       that.camera.lookAt(0,0,0);
       that.scene.background = '#000';
       that.camera.layers.mask = 2;
@@ -171,7 +172,7 @@ function changeScene() {
 // 关闭大屏video
 function closeBigScene() {
   document.getElementsByClassName('close-video')[0].onclick = function () {
-    this.nextSibling.nextSibling.setAttribute('src',null);
+    document.getElementById("big-video").setAttribute("src",null);
     document.getElementById('full-scene').style.zIndex = -1;
   }
 }
@@ -180,4 +181,34 @@ function closeBigScene() {
 function removeLoading(){
 	document.getElementById("loading").style.display = "none";
 }
-export { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene,removeLoading};
+// 添加消息
+function message() {
+  let that = this;
+  document.getElementById('push-message').onclick = function (e) {
+    if(!e.id) {
+      that.contextmenuStatus = 'transparent';
+      let cameraPosition = that.camera.position;
+      let position = {x: -70, y: 4, z: -30};
+      let mesh = that.builds['cylinder'];
+      let data = [{position: [-5,0,-5], message: '501煤气管漏气'}];
+      that.getOpacity( mesh, true, data );
+      let tween = new TWEEN.Tween(cameraPosition).to(
+        {
+          x: position.x+30,
+          y: position.y,
+          z: position.z+30
+        },1200
+      ).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function(val){
+        that.camera.position.set(val.x, val.y, val.z);
+        that.camera.lookAt(position.x,position.y,position.z);
+      }).onComplete(function () {
+        that.camera.position.set(100, 100, 100);
+        that.camera.lookAt(0,0,0);
+        that.scene.background = '#000';
+        that.camera.layers.mask = 2;
+        TWEEN.remove(tween);
+      }).start();
+    }
+  }
+}
+export { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene,removeLoading, message};

@@ -166,7 +166,7 @@ require('echarts/lib/component/polar');
         data: (function (x) {
           let y = [];
           x.map(function (v,i) {
-            let obj = {name: v, icon: `image://../assets/image/housemsg/icon${i+1}.png`};
+            let obj = {name: v, icon: `image://./assets/image/housemsg/icon${i+1}.png`};
             y.push(obj);
           })
           return y;

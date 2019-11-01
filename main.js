@@ -24,8 +24,8 @@ import line from './utils/addline';
 import monitor from './utils/monitorObj';
 import  houseManege from './utils/houseManagement';
 import  parterre from './utils/parteree';
-import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene, removeLoading } from './utils/event';
-import { computRem } from './utils/util';
+import { logChange, equipmentRunning, houseMessage, changeModel, changeScene, closeBigScene, removeLoading, message } from './utils/event';
+import { computRem, formatTime } from './utils/util';
 // obj文件导出
 import { objModel } from './utils/modelOut';
 import { Water } from './node_modules/three/examples/jsm/objects/Water2';
@@ -194,7 +194,7 @@ class RenderCanvas {
     this.redCar();
     this.loadGarbages();
     this.loadLamps();
-    this.randomBuild( 150 );
+    this.randomBuild( 350 );
     this.loadParking();
     this.mouseEvent();
     this.addRain();
@@ -211,7 +211,22 @@ class RenderCanvas {
 		outWall.addTestBuild(this.scene)
 		buildingEvent.init(this.scene,this.camera,this.controls,this.opacity);
 		removeLoading()//去除加载loading
+    // 模拟数据推送
+    setTimeout(function () {
+      let m = '501煤气管漏气';
+      let node = document.getElementById('push-message');
+      node.innerHTML = '<div class="message active-message">'+m+'</div>';
+      setTimeout(function () {
+        node.innerHTML = '';
+        let time = formatTime(new Date(), 'yyyy-MM-dd hh:mm');
+        let div = document.createElement('div');
+        div. className = 'new-event';
+        div.setAttribute('data-id','lastest8');
+        div.innerHTML = '<div class="new-event-text">501煤气管漏气</div><div class="new-event-time">'+time+'</div>'
+        document.getElementsByClassName('new-event-list')[0 ].appendChild(div);
+      },3000)
 
+    },6000)
   }
   // 添加缩放拖拽控制器
   initControl() {
@@ -319,21 +334,23 @@ class RenderCanvas {
     car.position.x += this.speed*direction;
     car.position.z += this.roadDeflection*direction;
   }
-  // 随机生成简单模型
+  /**
+   * 随机生成简单模型
+   * @param num number 白模数量
+   */
   randomBuild( num ) {
 		let demoBuild = new THREE.BoxBufferGeometry(20, 45, 20);
 		let geometers = [];
-		let length = 350;
-		// 合并为一个geometry对象
-		for( let i=0; i<length; i++ ) {
+		// 创建白模
+		for( let i=0; i<num; i++ ) {
 			let x,z;
-			if(i<length/4){
+			if(i<num/4){
 				x = 750+(Math.random()-.5)*350
 				z = 1800*(Math.random()-.5)
-			}else if(i<length/2){
+			}else if(i<num/2){
 				x = -760+(Math.random()-.5)*340
 				z = 1800*(Math.random()-.5)
-			}else if(i<length*3/4){
+			}else if(i<num*3/4){
 				z = -600+(Math.random()-.5)*500
 				x = 1800*(Math.random()-.5)
 			}else{
@@ -347,6 +364,7 @@ class RenderCanvas {
 			cloneDemo.translate(x, 45*s/2, z);
 			geometers.push(cloneDemo);
 		}
+    // 合并为一个geometry对象
 		let geometry = BufferGeometryUtils.mergeBufferGeometries( geometers );
 		let mesh = new THREE.Mesh(geometry, new THREE.MeshToonMaterial({color: '#525352',transparent:true,opacity:.8}));
     this.diffModel.random = mesh;
@@ -564,7 +582,6 @@ class RenderCanvas {
   //鼠标双击单击
   mouseEvent(){
 		let that = this;
-		//鼠标双击进入观察状态
 		document.addEventListener("click",function(event){
 			let mouse = {x:'',y:''}
 			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -594,7 +611,7 @@ class RenderCanvas {
 						that.camera.lookAt(position.x,position.y,position.z)
 					}).onComplete(function () {
 						if(obj.name==="camera"){
-							document.getElementById("full-scene").style.height = '100%';
+							document.getElementById("full-scene").style.zIndex = '2';
 							document.getElementById("big-video").setAttribute("src","./assets/image/test.mp4");
 						}else{
 							monitor.showEventDesc(intersects[0].object.attributes)
@@ -642,6 +659,15 @@ class RenderCanvas {
         that.scene.background = that.sceneTexture.sceneDay; // 返回真是场景
         that.camera.layers.mask = 1;
         let t = new TWEEN.Tween(cameraPosition).to(
+          {x: 100, y: 100, z: 100}, 1200
+        ).easing(TWEEN.Easing.Quadratic.Out)
+          .onUpdate(val => {
+            that.camera.position.set(val.x, val.y, val.y);
+            that.camera.lookAt(0,0,0);
+          }).start();
+      } else {
+        let cameraPosition = that.camera.position;
+        new TWEEN.Tween(cameraPosition).to(
           {x: 100, y: 100, z: 100}, 1200
         ).easing(TWEEN.Easing.Quadratic.Out)
           .onUpdate(val => {
@@ -709,6 +735,7 @@ class RenderCanvas {
             that.camera.lookAt(position.x,position.y,position.z);
           }).onComplete(function () {
             that.camera.position.set(100, 100, 100);
+            that.controls.target = new THREE.Vector3(0,0,0);
             that.camera.lookAt(0,0,0);
             that.scene.background = '#000';
             that.camera.layers.mask = 2;
@@ -815,6 +842,7 @@ class RenderCanvas {
     equipmentRunning.bind(this)();
     houseMessage.bind(this)();
     changeModel.bind(this)();
+    message.bind(this)();; // 消息推送点击事件
   }
 }
 computRem(document, window);

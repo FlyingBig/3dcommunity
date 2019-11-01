@@ -111,9 +111,9 @@ export const clearMemoty = (obj)=>{
 };
 /**
  * 添加画布渐变贴图
- * @param 颜色(格式为 rgba)
- * @param 方向(格式为 boolean)
- * @param 范围(格式为 0-1)
+ * @param color  颜色 string(255,0,0,.8)
+ * @param direct 方向 boolean
+ * @param range  范围 number
  * @returns {HTMLElement}
  */
 export const  createCanvasTexture = (color, direct, range) => {

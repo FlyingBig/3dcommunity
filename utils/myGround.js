@@ -1,5 +1,5 @@
 import { Earcut } from '../node_modules/three/src/extras/Earcut';
-import {Fire} from '../node_modules/three/examples/js/objects/Fire.js';
+import { Fire } from '../node_modules/three/examples/js/objects/Fire.js';
 // 小区道路点位数据
 var myRoads= [
 	//小区内无箭头道路
@@ -1573,12 +1573,12 @@ class MyGround {
 			let mtlLoader = new THREE.MTLLoader();
 			let objLoader = new THREE.OBJLoader();
 			let trees = new THREE.Object3D();
-			mtlLoader.load('../models/tree/file.mtl',function(materials){
+			mtlLoader.load('./models/tree/file.mtl',function(materials){
 				materials.preload();
 				materials.alphaTest = 0;
 				materials.blendDstAlpha = 0;
 				objLoader.setMaterials(materials);
-				objLoader.load('../models/tree//file.obj',function(obj){
+				objLoader.load('./models/tree//file.obj',function(obj){
 					obj.scale.set(0.05, 0.06, 0.05);
 					for(let i=0;i<myTrees.length;i++){
 						let treePoints = myTrees[i].point;
@@ -1631,8 +1631,8 @@ class MyGround {
 		boxRightMesh.material = material1;
 		boxRightMesh.position.z = 0.7
 
-		let otherWasteMesh = this.getBoxGeometry([0.2,2,1.4],"img","../assets/image/otherWaste.png");
-		let recycableMesh = this.getBoxGeometry([0.2	,2,1.4],"img","../assets/image/recycable.png");
+		let otherWasteMesh = this.getBoxGeometry([0.2,2,1.4],"img","./assets/image/otherWaste.png");
+		let recycableMesh = this.getBoxGeometry([0.2	,2,1.4],"img","./assets/image/recycable.png");
 		otherWasteMesh.position.set(-.7,0,0.7);
 		recycableMesh.position.set(-.7,0,-0.7);
 		let otherWasteMesh2 = otherWasteMesh.clone();
@@ -1745,7 +1745,7 @@ class MyGround {
 					y:lampClone.getWorldPosition().y+9.4,
 					z:lampClone.getWorldPosition().z+.7
 				},
-				src:'../assets/image/test.mp4',
+				src:'./assets/image/test.mp4',
 				status:"完好"
 			}
 			this.cameraData.push(cameraAttr)
@@ -1760,7 +1760,7 @@ class MyGround {
 		let cyliderOut = new THREE.CylinderBufferGeometry(0.2,0.2,1,8);
 		let cylider = new THREE.CylinderBufferGeometry(0.16,0.16,.8,30)
 		let material1 = new THREE.MeshPhongMaterial({color:0xffffff});
-		let material2 = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load('../assets/image/camera.png'),side:THREE.DoubleSide})
+		let material2 = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load('./assets/image/camera.png'),side:THREE.DoubleSide})
 		let cyliderOutMesh = new THREE.Mesh(cyliderOut,material1);
 		let cyliderMesh = new THREE.Mesh(cylider,material2);
 		cyliderMesh.position.y=0.2
@@ -1802,7 +1802,7 @@ class MyGround {
 	 * 雨滴
 	 */
 	createRain(){
-		let texture = new THREE.TextureLoader().load("../assets/image/rain1.png")
+		let texture = new THREE.TextureLoader().load("./assets/image/rain1.png")
 		let geom = new THREE.Geometry();
 		let material = new THREE.PointsMaterial({
 			size:2,
@@ -1866,7 +1866,7 @@ class MyGround {
 			plant.position.set(position[0],position[1],position[2]);
 		}else{
 			let plant = new THREE.Object3D();
-			let leafTure = new THREE.TextureLoader().load('../assets/image/tree1.png');
+			let leafTure = new THREE.TextureLoader().load('./assets/image/tree1.png');
 			let geometry1 = new THREE.PlaneGeometry(10,20);
 			let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:0.8});
 			for(var i=1;i<3;i++){
@@ -1904,7 +1904,7 @@ class MyGround {
 				}
 				let path = new THREE.SplineCurve3(points)
 				let geometry = new THREE.TubeGeometry( path, 200, 2-Math.random()*.3, 100, false );
-				let material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('../assets/image/wall.png') } );
+				let material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('./assets/image/wall.png') } );
 				let tubeMesh = new THREE.Mesh(geometry,material)
 				scene.add(tubeMesh)
 				pointsData = []
@@ -1921,7 +1921,7 @@ class MyGround {
 	addTree(scene){
 		let treeObj = new THREE.Object3D();
 		let mainBark = new THREE.CylinderGeometry(.3,1,15,50)
-		let mainBarkMaterial = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('../assets/image/bark.jpg')});
+		let mainBarkMaterial = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./assets/image/bark.jpg')});
 		let mainBarkMesh = new THREE.Mesh(mainBark,mainBarkMaterial);
 		treeObj.add(mainBarkMesh);
 		let secondBarkData = [
@@ -1959,7 +1959,7 @@ class MyGround {
 		let footMesh = new THREE.Mesh(footGeom,footMaterial);
 
 		let footPlane = new THREE.PlaneGeometry( 5,5);
-		let footPlaneMaterial = new THREE.MeshBasicMaterial( {map:new THREE.TextureLoader().load('../assets/image/grass1.png')});
+		let footPlaneMaterial = new THREE.MeshBasicMaterial( {map:new THREE.TextureLoader().load('./assets/image/grass1.png')});
 		let plane = new THREE.Mesh( footPlane, footPlaneMaterial );
 		plane.position.set(0,.1,0)
 		plane.rotation.x = -Math.PI/2
@@ -1971,7 +1971,7 @@ class MyGround {
 
 
 		let plant = new THREE.Object3D();
-		let leafTure = new THREE.TextureLoader().load('../assets/image/myLeaf.png');
+		let leafTure = new THREE.TextureLoader().load('./assets/image/myLeaf.png');
 		let geometry1 = new THREE.PlaneGeometry(10,20);
 		let leafMaterial = new THREE.MeshLambertMaterial({map:leafTure,side:THREE.DoubleSide,transparent:true,opacity:1});
 		let plantMesh = new THREE.Mesh(geometry1,leafMaterial)
@@ -2011,12 +2011,12 @@ class MyGround {
 	 */
 	testUvTexture(scene){
 		let box = new THREE.BoxGeometry(10,10,10);
-		let material1 = new THREE.TextureLoader().load('../assets/image/11.jpg');
-		let material2 = new THREE.TextureLoader().load('../assets/image/12.jpg');
-		let material3 = new THREE.TextureLoader().load('../assets/image/14.png');
-		let material4 = new THREE.TextureLoader().load('../assets/image/15.png');
-		let material5 = new THREE.TextureLoader().load('../assets/image/16.png');
-		let material6 = new THREE.TextureLoader().load('../assets/image/17.png');
+		let material1 = new THREE.TextureLoader().load('./assets/image/11.jpg');
+		let material2 = new THREE.TextureLoader().load('./assets/image/12.jpg');
+		let material3 = new THREE.TextureLoader().load('./assets/image/14.png');
+		let material4 = new THREE.TextureLoader().load('./assets/image/15.png');
+		let material5 = new THREE.TextureLoader().load('./assets/image/16.png');
+		let material6 = new THREE.TextureLoader().load('./assets/image/17.png');
 		let materials = [material1,material2,material3,material4,material5,material6]
 		let meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
 		let mesh = new THREE.Mesh(box,meshFaceMaterial);
@@ -2185,7 +2185,7 @@ class MyGround {
 			let extrudeSettings = { amount: .4, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 			let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
 			let mesh = {};
-			let texture = new THREE.TextureLoader().load('../assets/image/grass2.jpg');
+			let texture = new THREE.TextureLoader().load('./assets/image/grass2.jpg');
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.wrapT = THREE.RepeatWrapping;
 			texture.repeat.set(.05,.05);
@@ -2211,7 +2211,7 @@ class MyGround {
 			let extrudeSettings = { amount:1.4, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 			let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
 			let mesh = {};
-			let texture = new THREE.TextureLoader().load('../assets/image/flower.jpg');
+			let texture = new THREE.TextureLoader().load('./assets/image/flower.jpg');
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.wrapT = THREE.RepeatWrapping;
 			texture.repeat.set(.1,.1);

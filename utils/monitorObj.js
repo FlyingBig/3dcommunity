@@ -281,7 +281,7 @@ class Monitor {
 			html+='<div style="color:#fff;font-size:1.04rem;width:100%;text-align:center;height: 1.4rem;line-height: 1.4rem;">'+pmval+'</div>'
 			html+='</div>'
 			html+='</div>'
-			html+='<img src="../assets/image/monitor/light-selection@1x.png" style="width: 100%; height: .9rem; margin: 1rem 0 .5rem 0;">'
+			html+='<img src="./assets/image/monitor/light-selection@1x.png" style="width: 100%; height: .9rem; margin: 1rem 0 .5rem 0;">'
 		}
 		for(let i=1;i<3;i++){
 			html+='<div class="other-weather">'
@@ -404,7 +404,7 @@ class Monitor {
 			htmlStr+='<div class="camera-title">'+list[i].name+'</div>'
 			htmlStr+='<div class="camera-status">'+list[i].status+'</div>'
 			htmlStr+='<div class="camera-play">'
-			htmlStr+='<img style="display: inline-block;position: relative;top: 2px;" src="../assets/image/monitor/play default@1x.png">'
+			htmlStr+='<img style="display: inline-block;position: relative;top: 2px;" src="./assets/image/monitor/play default@1x.png">'
 			htmlStr+='<div style="color: #ffffff;font-size: 12px;display: inline-block">播放</div>'
 			htmlStr+='</div>'
 			htmlStr+='</div>'
@@ -446,7 +446,7 @@ class Monitor {
 		for(let i=0;i<list.length;i++){
 			let info = list[i];
 				htmlStr+='<div class="new-event" data-id="'+info.id+'">'
-			  /*htmlStr+='<img src="../assets/image/monitor/alarm.png" alt="">'*/
+			  /*htmlStr+='<img src="./assets/image/monitor/alarm.png" alt="">'*/
 			  htmlStr+='<div class="new-event-text">'+info.name+'</div>'
 			  htmlStr+='<div class="new-event-time">'+info.time+'</div>'
 			  htmlStr+='</div>'

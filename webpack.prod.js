@@ -2,9 +2,9 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
 const path = require('path');
-// 连接地址
+const basePth = require( './utils/basePath');
+// 连接地址''
 const join = function(url){
   return path.join(__dirname, url);
 };
@@ -20,7 +20,7 @@ module.exports = {
   output: {
     path: resolve('dist'),
     filename: '[name].js',
-    publicPath: '/3dCommunity/dist/',
+    publicPath: basePth.basePath,
   },
   resolve: {
     extensions: ['.js','.css'],

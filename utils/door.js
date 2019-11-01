@@ -46,7 +46,7 @@ class Door {
     let box = new THREE.Object3D();
     // 柱子中间部分
     let pillergeo = new THREE.BoxBufferGeometry(1.2, 5 , 1.2);
-    let t = this.texture('../assets/image/piller.png',{rx: 1, ry: 3});
+    let t = this.texture('./assets/image/piller.png',{rx: 1, ry: 3});
     let pillerMesh = new THREE.MeshBasicMaterial({ map: t });
     let piller = new THREE.Mesh(pillergeo, pillerMesh);
     // 柱子底部
@@ -65,7 +65,7 @@ class Door {
     bigTop.position.set(0, 3.2, 0);
     // 柱子顶部装饰物
     let conegeo = new THREE.IcosahedronGeometry( .7, 2 );
-    let t1 = this.texture('../assets/image/t1.jpg',{rx: 2, ry: 3});
+    let t1 = this.texture('./assets/image/t1.jpg',{rx: 2, ry: 3});
     let conemater = new THREE.MeshBasicMaterial( {map: t1} );
     let cone = new THREE.Mesh( conegeo, conemater );
     cone.rotateX(Math.PI);
@@ -91,12 +91,12 @@ class Door {
       (i>5 && i<=31) ? shape.lineTo(pathAll[i].x, pathAll[i].y) : shape.lineTo(pathAll[i][0], pathAll[i][1]);
     }
     let geo = new	THREE.ExtrudeBufferGeometry(shape, {depth: 1.2, bevelEnabled: false});
-    let t1 = this.texture('../assets/image/3.jpg',{rx: 1/6, ry: 1/6});
+    let t1 = this.texture('./assets/image/3.jpg',{rx: 1/6, ry: 1/6});
     let material = new THREE.MeshBasicMaterial({map: t1});
     let mesh = new THREE.Mesh(geo, material);
     // 门上装饰
     let doorTop = new THREE.BoxBufferGeometry(3.5, 1.5, 1.2);
-    let t = this.texture('../assets/image/2.jpg',{rx: 2, ry: 2});
+    let t = this.texture('./assets/image/2.jpg',{rx: 2, ry: 2});
     let doormaterial = new THREE.MeshBasicMaterial({map: t});
     let door = new THREE.Mesh(doorTop, doormaterial);
     door.position.set(1.75,7.35,0.6);
@@ -123,13 +123,13 @@ class Door {
       i>3 ? shape.lineTo(pathAll[i].x, pathAll[i].y) : shape.lineTo(pathAll[i][0], pathAll[i][1]);
     }
     let geo = new	THREE.ExtrudeBufferGeometry(shape, {depth: 1.2, bevelEnabled: false});
-    let t1 = this.texture('../assets/image/piller.png',{rx: 1/3, ry: 1});
+    let t1 = this.texture('./assets/image/piller.png',{rx: 1/3, ry: 1});
     let material = new THREE.MeshBasicMaterial({map: t1});
     let mesh = new THREE.Mesh(geo, material);
     mesh.position.set(0, -2, -.5);
     // 上面装饰
     let top = new THREE.BoxBufferGeometry(8.6, 0.2, 1);
-    let t2 = this.texture('../assets/image/3.jpg',{rx: 5, ry: 1});
+    let t2 = this.texture('./assets/image/3.jpg',{rx: 5, ry: 1});
     let materialTop = new THREE.MeshBasicMaterial({map: t2});
     let meshTop = new THREE.Mesh(top, materialTop);
     meshTop.position.set(4.3, 1, 0);
@@ -153,7 +153,7 @@ class Door {
   // 门框
   doorImg(size) {
     let door = new THREE.PlaneBufferGeometry(...size);
-    let t = this.texture('../assets/image/door.png');
+    let t = this.texture('./assets/image/door.png');
     let meterial = new THREE.MeshBasicMaterial({map: t, transparent: true, opacity: .8, side: THREE.DoubleSide});
     let mesh = new THREE.Mesh(door, meterial);
     return mesh;

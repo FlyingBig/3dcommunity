@@ -177,26 +177,20 @@ class outWall {
 			}
 		}
 		let material = new THREE.MeshPhongMaterial({vertexColors:THREE.FaceColors});*/
-		let texture1 = new THREE.TextureLoader().load("../../assets/image/window4.jpg");
+		let texture1 = new THREE.TextureLoader().load("./assets/image/window4.jpg");
 		texture1.wrapS = THREE.RepeatWrapping;
 		texture1.wrapT = THREE.RepeatWrapping;
 		texture1.repeat.set(.2,.3);
 
-		let texture2 = new THREE.TextureLoader().load("../../assets/image/door2.jpg");
+		let texture2 = new THREE.TextureLoader().load("./assets/image/door2.jpg");
 		texture2.wrapS = THREE.RepeatWrapping;
 		texture2.wrapT = THREE.RepeatWrapping;
 		texture2.repeat.set(1,1);
 
-		let texture3 = new THREE.TextureLoader().load("../../assets/image/innerwall3.jpg");
+		let texture3 = new THREE.TextureLoader().load("./assets/image/innerwall3.jpg");
 		texture3.wrapS = THREE.RepeatWrapping;
 		texture3.wrapT = THREE.RepeatWrapping;
 		texture3.repeat.set(1,1);
-/*
-		let texture3 = new THREE.TextureLoader().load("../../assets/image/window2.jpg");
-		texture3.wrapS = THREE.RepeatWrapping;
-		texture3.wrapT = THREE.RepeatWrapping;
-		texture3.repeat.set(.2,.3);*/
-
 
 		let material1 = new THREE.MeshBasicMaterial({map:texture1,transparent:true,opacity:1})
 		let material2 = new THREE.MeshBasicMaterial({map:texture2,transparent:true,opacity:1,side:THREE.DoubleSide})
@@ -344,7 +338,7 @@ class outWall {
 		};
 		var extrudeSettings = { amount: .2, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 		let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
-		let texture = new THREE.TextureLoader().load("../../assets/image/11.jpg")
+		let texture = new THREE.TextureLoader().load("./assets/image/11.jpg")
 		let mesh = new THREE.Mesh( geo, new THREE.MeshPhongMaterial({map:texture,transparent:true,opacity:1.0}));
 		mesh.rotateX(-Math.PI/2)
 		object.add(mesh)
@@ -366,7 +360,7 @@ class outWall {
 		};
 		var extrudeSettings = { amount: .2, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 		let geo = new THREE.ExtrudeBufferGeometry( shape,  extrudeSettings );
-		let texture = new THREE.TextureLoader().load("../../assets/image/innerground2.jpg");
+		let texture = new THREE.TextureLoader().load("./assets/image/innerground2.jpg");
 		texture.wrapS = THREE.RepeatWrapping;
 		texture.wrapT = THREE.RepeatWrapping;
 		texture.repeat.set(.3,.3);

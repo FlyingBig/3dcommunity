@@ -1,12 +1,13 @@
 /**
  * @name:
- * @description: 项目中的一些配置/方法
+ * @description: 项目中的一些非关于three方法
  * @author: chenqy
  * @modifiedBy: chenqy
  * @modifiedTime: 2019/10/16
  */
-const basePath = process.env.NODE_ENV === 'development' ? './' : '/3dCommunity/dist';
-export const basePth = basePath;
+const basePath = require('./basePath');
+export const basePth = basePath.basePath;
+
 // rem转换
 export const computRem = (doc, win) => {
     let docEl = doc.documentElement,
@@ -21,14 +22,22 @@ export const computRem = (doc, win) => {
     recalc();
 }
 
-// 消息提示
-export const dialogue = (position, data) => {
-  let dialogue = `<div class="dialogue-close">x</div><div class="dialogue-title">${data}</div>`;
-  let b = document.createElement('div');
-  b.className = 'dialogue';
-  b.style.top = position.y+'px';
-  b.style.left = position.x+'px';
-  b.innerHTML = dialogue;
-  document.body.appendChild(b);
-  console.log(1)
-}
+// 时间格式
+export const formatTime = (time, fmt = 'yyyy-MM-dd hh:mm:ss') => {
+  const t = {
+    'y+': time.getFullYear(), // 年份
+    'M+': time.getMonth() + 1, // 月份
+    'd+': time.getDate(), // 日
+    'h+': time.getHours(), // 小时
+    'm+': time.getMinutes(), // 分钟
+    's+': time.getSeconds(), // 秒
+  };
+  let rFmt = ''; // 返回的格式值
+  for (const key in t) {
+      const reg = new RegExp(`(${key})`);
+    if (reg.test(fmt)) {
+      rFmt = fmt.replace(reg, f => (f.length === 4 ? t[key] : ((`00${t[key]}`).substr((`${t[key]}`).length))));
+    }
+  }
+  return rFmt;
+};
