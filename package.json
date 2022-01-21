@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@tweenjs/tween.js": "18.1.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.2",
     "earcut": "^2.1.5",
     "echarts": "^4.2.1",
     "stats-js": "1.0.1",
